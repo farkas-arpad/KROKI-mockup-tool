@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.io.FileUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -34,8 +35,10 @@ public class DjangoGenerator {
 	public Configuration cfg;
 	private String projectDir =  Application.appRootPath + File.separator+"generated";
 	private String templateDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "templates";
-	private String destDir = projectDir + File.separator+Application.projectTitleRenamed+File.separator+Application.projectTitleRenamed;
+	private String staticSourceDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "resources"+ File.separator + "staticdata" ;
 
+	private String destDir = projectDir + File.separator+Application.projectTitleRenamed+File.separator+Application.projectTitleRenamed;
+	private String staticDestDir = projectDir + File.separator+Application.projectTitleRenamed+ File.separator+"static";
 	private Template template;
 	Map<String, Object> context = new HashMap<String, Object>();
 
@@ -57,8 +60,15 @@ public class DjangoGenerator {
 		generateViewsPy();
 		generateURLsPy();
 		generateSettingsPy();
+		generateStaticFiles();
+		
 	}
 
+	protected void generateStaticFiles() throws IOException{		
+		File srcDir = new File(staticSourceDir);
+		File destDir = new File(staticDestDir);		
+		FileUtils.copyDirectory(srcDir, destDir);		
+	}
 	/**
 	 * Copy the empty __init.py file 
 	 * @throws IOException

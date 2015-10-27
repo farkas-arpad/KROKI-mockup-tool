@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ProcessBuilder.Redirect;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -110,6 +111,20 @@ public class LogJFrame extends JFrame {
 			e1.printStackTrace();
 			displayStackTrace(e1);
 		}
+		try {
+			migration();
+			displayText("Data migration finished.", 0);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			displayStackTrace(e1);
+		}
+		try {
+			runApp();
+			displayText("Test server is running.", 0);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			displayStackTrace(e1);
+		}
 
 	}
 
@@ -133,18 +148,7 @@ public class LogJFrame extends JFrame {
 		MenuReader.load();
 
 	}
-
-	/**
-	 * Create initial folder structure
-	 */
-	private void createInitialFolderStructure(){
-
-		if ((new File(Application.appRootPath+File.separator+Application.projectTitleRenamed+File.separator+Application.projectTitleRenamed).mkdirs())) {
-			displayText("Initial folder structure created.", 0);
-		}else
-			displayText("Initial folder structure created.", 0);
-	}
-
+	
 	/**
 	 * Prepare log window icon
 	 */
@@ -200,5 +204,31 @@ public class LogJFrame extends JFrame {
 		e.printStackTrace(new PrintWriter(sw));
 		String stacktrace = sw.toString();
 		displayText(stacktrace, 1);
+	}
+	
+	
+	public void migration() throws Exception {
+		// starting up the app
+		// TODO redirect output to log window
+		System.out.println("start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py");
+
+		ProcessBuilder processBuilder = new ProcessBuilder("cmd","/k","start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py","migrate");
+		processBuilder.redirectErrorStream(true);
+		processBuilder.redirectOutput(Redirect.INHERIT);
+		process = processBuilder.start();
+
+	//	displayText("Starting internal server on port 8000", 0);
+	}
+	
+	public void runApp() throws Exception {
+		// starting up the app
+		// TODO redirect output to log window
+		ProcessBuilder processBuilder = new ProcessBuilder("cmd","/k","start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py","runserver");
+		processBuilder.redirectErrorStream(true);
+
+		processBuilder.redirectOutput(Redirect.INHERIT);
+		process = processBuilder.start();
+
+		displayText("Starting internal server on port 8000", 0);
 	}
 }
