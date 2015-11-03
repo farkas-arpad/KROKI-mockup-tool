@@ -11,7 +11,19 @@ public class Application {
 	public static String repositoryPath = RepositoryPathsUtil.getRepositoryRootPath();
 	public static String appRootPath = RepositoryPathsUtil.getAppRootPath();
 
+	private static LogJFrame mainFrame;
 	
+	
+	public static LogJFrame getMainFrame() {
+		return mainFrame;
+	}
+
+
+	public static void setMainFrame(LogJFrame mainFrame) {
+		Application.mainFrame = mainFrame;
+	}
+
+
 	public static void main(String[] args) {
 		LogJFrame mainFrame = new LogJFrame();		
 	}

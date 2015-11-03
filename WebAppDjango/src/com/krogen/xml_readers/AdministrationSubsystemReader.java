@@ -10,8 +10,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.krogen.ejb.PersisenceHelper;
+
 import adapt.core.AppCache;
-import adapt.util.ejb.PersisenceHelper;
 import adapt.util.repository_utils.RepositoryPathsUtil;
 import adapt.util.staticnames.Tags;
 import adapt.util.xml_utils.XMLParserUtils;

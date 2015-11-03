@@ -1,38 +1,32 @@
 package com.krogen.model.django;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class DjangoUrl {
 
-	//String pattern;
-	//String ; 
-
-
-	private void writeUrls(){
-
+	String pattern;
+	String view;
+	
+	public DjangoUrl(String pattern, String view) {
+		super();
+		this.pattern = pattern;
+		this.view = view;
 	}
 
+	public String getPattern() {
+		return pattern;
+	}
+
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
+	}
+
+	public String getView() {
+		return view;
+	}
+
+	public void setView(String view) {
+		this.view = view;
+	} 
 	
-
-/**
 	
-from django.conf.urls import patterns, include, url
-from ticket import views
-
-from django.contrib import admin
-admin.autodiscover()
-
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'ticket.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
- 	url(r'^test', views.testdefault),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^login/$', 'django.contrib.auth.views.login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout'),
-)
-
-*/	 
+	 
 }

@@ -1,4 +1,4 @@
-package adapt.util.resolvers;
+package com.krogen.util.resolvers;
 
 import com.krogen.xml_readers.TypeComponenMappingReader;
 

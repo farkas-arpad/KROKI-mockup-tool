@@ -4,16 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import adapt.core.AppCache;
-import adapt.util.repository_utils.RepositoryPathsUtil;
-import adapt.util.staticnames.Tags;
-import adapt.util.xml_utils.XMLParserUtils;
+import com.krogen.main.AppCache;
+import com.krogen.repository_utils.RepositoryPathsUtil;
+import com.krogen.static_names.Tags;
+import com.krogen.xml_utils.XMLParserUtils;
 
 /**
  * Reads mapping of language types to UI components

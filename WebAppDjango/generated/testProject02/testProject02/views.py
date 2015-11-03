@@ -1,29 +1,23 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+	projectname = 'testProject02'
+	context = {
+		"projectname": projectname 
+	}
+	return render(request,'base.html', context)
 
 
 def testdefault(request):
-    return HttpResponse("Hello, world. You're at the test view.")
+	return HttpResponse("Hello, world. You're at the test view.")
 
 def login_user(request):
-    state = "Please log in below..."
-    username = password = ''
-    if request.POST:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+	title = "Welecome"
+	context = {
+	"title": title
+	}
 
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                state = "You're successfully logged in!"
-            else:
-                state = "Your account is not active, please contact the site admin."
-        else:
-            state = "Your username and/or password were incorrect."
-
-    return render_to_response('auth.html',{'state':state, 'username': username})
+	return render(request,'base.html', context)

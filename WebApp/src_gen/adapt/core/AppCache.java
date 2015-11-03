@@ -92,7 +92,6 @@ public class AppCache {
 	}
 
 	public Enumeration findEnumerationByName(String name) {
-		Enumeration enumeration = null;
 		for (String  enumName : model.getEnumerations().keySet()) {
 			if(enumName.equals(name)) {
 				return model.getEnumerations().get(enumName);

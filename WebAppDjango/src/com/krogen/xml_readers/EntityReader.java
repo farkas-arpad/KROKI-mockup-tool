@@ -8,16 +8,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import adapt.core.AppCache;
-import adapt.exceptions.EntityAttributeNotFoundException;
-import adapt.model.ejb.ColumnAttribute;
-import adapt.model.ejb.EntityBean;
-import adapt.model.ejb.JoinColumnAttribute;
-import adapt.model.enumeration.Enumeration;
-import adapt.util.ejb.EntityHelper;
-import adapt.util.repository_utils.RepositoryPathsUtil;
-import adapt.util.staticnames.Tags;
-import adapt.util.xml_utils.XMLParserUtils;
+import com.krogen.ejb.EntityHelper;
+import com.krogen.exceptions.EntityAttributeNotFoundException;
+import com.krogen.main.AppCache;
+import com.krogen.model.ejb.ColumnAttribute;
+import com.krogen.model.ejb.EntityBean;
+import com.krogen.model.ejb.JoinColumnAttribute;
+import com.krogen.model.enumeration.Enumeration;
+import com.krogen.repository_utils.RepositoryPathsUtil;
+import com.krogen.static_names.Tags;
+import com.krogen.xml_utils.XMLParserUtils;
 
 /**
  * Util class that reads ejb entities specification from application repository

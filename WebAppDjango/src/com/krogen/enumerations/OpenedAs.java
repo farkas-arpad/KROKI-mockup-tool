@@ -1,4 +1,4 @@
-package adapt.enumerations;
+package com.krogen.enumerations;
 
 public enum OpenedAs {
 	DEFAULT("DEFAULT"),

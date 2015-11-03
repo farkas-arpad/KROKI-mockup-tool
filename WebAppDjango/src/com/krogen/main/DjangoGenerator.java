@@ -5,44 +5,56 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
+
+import com.krogen.model.django.DjangoUrl;
+import com.krogen.model.menu.AdaptSubMenu;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Parse xmls and Generate python code
+ */
 public class DjangoGenerator {
 
-	/**
-	 * Parse xmls and Generate python code
-	 */
 
+	// 	file name constants
 	public static String MANAGE_PY = "manage";
 	public static String WSGI_PY = "wsgi";
 	public static String MODELS_PY = "models";
 	public static String VIEWS_PY = "views";
+	public static String FORMS_PY = "forms";
 	public static String URLS_PY = "urls";
 	public static String SETTINGS_PY = "settings";
 
 	public Configuration cfg;
+
+	// data paths
 	private String projectDir =  Application.appRootPath + File.separator+"generated";
 	private String templateDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "templates";
 	private String staticSourceDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "resources"+ File.separator + "staticdata" ;
-
+	private String djangoResources = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "resources";
 	private String destDir = projectDir + File.separator+Application.projectTitleRenamed+File.separator+Application.projectTitleRenamed;
 	private String staticDestDir = projectDir + File.separator+Application.projectTitleRenamed+ File.separator+"static";
+
 	private Template template;
 	Map<String, Object> context = new HashMap<String, Object>();
 
+	//
+
 	public DjangoGenerator() throws IOException {
+
+
 		cfg = new Configuration();		
 		try {
 			cfg.setDirectoryForTemplateLoading(new File(templateDir));
@@ -57,17 +69,24 @@ public class DjangoGenerator {
 		generateManagePy();
 		generateWsgiPy();
 		generateModelsPy();
+		generateFormsPy();
 		generateViewsPy();
 		generateURLsPy();
 		generateSettingsPy();
 		generateStaticFiles();
-		
+		generateTemplates();
+
 	}
 
 	protected void generateStaticFiles() throws IOException{		
 		File srcDir = new File(staticSourceDir);
-		File destDir = new File(staticDestDir);		
-		FileUtils.copyDirectory(srcDir, destDir);		
+		File tempDestDir = new File(staticDestDir);		
+		FileUtils.copyDirectory(srcDir, tempDestDir);		
+	}
+	protected void generateTemplates() throws IOException{		
+		File srcDir = new File(djangoResources  +File.separator+"djangotemplates");
+		File tempDestDir = new File(destDir +File.separator+"templates");		
+		FileUtils.copyDirectory(srcDir, tempDestDir);		
 	}
 	/**
 	 * Copy the empty __init.py file 
@@ -81,12 +100,26 @@ public class DjangoGenerator {
 	}
 
 	public void generateViewsPy()throws IOException{
+		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+
 		context.clear();
 		context.put("classes", new ArrayList<String>());
+		context.put("projectname", Application.projectTitleRenamed);
+		context.put("menu", mainMenu);
 
 		generateWithProjectname(destDir,VIEWS_PY, context);
 	}
-	
+
+	public void generateFormsPy()throws IOException{
+		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+
+		context.clear();
+		context.put("classes", new ArrayList<String>());
+		context.put("projectname", Application.projectTitleRenamed);
+		context.put("menu", mainMenu);
+
+		generateWithProjectname(destDir,FORMS_PY, context);
+	}
 	public void generateSettingsPy()throws IOException{
 		context.clear();
 		context.put("projectname", Application.projectTitleRenamed);
@@ -94,15 +127,33 @@ public class DjangoGenerator {
 		generateWithProjectname(destDir,SETTINGS_PY, context);
 	}
 	public void generateURLsPy()throws IOException{
-		context.clear();
+		// TODO 
+		// get the links from the menu system??
+		// get he links from the forms list
+		AppCache cache = AppCache.getInstance();
+		List<DjangoUrl> urls = new ArrayList<DjangoUrl>();
+		Map<String, String> panels =AppCache.getInstance().getPanelClassMap();
+
+
+		for (Map.Entry<String, String> entry : panels.entrySet())
+		{
+			System.out.println(entry.getKey() + "/" + entry.getValue());
+			urls.add(new DjangoUrl(entry.getValue(),entry.getValue()));
+		}
+
+		context.clear();		
 		context.put("imports", new ArrayList<String>());
-		context.put("urls", new ArrayList<String>());
+		context.put("urls", urls);
 		context.put("projectname", Application.projectTitleRenamed);
 
 		generateWithProjectname(destDir,URLS_PY, context);
 	}
-	
-	
+
+	private void creatDjangoUrls(AdaptSubMenu menu){
+
+		new ArrayList<DjangoUrl>();
+
+	}
 	public void generateModelsPy()throws IOException{
 		context.clear();
 		context.put("classes", new ArrayList<String>());

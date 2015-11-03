@@ -9,13 +9,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import adapt.util.resolvers.PanelTypeResolver;
-
+import com.krogen.enumerations.PanelType;
 import com.krogen.exceptions.GeneratedMenuMissingException;
 import com.krogen.exceptions.PanelTypeParsingException;
+import com.krogen.main.AppCache;
 import com.krogen.model.menu.AdaptMenuItem;
 import com.krogen.model.menu.AdaptSubMenu;
 import com.krogen.repository_utils.RepositoryPathsUtil;
+import com.krogen.util.resolvers.PanelTypeResolver;
 import com.krogen.xml_utils.XMLParserUtils;
 
 
@@ -49,19 +50,20 @@ public class MenuReader {
 	 */
 	public static void load() {
 		try {
-			AppCache.displayTextOnMainFrame(logPrefix
-					+ "Reading menu structure from XML specification...", 0);
+//			AppCache.displayTextOnMainFrame(logPrefix
+//					+ "Reading menu structure from XML specification...", 0);
 			createMenus(xmlFileNameDefault, DEFAULT_MENU);
 			rootMenus.clear();
 			menuMaps.clear();
 			createMenus(xmlFileName, GENERATED_MENUS);
-			AppCache.displayTextOnMainFrame(logPrefix
-					+ "Menu structure obtained successfully!", 0);
+			System.out.println("test");
+//			AppCache.displayTextOnMainFrame(logPrefix
+//					+ "Menu structure obtained successfully!", 0);
 		} catch (GeneratedMenuMissingException e) {
-			AppCache.displayTextOnMainFrame("Error reading " + e.getMessage(), 2);
+//			AppCache.displayTextOnMainFrame("Error reading " + e.getMessage(), 2);
 		} catch (Exception e) {
-			AppCache.displayTextOnMainFrame("Error reading " + xmlFileName, 1);
-			AppCache.displayStackTraceOnMainFrame(e);
+//			AppCache.displayTextOnMainFrame("Error reading " + xmlFileName, 1);
+//			AppCache.displayStackTraceOnMainFrame(e);
 		}
 
 	}

@@ -29,6 +29,7 @@ import javax.swing.text.StyledDocument;
 
 import com.krogen.static_names.Settings;
 import com.krogen.xml_readers.MenuReader;
+import com.krogen.xml_readers.PanelReader;
 
 /**
  * Parse xml, generate python code, start up the project 
@@ -50,6 +51,7 @@ public class LogJFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		loadIcon();	
+		Application.setMainFrame(this);
 		init();
 	}	
 
@@ -105,6 +107,13 @@ public class LogJFrame extends JFrame {
 		setVisible(true);
 
 		try {
+			parseData();
+			displayText("Parsing finished.", 0);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			displayStackTrace(e1);
+		}
+		try {
 			initGenerator();
 			displayText("Application generated.", 0);
 		} catch (Exception e1) {
@@ -129,6 +138,10 @@ public class LogJFrame extends JFrame {
 	}
 
 
+	private void parseData(){
+		MenuReader.load();
+		PanelReader.loadMappings();
+	}
 	private void initGenerator() {
 
 		try {
@@ -215,8 +228,8 @@ public class LogJFrame extends JFrame {
 		ProcessBuilder processBuilder = new ProcessBuilder("cmd","/k","start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py","migrate");
 		processBuilder.redirectErrorStream(true);
 		processBuilder.redirectOutput(Redirect.INHERIT);
-		process = processBuilder.start();
-
+	//	Process process = processBuilder.start();
+	//	process.waitFor();
 	//	displayText("Starting internal server on port 8000", 0);
 	}
 	

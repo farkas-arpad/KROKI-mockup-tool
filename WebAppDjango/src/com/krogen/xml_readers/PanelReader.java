@@ -1,6 +1,5 @@
 package com.krogen.xml_readers;
 
-import java.awt.Label;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,35 +10,35 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import adapt.core.AppCache;
-import adapt.enumerations.OpenedAs;
-import adapt.enumerations.OperationType;
-import adapt.enumerations.PanelType;
-import adapt.enumerations.ViewMode;
-import adapt.exceptions.OperationNotFoundException;
-import adapt.model.ejb.AbstractAttribute;
-import adapt.model.ejb.ColumnAttribute;
-import adapt.model.ejb.EntityBean;
-import adapt.model.ejb.JoinColumnAttribute;
-import adapt.model.panel.AdaptManyToManyPanel;
-import adapt.model.panel.AdaptPanel;
-import adapt.model.panel.AdaptParentChildPanel;
-import adapt.model.panel.AdaptStandardPanel;
-import adapt.model.panel.configuration.DataSettings;
-import adapt.model.panel.configuration.Next;
-import adapt.model.panel.configuration.PanelSettings;
-import adapt.model.panel.configuration.Zoom;
-import adapt.model.panel.configuration.operation.Operation;
-import adapt.model.panel.configuration.operation.Parameter;
-import adapt.model.panel.configuration.operation.ParameterType;
-import adapt.model.panel.configuration.operation.SpecificOperations;
-import adapt.util.converters.ConverterUtil;
-import adapt.util.ejb.EntityHelper;
-import adapt.util.repository_utils.RepositoryPathsUtil;
-import adapt.util.resolvers.PanelTypeResolver;
-import adapt.util.staticnames.Tags;
-import adapt.util.xml_utils.XMLParserUtils;
-import adapt.util.xml_utils.XMLTypesConverter;
+import com.krogen.converters.ConverterUtil;
+import com.krogen.ejb.EntityHelper;
+import com.krogen.enumerations.OpenedAs;
+import com.krogen.enumerations.OperationType;
+import com.krogen.enumerations.PanelType;
+import com.krogen.enumerations.ViewMode;
+import com.krogen.exceptions.OperationNotFoundException;
+import com.krogen.main.AppCache;
+import com.krogen.model.ejb.AbstractAttribute;
+import com.krogen.model.ejb.ColumnAttribute;
+import com.krogen.model.ejb.EntityBean;
+import com.krogen.model.ejb.JoinColumnAttribute;
+import com.krogen.model.panel.AdaptManyToManyPanel;
+import com.krogen.model.panel.AdaptPanel;
+import com.krogen.model.panel.AdaptParentChildPanel;
+import com.krogen.model.panel.AdaptStandardPanel;
+import com.krogen.model.panel.configuration.DataSettings;
+import com.krogen.model.panel.configuration.Next;
+import com.krogen.model.panel.configuration.PanelSettings;
+import com.krogen.model.panel.configuration.Zoom;
+import com.krogen.model.panel.configuration.operation.Operation;
+import com.krogen.model.panel.configuration.operation.Parameter;
+import com.krogen.model.panel.configuration.operation.ParameterType;
+import com.krogen.model.panel.configuration.operation.SpecificOperations;
+import com.krogen.repository_utils.RepositoryPathsUtil;
+import com.krogen.static_names.Tags;
+import com.krogen.util.resolvers.PanelTypeResolver;
+import com.krogen.xml_utils.XMLParserUtils;
+import com.krogen.xml_utils.XMLTypesConverter;
 
 public class PanelReader {
 
@@ -56,7 +55,7 @@ public class PanelReader {
 	 */
 	public static void loadMappings() {
 		try {
-			AppCache.displayTextOnMainFrame(logPrefix + "Reading mapping file: " + mappingFileName, 0);
+		//	AppCache.displayTextOnMainFrame(logPrefix + "Reading mapping file: " + mappingFileName, 0);
 			Document document = XMLParserUtils.parseXml(panelsDirectoryPath + mappingFileName);
 			NodeList panelNodes = document.getElementsByTagName(Tags.PANEL);
 			for(int i=0; i<panelNodes.getLength(); i++) {
@@ -64,10 +63,10 @@ public class PanelReader {
 				String id = panelElement.getAttribute(Tags.ID);
 				String ejb_ref = panelElement.getAttribute(Tags.EJB_REF);
 				AppCache.getInstance().addToCachePanelClassMapping(ejb_ref, id);
-				AppCache.displayTextOnMainFrame(logPrefix + "Mapping " + ejb_ref + ".java --> " + id, 0);
+		//		AppCache.displayTextOnMainFrame(logPrefix + "Mapping " + ejb_ref + ".java --> " + id, 0);
 			}
 		} catch (Exception e) {
-			AppCache.displayTextOnMainFrame(logPrefix +  "Error parsing mapping file " + mappingFileName, 1);
+	//		AppCache.displayTextOnMainFrame(logPrefix +  "Error parsing mapping file " + mappingFileName, 1);
 		}
 	}
 
@@ -81,7 +80,7 @@ public class PanelReader {
 			AdaptPanel panel = null;
 			switch (type) {
 			case STANDARDPANEL:
-				AppCache.displayTextOnMainFrame(logPrefix + " Fetching standard panel data for: " + panelId, 0);
+			//	AppCache.displayTextOnMainFrame(logPrefix + " Fetching standard panel data for: " + panelId, 0);
 				if(openedAs.equals(OpenedAs.NEXT)) {
 					panel = findNextPanel(document, panelId, type, openedId);
 				}else if(openedAs.equals(OpenedAs.ZOOM)) {
@@ -91,18 +90,18 @@ public class PanelReader {
 				}
 				break;
 			case PARENTCHILDPANEL:
-				AppCache.displayTextOnMainFrame(logPrefix + " Fetching parent-child panel data for: " + panelId, 0);
+		//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching parent-child panel data for: " + panelId, 0);
 				panel = findParentChildPanel(document, panelId);
 				break;
 			case MANYTOMANYPANEL:
-				AppCache.displayTextOnMainFrame(logPrefix + " Fetching many to many panel data for: " + panelId, 0);
+		//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching many to many panel data for: " + panelId, 0);
 				panel = findManyToManyPanel(document, panelId);
 				break;
 			}
 			return panel;
 		} catch (Exception e) {
-			AppCache.displayTextOnMainFrame("Error reading panel data for name: " + panelId, 1);
-			AppCache.displayStackTraceOnMainFrame(e);
+	//		AppCache.displayTextOnMainFrame("Error reading panel data for name: " + panelId, 1);
+	//		AppCache.displayStackTraceOnMainFrame(e);
 		}
 		return null;
 	}
@@ -384,8 +383,8 @@ public class PanelReader {
 					method.invoke(attr, argValue);
 				}
 			} catch (Exception e) {
-				AppCache.displayTextOnMainFrame("Error setting column restrictions.", 1);
-				AppCache.displayStackTraceOnMainFrame(e);
+		//		AppCache.displayTextOnMainFrame("Error setting column restrictions.", 1);
+		//		AppCache.displayStackTraceOnMainFrame(e);
 			}
 		}
 		return bean;
@@ -427,8 +426,8 @@ public class PanelReader {
 					method.invoke(settings, new Boolean(val));
 				}
 			} catch (Exception e) {
-				AppCache.displayTextOnMainFrame("Error apllying settings do panel", 1);
-				AppCache.displayStackTraceOnMainFrame(e);
+		//		AppCache.displayTextOnMainFrame("Error apllying settings do panel", 1);
+		//		AppCache.displayStackTraceOnMainFrame(e);
 			}
 		}
 		return settings;
@@ -452,8 +451,8 @@ public class PanelReader {
 				next.setOpposite(nextElement.getAttribute(Tags.OPPOSITE));
 				nexts.add(next);
 			} catch (Exception e) {
-				AppCache.displayTextOnMainFrame("Error reading next data from file", 1);
-				AppCache.displayStackTraceOnMainFrame(e);
+		//		AppCache.displayTextOnMainFrame("Error reading next data from file", 1);
+		//		AppCache.displayStackTraceOnMainFrame(e);
 			}
 		}
 		return nexts;

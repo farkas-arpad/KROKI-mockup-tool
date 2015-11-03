@@ -1,7 +1,6 @@
-package adapt.util.resolvers;
+package com.krogen.util.resolvers;
 
-import adapt.enumerations.PanelType;
-
+import com.krogen.enumerations.PanelType;
 import com.krogen.exceptions.PanelTypeParsingException;
 import com.krogen.static_names.Tags;
 
