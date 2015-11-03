@@ -17,19 +17,22 @@ urlpatterns = patterns('',
     
     <#list urls as url>
     #Links for ${url.pattern}
-    url(r'^${url.pattern}', '${projectname}.views.${url.view}', name='${url.view}'),   
-    url(r'^${url.pattern}_new', '${projectname}.views.${url.view}_new', name='${url.view}_new'),   
-    url(r'^${url.pattern}_edit', '${projectname}.views.${url.view}_edit', name='${url.view}_edit'),   
+    #url(r'^${url.pattern}', '${projectname}.views.${url.view}', name='${url.view}'),   
+    #url(r'^${url.pattern}_new', '${projectname}.views.${url.view}_new', name='${url.view}_new'),   
+    #url(r'^${url.pattern}_edit', '${projectname}.views.${url.view}_edit', name='${url.view}_edit'),   
   
     </#list>   
    
    	# home page
-    url(r'^$', '${projectname}.views.index'),
+    url(r'^$', '${projectname}.views.index', name='index'),
     
    	# test url
  	url(r'^test', views.testdefault),
  	
  	# Set Django registration redux basic links
-    url(r'^logout/$', '${projectname}.views.logout_user'),
-    url(r'^login/$', '${projectname}.views.login_user'),
+    url(r'^logout/$', '${projectname}.views.logout_user', name='logout'),
+    url(r'^login/$', '${projectname}.views.login_user', name='login'),
+    
+	url(r'^admin/', include(admin.site.urls)),
+  
 ) 

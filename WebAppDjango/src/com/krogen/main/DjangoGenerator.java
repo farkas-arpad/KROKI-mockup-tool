@@ -16,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.krogen.model.django.DjangoUrl;
 import com.krogen.model.menu.AdaptSubMenu;
+import com.krogen.static_names.Settings;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -35,6 +36,8 @@ public class DjangoGenerator {
 	public static String VIEWS_PY = "views";
 	public static String FORMS_PY = "forms";
 	public static String URLS_PY = "urls";
+	public static String INIT_PY = "__init__";
+	
 	public static String SETTINGS_PY = "settings";
 
 	public Configuration cfg;
@@ -93,9 +96,11 @@ public class DjangoGenerator {
 	 * @throws IOException
 	 */
 	protected void generateInitPy() throws IOException{
-		File file = new File(destDir + File.separator+"__init__.py");
-		if (!file.exists())
-			file.createNewFile();
+//		File file = new File(destDir + File.separator+"__init__.py");
+//		if (!file.exists())
+//			file.createNewFile();
+		context.clear();		
+		generateWithProjectname(destDir,INIT_PY, context);
 
 	}
 
@@ -105,7 +110,8 @@ public class DjangoGenerator {
 		context.clear();
 		context.put("classes", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
-		context.put("menu", mainMenu);
+		context.put("description", Settings.APP_DESCRIPTION);	
+		context.put("mainmenu", mainMenu);
 
 		generateWithProjectname(destDir,VIEWS_PY, context);
 	}

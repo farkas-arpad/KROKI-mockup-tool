@@ -128,6 +128,13 @@ public class LogJFrame extends JFrame {
 			displayStackTrace(e1);
 		}
 		try {
+			addAdminUser();
+			displayText("Default admin user added.", 0);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			displayStackTrace(e1);
+		}
+		try {
 			runApp();
 			displayText("Test server is running.", 0);
 		} catch (Exception e1) {
@@ -161,7 +168,7 @@ public class LogJFrame extends JFrame {
 		MenuReader.load();
 
 	}
-	
+
 	/**
 	 * Prepare log window icon
 	 */
@@ -218,8 +225,8 @@ public class LogJFrame extends JFrame {
 		String stacktrace = sw.toString();
 		displayText(stacktrace, 1);
 	}
-	
-	
+
+
 	public void migration() throws Exception {
 		// starting up the app
 		// TODO redirect output to log window
@@ -228,11 +235,21 @@ public class LogJFrame extends JFrame {
 		ProcessBuilder processBuilder = new ProcessBuilder("cmd","/k","start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py","migrate");
 		processBuilder.redirectErrorStream(true);
 		processBuilder.redirectOutput(Redirect.INHERIT);
-	//	Process process = processBuilder.start();
-	//	process.waitFor();
-	//	displayText("Starting internal server on port 8000", 0);
+		Process process = processBuilder.start();
+		//	process.waitFor();
+		//	displayText("Starting internal server on port 8000", 0);
 	}
-	
+
+	public void addAdminUser() throws Exception {
+		// TODO redirect output to log window
+
+		ProcessBuilder processBuilder = new ProcessBuilder("cmd","/k","start "+Application.PYTHON_PATH+" "+ Application.appRootPath+File.separator+"generated"+File.separator+Application.projectTitleRenamed+File.separator+"manage.py","createsuperuser --username=admin --email=admin@example.com");
+		processBuilder.redirectErrorStream(true);
+		processBuilder.redirectOutput(Redirect.INHERIT);
+		Process process = processBuilder.start();
+		//	process.waitFor();
+		//	displayText("Starting internal server on port 8000", 0);
+	}
 	public void runApp() throws Exception {
 		// starting up the app
 		// TODO redirect output to log window

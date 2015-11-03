@@ -18,11 +18,9 @@ public class Application {
 		return mainFrame;
 	}
 
-
 	public static void setMainFrame(LogJFrame mainFrame) {
 		Application.mainFrame = mainFrame;
 	}
-
 
 	public static void main(String[] args) {
 		LogJFrame mainFrame = new LogJFrame();		
