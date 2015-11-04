@@ -30,16 +30,16 @@ public class DjangoGenerator {
 
 
 	// 	file name constants
-	public static String MANAGE_PY = "manage";
-	public static String WSGI_PY = "wsgi";
-	public static String MODELS_PY = "models";
-	public static String VIEWS_PY = "views";
-	public static String FORMS_PY = "forms";
-	public static String URLS_PY = "urls";
-	public static String INIT_PY = "__init__";
-	
-	public static String SETTINGS_PY = "settings";
+	public static String MANAGE_PY = "manage.py";
+	public static String WSGI_PY = "wsgi.py";
+	public static String MODELS_PY = "models.py";
+	public static String VIEWS_PY = "views.py";
+	public static String FORMS_PY = "forms.py";
+	public static String URLS_PY = "urls.py";
+	public static String INIT_PY = "__init__.py";
+	public static String SETTINGS_PY = "settings.py";
 
+	public static String NAVBAR_HTML = "navbar.html";
 	public Configuration cfg;
 
 	// data paths
@@ -56,8 +56,6 @@ public class DjangoGenerator {
 	//
 
 	public DjangoGenerator() throws IOException {
-
-
 		cfg = new Configuration();		
 		try {
 			cfg.setDirectoryForTemplateLoading(new File(templateDir));
@@ -86,19 +84,30 @@ public class DjangoGenerator {
 		File tempDestDir = new File(staticDestDir);		
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
 	}
-	protected void generateTemplates() throws IOException{		
-		File srcDir = new File(djangoResources  +File.separator+"djangotemplates");
+	protected void generateTemplates() throws IOException{	
+		
+
+		String srcDirString = djangoResources  +File.separator+"djangotemplates";
+		File srcDir = new File(srcDirString);		
 		File tempDestDir = new File(destDir +File.separator+"templates");		
+
+		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+		context.clear();
+		context.put("menu", mainMenu);
+
+		generateWithProjectname(srcDirString,NAVBAR_HTML, context);
+
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
 	}
 	/**
-	 * Copy the empty __init.py file 
+	 * Create the __init__.py file with the basic configurations 
 	 * @throws IOException
 	 */
 	protected void generateInitPy() throws IOException{
-//		File file = new File(destDir + File.separator+"__init__.py");
-//		if (!file.exists())
-//			file.createNewFile();
+		// 		create empty __init__.py 
+		//		File file = new File(destDir + File.separator+"__init__.py");
+		//		if (!file.exists())
+		//			file.createNewFile();
 		context.clear();		
 		generateWithProjectname(destDir,INIT_PY, context);
 
@@ -199,11 +208,11 @@ public class DjangoGenerator {
 	private void generateWithProjectname(String path, String templateName, Map<String, Object> context) throws IOException{
 		try{
 			// set basic configuration
-			template = cfg.getTemplate(templateName +".ftl");
+			template = cfg.getTemplate(templateName.substring(0,templateName.lastIndexOf(".")) +".ftl");
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
 
 			// put data to context
-			Writer out = new OutputStreamWriter(new FileOutputStream(path+File.separator+templateName +".py"));
+			Writer out = new OutputStreamWriter(new FileOutputStream(path+File.separator+templateName));
 			if (out != null) {
 				template.process(context, out);
 				out.flush();

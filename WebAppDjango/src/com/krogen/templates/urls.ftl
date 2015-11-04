@@ -19,8 +19,7 @@ urlpatterns = patterns('',
     #Links for ${url.pattern}
     #url(r'^${url.pattern}', '${projectname}.views.${url.view}', name='${url.view}'),   
     #url(r'^${url.pattern}_new', '${projectname}.views.${url.view}_new', name='${url.view}_new'),   
-    #url(r'^${url.pattern}_edit', '${projectname}.views.${url.view}_edit', name='${url.view}_edit'),   
-  
+    #url(r'^${url.pattern}_edit', '${projectname}.views.${url.view}_edit', name='${url.view}_edit'),     
     </#list>   
    
    	# home page

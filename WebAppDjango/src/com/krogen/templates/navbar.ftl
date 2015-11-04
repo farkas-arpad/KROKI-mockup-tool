@@ -11,16 +11,22 @@
           <a class="navbar-brand" href="#">{{ projectname }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <!-- TODO  generate dropdown for all forms-->
+          <ul class="nav navbar-nav">          
             {% if request.user.is_authenticated %}
-            					<li class="dropdown">
-            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">filename007 <span class="caret"></span></a>
+            <#list menu.children as submenu>
+			<#if submenu.name??>				
+				<#if submenu.children?has_content>
+					<li class="dropdown">
+            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${submenu.name} <span class="caret"></span></a>
               			<ul class="dropdown-menu">
-					   <li><a href="filename007_st">filename007</a></li>
+							<@menugenerator menuList=submenu.children/>
 						</ul>
 					</li>
+				</#if>
+			<#else>
+			<li><a href="#">${submenu.menuName}</a></li>           				
+			</#if>			
+			</#list>
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -35,3 +41,21 @@
       </div>
     </nav>
 
+<#macro menugenerator menuList>
+        <#if menuList??>
+				<#foreach child in menuList>
+					<#if child.name??>						
+							<#if child.children?has_content>
+							<li class="dropdown-submenu">
+							<a tabindex="-1" href="#">${child.name}</a>
+								<ul class="dropdown-menu">
+								<@menugenerator menuList=child.children/>
+								</ul>
+							</li>
+							</#if>							
+					<#else>
+					   <li><a href="${child.activate}">${child.menuName}</a></li>
+					</#if>
+				</#foreach>			
+        </#if>
+</#macro>
