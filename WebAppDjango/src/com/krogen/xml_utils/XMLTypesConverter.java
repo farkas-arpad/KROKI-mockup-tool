@@ -1,6 +1,6 @@
 package com.krogen.xml_utils;
 
-import adapt.core.AppCache;
+import com.krogen.main.DataContainer;
 
 public class XMLTypesConverter {
 
@@ -12,7 +12,7 @@ public class XMLTypesConverter {
 			try {
 				i = new Integer(s);
 			} catch (Exception e) {
-				AppCache.displayTextOnMainFrame("Error converting '" + s + "' to number. Assigning default value.", 1);
+				DataContainer.displayTextOnMainFrame("Error converting '" + s + "' to number. Assigning default value.", 1);
 				return 0;
 			}
 		}

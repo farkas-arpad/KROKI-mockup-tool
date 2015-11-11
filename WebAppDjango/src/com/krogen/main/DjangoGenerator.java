@@ -14,8 +14,9 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
-import com.krogen.model.django.DjangoUrl;
-import com.krogen.model.menu.AdaptSubMenu;
+import com.krogen.model.django.DjangoAdapter;
+import com.krogen.model.django.modelpy.DjangoModel;
+import com.krogen.model.menu.DjangoSubMenu;
 import com.krogen.static_names.Settings;
 
 import freemarker.template.Configuration;
@@ -24,7 +25,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
- * Parse xmls and Generate python code
+ * Generating python code
  */
 public class DjangoGenerator {
 
@@ -35,27 +36,41 @@ public class DjangoGenerator {
 	public static String MODELS_PY = "models.py";
 	public static String VIEWS_PY = "views.py";
 	public static String FORMS_PY = "forms.py";
-	public static String URLS_PY = "urls.py";
+	public static String URLS_PY = "urls.py";	
 	public static String INIT_PY = "__init__.py";
 	public static String SETTINGS_PY = "settings.py";
 
+	public static String URLS_DEFAULT_FTL = "urlsDefault.ftl";		
 	public static String NAVBAR_HTML = "navbar.html";
+	
+	public static String MODULE_NAME = "module";
 	public Configuration cfg;
 
-	// data paths
-	private String projectDir =  Application.appRootPath + File.separator+"generated";
-	private String templateDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "templates";
-	private String staticSourceDir = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "resources"+ File.separator + "staticdata" ;
-	private String djangoResources = Application.appRootPath + File.separator+"src"+ File.separator+"com"+ File.separator + "krogen" + File.separator + "resources";
-	private String destDir = projectDir + File.separator+Application.projectTitleRenamed+File.separator+Application.projectTitleRenamed;
-	private String staticDestDir = projectDir + File.separator+Application.projectTitleRenamed+ File.separator+"static";
-
+	// destination paths
+	// project will be generated into:
+	private String projectDir =  Application.appRootPath + File.separator + "generated";
+	// module will be placed into:
+	private String moduleDir =  projectDir + File.separator + Application.projectTitleRenamed + File.separator+ MODULE_NAME;
+	// main configuration files will be generated into:
+	private String projectConfigDestDir = projectDir + File.separator + Application.projectTitleRenamed + File.separator+Application.projectTitleRenamed;
+	// static files will be copied into:
+	private String staticDestDir = projectDir + File.separator + Application.projectTitleRenamed + File.separator+"static";
+	
+	// source paths
+	private String resourcesSourceDir = Application.appRootPath + File.separator+"src"+ File.separator + "resources";
+	// ftl template source
+	private String templateDir = resourcesSourceDir + File.separator + "freemarkertemplates";	
+	// html template source
+	private String djangoTemplateDir = resourcesSourceDir  +File.separator+"djangotemplates";
+	// static resources source
+	private String staticSourceDir = resourcesSourceDir + File.separator + "staticdata" ;
+	
 	private Template template;
 	Map<String, Object> context = new HashMap<String, Object>();
+	
+	DjangoAdapter djangoAdapter = new DjangoAdapter();
 
-	//
-
-	public DjangoGenerator() throws IOException {
+	public DjangoGenerator() throws IOException {		
 		cfg = new Configuration();		
 		try {
 			cfg.setDirectoryForTemplateLoading(new File(templateDir));
@@ -65,18 +80,40 @@ public class DjangoGenerator {
 	}
 
 	public void generate() throws IOException{
+		// create base folders
 		generateBasicFolderStructure();
-		generateInitPy();	
-		generateManagePy();
-		generateWsgiPy();
+		// project settings
+		generateProjectSettings();		
+		// component files
 		generateModelsPy();
 		generateFormsPy();
 		generateViewsPy();
 		generateURLsPy();
-		generateSettingsPy();
 		generateStaticFiles();
+		// directly tweak html files using freemarker
 		generateTemplates();
+		
+		//copy custom code
 
+	}
+
+	protected void generateProjectSettings() throws IOException{
+		context.clear();
+		context.put("projectname", Application.projectTitleRenamed);
+		context.put("modulename", MODULE_NAME);
+
+		// Generate the manage.py 
+		generateWithProjectname(projectDir + File.separator + Application.projectTitleRenamed,MANAGE_PY, context);	
+		// Generate the __init__.py file with the basic configurations 
+		// TODO put basic config into an external file
+		generateWithProjectname(projectConfigDestDir,INIT_PY, context);
+		// Generate settings.py
+		generateWithProjectname(projectConfigDestDir,SETTINGS_PY, context);		
+		// Generate wsgi.py
+		generateWithProjectname(projectConfigDestDir,WSGI_PY,context);		
+		// Generate urls.py
+		generateWithProjectname(projectConfigDestDir,URLS_DEFAULT_FTL,URLS_PY,context);	
+		
 	}
 
 	protected void generateStaticFiles() throws IOException{		
@@ -84,119 +121,72 @@ public class DjangoGenerator {
 		File tempDestDir = new File(staticDestDir);		
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
 	}
+	
 	protected void generateTemplates() throws IOException{	
-		
 
-		String srcDirString = djangoResources  +File.separator+"djangotemplates";
-		File srcDir = new File(srcDirString);		
-		File tempDestDir = new File(destDir +File.separator+"templates");		
+		String srcDirString = djangoTemplateDir;
+		File srcDir = new File(djangoTemplateDir);		
+		File tempDestDir = new File(moduleDir +File.separator+"templates");		
 
-		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+		// TODO:
+		// add multimeenu system
+		DjangoSubMenu mainMenu = djangoAdapter.getDefaultMenu();
 		context.clear();
 		context.put("menu", mainMenu);
 
 		generateWithProjectname(srcDirString,NAVBAR_HTML, context);
 
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
-	}
-	/**
-	 * Create the __init__.py file with the basic configurations 
-	 * @throws IOException
-	 */
-	protected void generateInitPy() throws IOException{
-		// 		create empty __init__.py 
-		//		File file = new File(destDir + File.separator+"__init__.py");
-		//		if (!file.exists())
-		//			file.createNewFile();
-		context.clear();		
-		generateWithProjectname(destDir,INIT_PY, context);
 
-	}
+	}	
 
 	public void generateViewsPy()throws IOException{
-		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+
+		//AppCache.getInstance().getXmlMappings();
+		Map<String, String> panels = djangoAdapter.getPanelClassMap();
 
 		context.clear();
 		context.put("classes", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
 		context.put("description", Settings.APP_DESCRIPTION);	
-		context.put("mainmenu", mainMenu);
+		context.put("urls", djangoAdapter.getDjangoUrls());		
+		context.put("panels", panels);
 
-		generateWithProjectname(destDir,VIEWS_PY, context);
+		generateWithProjectname(moduleDir,VIEWS_PY, context);
 	}
 
 	public void generateFormsPy()throws IOException{
-		AdaptSubMenu mainMenu = AppCache.getInstance().getDefaultMenu();
+		DjangoSubMenu mainMenu = djangoAdapter.getDefaultMenu();
+		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 
 		context.clear();
-		context.put("classes", new ArrayList<String>());
+		context.put("forms", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
 		context.put("menu", mainMenu);
+		context.put("models", djangoModelList);
 
-		generateWithProjectname(destDir,FORMS_PY, context);
+		generateWithProjectname(moduleDir,FORMS_PY, context);
 	}
-	public void generateSettingsPy()throws IOException{
-		context.clear();
-		context.put("projectname", Application.projectTitleRenamed);
 
-		generateWithProjectname(destDir,SETTINGS_PY, context);
-	}
 	public void generateURLsPy()throws IOException{
-		// TODO 
-		// get the links from the menu system??
-		// get he links from the forms list
-		AppCache cache = AppCache.getInstance();
-		List<DjangoUrl> urls = new ArrayList<DjangoUrl>();
-		Map<String, String> panels =AppCache.getInstance().getPanelClassMap();
-
-
-		for (Map.Entry<String, String> entry : panels.entrySet())
-		{
-			System.out.println(entry.getKey() + "/" + entry.getValue());
-			urls.add(new DjangoUrl(entry.getValue(),entry.getValue()));
-		}
 
 		context.clear();		
 		context.put("imports", new ArrayList<String>());
-		context.put("urls", urls);
+		context.put("urls", djangoAdapter.getDjangoUrls());
 		context.put("projectname", Application.projectTitleRenamed);
-
-		generateWithProjectname(destDir,URLS_PY, context);
+		context.put("modulename", MODULE_NAME);
+		generateWithProjectname(moduleDir,URLS_PY, context);
 	}
 
-	private void creatDjangoUrls(AdaptSubMenu menu){
-
-		new ArrayList<DjangoUrl>();
-
-	}
 	public void generateModelsPy()throws IOException{
+		// Map<String, DjangoModel> model = DjangoContainer.getInstance().getDjangoModels();
+
+		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
+
 		context.clear();
-		context.put("classes", new ArrayList<String>());
+		context.put("models", djangoModelList);
 
-		generateWithProjectname(destDir,MODELS_PY, context);
-	}
-	/**
-	 * Generate the manage.py file in the appropriate folder
-	 * The only property needed to add here is the project name
-	 * @throws IOException
-	 */
-	public void generateManagePy() throws IOException{
-		context.clear();
-		context.put("projectname", Application.projectTitleRenamed);
-
-		generateWithProjectname(projectDir+File.separator+Application.projectTitleRenamed,MANAGE_PY, context);		
-	}
-
-	/**
-	 * Generate the wsgi.py file in the appropriate folder
-	 * The only property needed to add here is the project name
-	 * @throws IOException
-	 */
-	public void generateWsgiPy() throws IOException{
-		context.clear();
-		context.put("projectname", Application.projectTitleRenamed);
-
-		generateWithProjectname(destDir,WSGI_PY,context);		
+		generateWithProjectname(moduleDir,MODELS_PY, context);
 	}
 
 	/**
@@ -205,14 +195,26 @@ public class DjangoGenerator {
 	 * @param templateName
 	 * @throws IOException
 	 */
-	private void generateWithProjectname(String path, String templateName, Map<String, Object> context) throws IOException{
+	private void generateWithProjectname(String path, String destinationFileName, Map<String, Object> context) throws IOException{
+		String templateName = destinationFileName.substring(0,destinationFileName.lastIndexOf(".")) +".ftl";		
+		generateWithProjectname(path, templateName, destinationFileName, context);
+	}
+/**
+ * Used to generate files using freemarker
+ * @param path - destination path
+ * @param templateName
+ * @param destinationFileName
+ * @param context
+ * @throws IOException
+ */
+	private void generateWithProjectname(String path, String templateName,String destinationFileName, Map<String, Object> context) throws IOException{
 		try{
 			// set basic configuration
-			template = cfg.getTemplate(templateName.substring(0,templateName.lastIndexOf(".")) +".ftl");
+			template = cfg.getTemplate(templateName);
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
 
 			// put data to context
-			Writer out = new OutputStreamWriter(new FileOutputStream(path+File.separator+templateName));
+			Writer out = new OutputStreamWriter(new FileOutputStream(path + File.separator+destinationFileName));
 			if (out != null) {
 				template.process(context, out);
 				out.flush();
@@ -222,22 +224,24 @@ public class DjangoGenerator {
 			throw new IOException("Missing template  " + templateName + ".",
 					e);
 		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Creates the basic folder structure for the Django project
 	 * @throws IOException
 	 */
-	protected void generateBasicFolderStructure() throws IOException{
-		Path folderToCreate = Paths.get(destDir);
+	protected void generateBasicFolderStructure() throws IOException{	
+		createFolder(Paths.get(projectConfigDestDir));
+		createFolder(Paths.get(moduleDir));		
+	}
 
+	private void createFolder(Path folderToCreate) throws IOException{
 		if (!folderToCreate.toFile().exists())
 			if (!folderToCreate.toFile().mkdirs()) {
-				throw new IOException("Greska pri kreiranju izlaznog direktorijuma "
-						+ destDir);
+				throw new IOException("Error during folder creation."
+						+ folderToCreate);
 			}
 	}
 }

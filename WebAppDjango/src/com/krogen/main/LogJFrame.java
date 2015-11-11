@@ -28,8 +28,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import com.krogen.static_names.Settings;
-import com.krogen.xml_readers.MenuReader;
-import com.krogen.xml_readers.PanelReader;
+import com.krogen.xmlParsers.MainParser;
 
 /**
  * Parse xml, generate python code, start up the project 
@@ -146,9 +145,11 @@ public class LogJFrame extends JFrame {
 
 
 	private void parseData(){
-		MenuReader.load();
-		PanelReader.loadMappings();
+		MainParser parser = new MainParser();
+		parser.parseData();	
+		
 	}
+	
 	private void initGenerator() {
 
 		try {
@@ -158,15 +159,6 @@ public class LogJFrame extends JFrame {
 			e.printStackTrace();
 			displayStackTrace(e);
 		}
-	}
-
-
-	/**
-	 * Set 
-	 */
-	private void parseXML() {
-		MenuReader.load();
-
 	}
 
 	/**

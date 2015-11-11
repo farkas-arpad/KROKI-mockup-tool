@@ -1,6 +1,5 @@
 package com.krogen.util.resolvers;
 
-import com.krogen.xml_readers.TypeComponenMappingReader;
 
 public class ComponentTypeResolver {
 
@@ -9,14 +8,14 @@ public class ComponentTypeResolver {
 	 * This class tries to read preferred template for given data type if it is available,
 	 * otherwise it falls back to simple text field template.
 	 */
-	public static String getTemplate(String typeName) {
-		String componentId = AppCache.getInstance().getComponentForType(typeName);
-		String template = TypeComponenMappingReader.loadComponent(componentId);
-		if(template != null) {
-			return template;
-		}else {
-			return TypeComponenMappingReader.loadComponent("textField");
-		}
-	}
+//	public static String getTemplate(String typeName) {
+//		String componentId = DataContainer.getInstance().getComponentForType(typeName);
+//		String template = TypeComponenMappingReader.loadComponent(componentId);
+//		if(template != null) {
+//			return template;
+//		}else {
+//			return TypeComponenMappingReader.loadComponent("textField");
+//		}
+//	}
 
 }

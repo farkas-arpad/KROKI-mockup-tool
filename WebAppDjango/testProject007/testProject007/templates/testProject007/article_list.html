@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+  {% load crispy_forms_tags %}
+  
+  {% block head_title %} List {% endblock %}
+  
+  {% block jumbotron %}
+  <div class="jumbotron">      
+   	
+<h2>Articles</h2>
+<ul>
+{% for object in object_list %}
+    <li>{{ object }}.toString()</li>
+{% empty %}
+    <li>No data yet.</li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

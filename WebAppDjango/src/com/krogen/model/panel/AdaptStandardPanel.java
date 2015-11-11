@@ -3,7 +3,7 @@ package com.krogen.model.panel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.krogen.model.ejb.EntityBean;
+import com.krogen.model.ejb.EjbClass;
 import com.krogen.model.panel.configuration.DataSettings;
 import com.krogen.model.panel.configuration.Next;
 import com.krogen.model.panel.configuration.PanelSettings;
@@ -12,7 +12,7 @@ import com.krogen.model.panel.configuration.operation.SpecificOperations;
 
 public class AdaptStandardPanel extends AdaptPanel {
 
-	protected EntityBean entityBean;
+	protected EjbClass entityBean;
 	protected Integer level;
 	protected PanelSettings panelSettings;
 	protected SpecificOperations standardOperations;
@@ -21,10 +21,10 @@ public class AdaptStandardPanel extends AdaptPanel {
 	protected List<Next> nextPanels = new ArrayList<Next>();
 	protected List<Zoom> zoomPanels = new ArrayList<Zoom>();
 	
-	public EntityBean getEntityBean() {
+	public EjbClass getEntityBean() {
 		return entityBean;
 	}
-	public void setEntityBean(EntityBean entityBean) {
+	public void setEntityBean(EjbClass entityBean) {
 		this.entityBean = entityBean;
 	}
 	public Integer getLevel() {
