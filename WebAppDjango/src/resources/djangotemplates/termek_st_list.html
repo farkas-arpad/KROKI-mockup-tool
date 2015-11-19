@@ -1,0 +1,38 @@
+  {% extends "base.html" %}
+  {% load crispy_forms_tags %}
+  
+  {% block head_title%} {{block.super}} {% endblock %}
+  
+  {% block jumbotron %}
+   <!-- Main component for a primary marketing message or call to action -->
+	<div class="jumbotron">      
+	
+	 <a href="{% url 'termek_st_new' %}"> New</a>
+   		<div class="row">
+        <div class="col-md-3">
+              <fieldset>
+                <div class="form-group">
+                <ul>
+                    {% for termek_st in termek_sts %}
+                       <li class="list-unstyled">                       
+                       {% if termek_st.name == null %}
+                       <a href="{% url 'termek_st' termek_st.id %}" class="col-lg-8" > termek_st {{termek_st.id}}</a>
+                       {% else %}
+                       <a href="{% url 'termek_st' termek_st.id %}" class="col-lg-8"> {{termek_st}}</a> 
+                       {% endif %}
+                         {% if deletable == "true" %}
+                         <form action="{% url 'termek_st_delete' termek_st.id %}" method="POST">
+                         {% csrf_token %}
+                          <input type="submit" class="col-lg-4" value="Delete" />
+                         </form>
+                         {% endif %}
+                       </li>
+                    {% endfor %}  
+                </ul>      
+                </div>
+              </fieldset>
+        </div>   
+    </div>
+      
+  {% endblock %}
+  

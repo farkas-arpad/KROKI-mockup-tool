@@ -1,7 +1,6 @@
 package com.krogen.main;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -99,14 +98,14 @@ public class DataContainer {
 		return null;
 	}
 	
-	public AdaptStandardPanel getPanelByName(String name) {
-		AdaptPanel panel = model.getPanels().get(name);
-		if(panel instanceof AdaptStandardPanel) {
-			return (AdaptStandardPanel) panel;
-		}else {
-			return null;
-		}
-	}
+//	public AdaptStandardPanel getPanelByName(String name) {
+//		AdaptPanel panel = model.getPanels().get(name);
+//		if(panel instanceof AdaptStandardPanel) {
+//			return (AdaptStandardPanel) panel;
+//		}else {
+//			return null;
+//		}
+//	}
 //	
 //	public String getPanelId(String className) {
 //		return model.getPanelClassMap().get(className);
@@ -137,6 +136,9 @@ public class DataContainer {
 		return model.getXmlMappings().get(className);
 	}
 	
+	public Map<String, String> getXMLMappings() {
+		return model.getXmlMappings();
+	}
 	public static Application getApplication() {
 		return application;
 	}
@@ -153,7 +155,7 @@ public class DataContainer {
 		return model.getDefaultMenu();
 	}
 	
-	public Map<String, AdaptPanel> getPanels(){
+	public List<AdaptPanel> getPanels(){
 		return model.getPanels();
 	}
 
@@ -162,10 +164,14 @@ public class DataContainer {
 	}
 
 	public void addPanel(AdaptPanel panel) {
-		model.add(panel.getName(), panel);
+		model.add(panel);
 		
 	}
 	public List<EjbClass> getEjbClasses(){
 		return model.getEntityBeans();
+	}
+	
+	public Map<String, Enumeration> getEnumerations(){
+		return model.getEnumerations();
 	}
 }

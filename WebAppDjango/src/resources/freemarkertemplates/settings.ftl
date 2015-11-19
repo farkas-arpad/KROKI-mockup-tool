@@ -43,8 +43,9 @@ INSTALLED_APPS = (
     #third party apps
     'crispy_forms',
     'registration',
-    #this app
+    #this app    
     '${projectname}',
+    '${modulename}'
     
 )
 
@@ -64,7 +65,7 @@ ROOT_URLCONF = '${projectname}.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'${projectname}/templates')],
+        'DIRS': [os.path.join(BASE_DIR,'${modulename}/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

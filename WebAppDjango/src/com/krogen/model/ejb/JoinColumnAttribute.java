@@ -6,7 +6,7 @@ import java.util.List;
 
 public class JoinColumnAttribute extends AbstractAttribute {
 
-	protected Class<?> lookupClass;
+	protected String lookupClass;
 	protected String zoomedBy;
 	protected List<ColumnAttribute> columns;
 	
@@ -37,11 +37,11 @@ public class JoinColumnAttribute extends AbstractAttribute {
 		columns.remove(column);
 	}
 	
-	public Class<?> getLookupClass() {
+	public String getLookupClass() {
 		return lookupClass;
 	}
 
-	public void setLookupClass(Class<?> lookupClass) {
+	public void setLookupClass(String lookupClass) {
 		this.lookupClass = lookupClass;
 	}
 

@@ -5,10 +5,14 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 
 urlpatterns = patterns('',
-   	# Set Django login and logout links
-    url(r'^logout/$', '${projectname}.views.logout_user', name='logout'),
-    url(r'^login/$', '${projectname}.views.login_user', name='login'),  
     
+    # Set Django login and logout links
+    url(r'^logout/$', '${modulename}.views.logout_user', name='logout'),
+    url(r'^login/$', '${modulename}.views.login_user', name='login'),  
+    
+    # home page
+    url(r'^$', '${modulename}.views.index', name='index'),
+      
     <#list urls as url>
     #Links for ${url.pattern}
     url(r'^${url.pattern}/list', '${modulename}.views.${url.view}_list', name = '${url.view}_list'),   
@@ -16,11 +20,7 @@ urlpatterns = patterns('',
     url(r'^${url.pattern}/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}', name = '${url.view}'), 
     url(r'^${url.pattern}/edit/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}_edit', name = '${url.view}_edit'),   
     url(r'^${url.pattern}/delete/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}_delete', name = '${url.view}_delete'),     
+
     </#list>   
    
-   	# home page
-    url(r'^$', '${projectname}.views.index', name='index'),
-    
-   	# test url
- 	url(r'^test', 'views.testdefault', name='test'), 			
 ) 

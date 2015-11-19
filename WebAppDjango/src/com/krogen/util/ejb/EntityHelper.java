@@ -75,7 +75,7 @@ public class EntityHelper {
 		while (it.hasNext()) {
 			attr = it.next();
 			if (attr instanceof JoinColumnAttribute) {
-				if (((JoinColumnAttribute) attr).getLookupClass().getName()
+				if (((JoinColumnAttribute) attr).getLookupClass()
 						.equals(lookupClass.getName())) {
 					return counter;
 				} else {
@@ -188,8 +188,8 @@ public class EntityHelper {
 		for (int i = 0; i < bean.getAttributes().size(); i++) {
 			if (bean.getAttributes().get(i) instanceof JoinColumnAttribute) {
 				jcAttr = (JoinColumnAttribute) bean.getAttributes().get(i);
-				String jcaName = joinColumnAttribute.getLookupClass().getName();
-				if (jcAttr.getLookupClass().getName().equals(jcaName)) {
+				String jcaName = joinColumnAttribute.getLookupClass();
+				if (jcAttr.getLookupClass().equals(jcaName)) {
 					for (int j = 0; j < jcAttr.getColumns().size(); j++) {
 						colAttr = jcAttr.getColumns().get(j);
 						if (colAttr.getName().equals(columnAttribute.getName())) {

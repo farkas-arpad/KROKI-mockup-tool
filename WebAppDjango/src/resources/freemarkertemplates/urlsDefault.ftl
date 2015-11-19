@@ -5,7 +5,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 urlpatterns = patterns('',        
-	url(r'^admin/', include(admin.site.urls)),
 	url(r'^${projectname}/', include('${modulename}.urls')),
-	  	
+	 	  
+   
+   	# test url
+ 	url(r'^test/', '${modulename}.views.testdefault', name='test'), 	
+ 	url(r'^admin/', include(admin.site.urls)),
+	 	
 ) 

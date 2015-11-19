@@ -3,8 +3,9 @@
 
 #default imports
 from django import forms
-from django.utils import timezone
 from django.forms.widgets import TextInput, Textarea, Select, DateInput, NumberInput, CheckboxInput
+from django.utils import timezone
+
 
 #generated imports
 from ${modulename}.models import Login<#list models as model>, ${model.name}</#list>
@@ -22,7 +23,7 @@ class LoginForm(forms.ModelForm):
 		username = self.cleaned_data.get('username')
 
 <#list models as model>
-class ${model.name}Form(forms.Modelform):
+class ${model.name}Form(forms.ModelForm):
 	class Meta:
 		model = ${model.name}
 		fields =[
@@ -36,9 +37,11 @@ class ${model.name}Form(forms.Modelform):
 		<#if field.entryTypesEnum == 'CharField'>
 			'${field.fieldName}' : TextInput(),
 		<#elseif field.entryTypesEnum == 'IntegerField'>
+			'${field.fieldName}' : NumberInput(),
 		<#elseif field.entryTypesEnum == 'DateField'>
 		<#elseif field.entryTypesEnum == 'FloatField'>
 		<#elseif field.entryTypesEnum == 'BooleanField'>
+			'${field.fieldName}' : CheckboxInput(),
 		<#elseif field.entryTypesEnum == 'ForeignKey'>
 		</#if>
 		</#list>

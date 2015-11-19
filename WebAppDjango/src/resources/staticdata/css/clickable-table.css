@@ -1,0 +1,16 @@
+table#example {
+    border-collapse: collapse;   
+}
+#example tr {
+    background-color: #eee;
+    border-top: 1px solid #fff;
+}
+#example tbody tr:hover {
+    background-color: #ccc;
+}
+#example thead {
+    background-color: #fff;
+}
+#example td:hover {
+    cursor: pointer;
+}

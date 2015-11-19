@@ -2,6 +2,7 @@ package com.krogen.xmlParsers;
 
 import java.io.File;
 
+import com.krogen.main.DataContainer;
 import com.krogen.xmlParsers.enums.MenuType;
 
 
@@ -23,20 +24,22 @@ public class MainParser {
 
 	public void parseData(){
 		// TODO
-//		EnumerationParser enumeParser = new EnumerationParser();
-//		enumParser.parse();
+		EnumerationParser enumeParser = new EnumerationParser();
+		enumeParser.parseEnumerations();
 		// parse menudata 
 		MenuParser menuParser = new MenuParser();
 		menuParser.parse(MenuType.DEFAULT_MENU);
 		if (new File(ParserConstants.generatedModelPath + File.separator + ParserConstants.xmlFileName).exists())
 			menuParser.parse(MenuType.GENERATED_MENUS);
-
-		// parse form data based upon the menu items
-		PanelParser panelParser = new PanelParser();
-		panelParser.parsePanelMappings();
+		
 		// parse model data based upon the forms
 		EntityParser entityParser = new EntityParser();
 		entityParser.parseEjbToXMLMappings();
+		entityParser.parseEjbBeansUsingMappings(DataContainer.getInstance().getXMLMappings());
+		// parse form data based upon the menu items
+		PanelParser panelParser = new PanelParser();
+		panelParser.parsePanelMappings();
+		panelParser.parsePanels();
 		// parse anything else if needed
 
 		

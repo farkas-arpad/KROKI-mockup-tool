@@ -21,7 +21,7 @@ public class DataModel {
 	//--------------------------------------------------------------------| OBJECTS LISTS
 	protected List<EjbClass> entityBeans = new ArrayList<EjbClass>();
 	protected List<DjangoMenu> menus = new ArrayList<DjangoMenu>();
-	protected Map<String, AdaptPanel> panels = new HashMap<String, AdaptPanel>();
+	protected List<AdaptPanel> panels = new ArrayList<AdaptPanel>();
 	protected Map<String, Enumeration> enumerations = new HashMap<String, Enumeration>();
 	protected DjangoSubMenu defaultMenu = new DjangoSubMenu();
 	
@@ -52,8 +52,8 @@ public class DataModel {
 		menus.addAll(allMenus);
 	}
 	
-	public void add(String panelId, AdaptPanel panel) {
-		panels.put(panelId, panel);
+	public void add(AdaptPanel panel) {
+		panels.add(panel);
 	}
 	
 	public void add(String name, Enumeration enumeration) {
@@ -85,11 +85,11 @@ public class DataModel {
 		this.menus = menus;
 	}
 
-	public Map<String, AdaptPanel> getPanels() {
+	public List<AdaptPanel> getPanels() {
 		return panels;
 	}
 
-	public void setPanels(Map<String, AdaptPanel> panels) {
+	public void setPanels(List<AdaptPanel> panels) {
 		this.panels = panels;
 	}
 

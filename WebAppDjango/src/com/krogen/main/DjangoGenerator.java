@@ -16,7 +16,9 @@ import org.apache.commons.io.FileUtils;
 
 import com.krogen.model.django.DjangoAdapter;
 import com.krogen.model.django.modelpy.DjangoModel;
+import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoSubMenu;
+import com.krogen.model.panel.AdaptPanel;
 import com.krogen.static_names.Settings;
 
 import freemarker.template.Configuration;
@@ -134,8 +136,21 @@ public class DjangoGenerator {
 		context.clear();
 		context.put("menu", mainMenu);
 
+		// generate navbar
 		generateWithProjectname(srcDirString,NAVBAR_HTML, context);
 
+		// generate list views
+		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		
+		for (AdaptPanel panel : panels){
+			context.clear();			
+			context.put("menu", mainMenu);
+			context.put("panel", panel);
+			generateWithProjectname(srcDirString,"list.ftl",panel.getName() + "_list.html", context);
+			generateWithProjectname(srcDirString,"newObject.ftl",panel.getName() + "_new.html", context);
+			generateWithProjectname(srcDirString,"object.ftl",panel.getName() + ".html", context);
+
+		}
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
 
 	}	
@@ -143,15 +158,18 @@ public class DjangoGenerator {
 	public void generateViewsPy()throws IOException{
 
 		//AppCache.getInstance().getXmlMappings();
-		Map<String, String> panels = djangoAdapter.getPanelClassMap();
-
+		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
+		
 		context.clear();
 		context.put("classes", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
+		context.put("modulename", MODULE_NAME);
 		context.put("description", Settings.APP_DESCRIPTION);	
 		context.put("urls", djangoAdapter.getDjangoUrls());		
 		context.put("panels", panels);
-
+		context.put("models", djangoModelList);
+		
 		generateWithProjectname(moduleDir,VIEWS_PY, context);
 	}
 
@@ -162,6 +180,8 @@ public class DjangoGenerator {
 		context.clear();
 		context.put("forms", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
+		context.put("modulename", MODULE_NAME);
+
 		context.put("menu", mainMenu);
 		context.put("models", djangoModelList);
 
@@ -182,8 +202,10 @@ public class DjangoGenerator {
 		// Map<String, DjangoModel> model = DjangoContainer.getInstance().getDjangoModels();
 
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
+		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 
 		context.clear();
+		context.put("enumerations", enumerations);
 		context.put("models", djangoModelList);
 
 		generateWithProjectname(moduleDir,MODELS_PY, context);

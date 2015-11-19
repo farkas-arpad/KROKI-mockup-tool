@@ -31,7 +31,16 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
            {% if request.user.is_authenticated %}
-             <li> <a href="{% url 'logout' %}">Logout</a></li>          
+            <li class="dropdown">
+				<a href="#" class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false"> <span class="glyphicon glyphicon-user" aria-hidden="true"></span>  {{ user.username }} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+				<li><a href="{% url 'logout' %}">
+				Logout</a>
+				</li>
+				</ul>
+				</li>           
           {% else %}
              <li class='active'> <a href="{% url 'login' %}">Login</a></li>
                {% endif %}
@@ -54,7 +63,7 @@
 							</li>
 							</#if>							
 					<#else>
-					   <li><a href="${child.activate}">${child.menuName}</a></li>
+					   <li><a href="{% url '${child.activate}_list' %}">${child.menuName}</a></li>
 					</#if>
 				</#foreach>			
         </#if>

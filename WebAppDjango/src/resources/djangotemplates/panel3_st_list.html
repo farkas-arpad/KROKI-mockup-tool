@@ -1,0 +1,54 @@
+  {% extends "base.html" %}
+  {% load crispy_forms_tags %}
+  
+  {% block head_title%} {{block.super}} {% endblock %}
+  
+  {% block jumbotron %}
+   <!-- Main component for a primary marketing message or call to action -->
+	<div class="jumbotron">      
+	
+
+   		       <fieldset>
+              <legend>Panel3</legend>        
+              <div class="panel panel-default">
+ 			 <div class="panel-body">
+              	 <a class="btn btn-large btn-info" href="{% url 'panel3_st_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Panel3</a>  
+              	<a class="btn btn-large btn-info" href="{% url 'panel3_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh </a>  
+             
+              	 </div>
+              	 </div>     
+                  <table class="table" id="example">   
+                  <thead>
+                    <tr>
+           			<th>ID</th>
+           			<th>property7</th>
+           			<th>property8</th>
+           			<th>property9</th>
+        			</tr>
+        			</thead>           			        
+                    {% for panel3_st in panel3_sts %}
+                  <tr>
+           			<td>{{ panel3_st.id }}</td>
+           			<td>{{ panel3_st.a_property7 }}</td>
+           			<td>{{ panel3_st.a_property8 }}</td>
+           			<td>{{ panel3_st.a_property9 }}</td>
+        			<td>        				
+        			 <a class="btn btn-default" href="{% url 'panel3_st' panel3_st.id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Details</span>	</a>					
+						</td>
+                       <td> {% if deletable == "true" %}
+                         <form action="{% url 'panel3_st_delete' panel3_st.id %}" method="POST">
+                         {% csrf_token %}
+                        <button class="btn btn-default" type="submit">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
+						</button>
+						</form>
+						</td>
+						
+                         {% endif %}
+                       </tr>                
+                    {% endfor %}       
+                    </table>                 
+              </fieldset>
+        </div>         
+  {% endblock %}
+  

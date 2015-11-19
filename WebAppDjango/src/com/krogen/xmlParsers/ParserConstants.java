@@ -37,8 +37,8 @@ public class ParserConstants {
 	protected static String panelsFileName = "panel.xml";
 	
 	// EJB data xml files
-	protected static String EjbMappingFileName 	= "xml-mapping.xml";
-
+	protected static String ejbMappingFileName 	= "xml-mapping.xml";
+	
 	// ENUMERATION data xml files
 	protected static String enumStaticFileName = "enumerations.xml";
 	protected static String enumGeneratedFileName = "enumerations-generated.xml";

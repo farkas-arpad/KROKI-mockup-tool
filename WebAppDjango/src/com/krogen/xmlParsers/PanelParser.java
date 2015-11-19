@@ -60,166 +60,189 @@ public class PanelParser {
 		}
 	}	
 
-	/**
-	 * Load panel data from XML file based on panel ID
-	 */
-	public static AdaptPanel loadPanel(String panelId, PanelType type, String openedId, OpenedAs openedAs) {
-		System.out.println(logPrefix + " Loading data for: " + panelId);
-		try {
-			Document document = XMLParserUtils.parseXml(ParserConstants.panelsDirectoryPath + ParserConstants.panelsFileName);
-			AdaptPanel panel = null;
-			switch (type) {
-			case STANDARDPANEL:
-				//	AppCache.displayTextOnMainFrame(logPrefix + " Fetching standard panel data for: " + panelId, 0);
-				if(openedAs.equals(OpenedAs.NEXT)) {
-					panel = findNextPanel(document, panelId, type, openedId);
-				}else if(openedAs.equals(OpenedAs.ZOOM)) {
-					panel = findZoomPanel(document, panelId, type, openedId);
-				}else {
-					panel = findStandardPanel(document, panelId);
-				}
-				break;
-			case PARENTCHILDPANEL:
-				//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching parent-child panel data for: " + panelId, 0);
-				panel = findParentChildPanel(document, panelId);
-				break;
-			case MANYTOMANYPANEL:
-				//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching many to many panel data for: " + panelId, 0);
-				panel = findManyToManyPanel(document, panelId);
-				break;
-			}
-			return panel;
-		} catch (Exception e) {
-			//		AppCache.displayTextOnMainFrame("Error reading panel data for name: " + panelId, 1);
-			//		AppCache.displayStackTraceOnMainFrame(e);
-		}
-		return null;
-	}
 
-	private static AdaptStandardPanel findStandardPanel(Document document, String panelId) {
+	//	/**
+	//	 * Load panel data from XML file based on panel ID
+	//	 */
+	//	public static AdaptPanel loadPanel(String panelId, PanelType type, String openedId, OpenedAs openedAs) {
+	//		System.out.println(logPrefix + " Loading data for: " + panelId);
+	//		try {
+	//			Document document = XMLParserUtils.parseXml(ParserConstants.panelsDirectoryPath + ParserConstants.panelsFileName);
+	//			AdaptPanel panel = null;
+	//			switch (type) {
+	//			case STANDARDPANEL:
+	//				//	AppCache.displayTextOnMainFrame(logPrefix + " Fetching standard panel data for: " + panelId, 0);
+	//				if(openedAs.equals(OpenedAs.NEXT)) {
+	//					panel = findNextPanel(document, panelId, type, openedId);
+	//				}else if(openedAs.equals(OpenedAs.ZOOM)) {
+	//					panel = findZoomPanel(document, panelId, type, openedId);
+	//				}else {
+	//					panel = findStandardPanel(document, panelId);
+	//				}
+	//				break;
+	//			case PARENTCHILDPANEL:
+	//				//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching parent-child panel data for: " + panelId, 0);
+	//				panel = findParentChildPanel(document, panelId);
+	//				break;
+	//			case MANYTOMANYPANEL:
+	//				//		AppCache.displayTextOnMainFrame(logPrefix + " Fetching many to many panel data for: " + panelId, 0);
+	//				panel = findManyToManyPanel(document, panelId);
+	//				break;
+	//			}
+	//			return panel;
+	//		} catch (Exception e) {
+	//			//		AppCache.displayTextOnMainFrame("Error reading panel data for name: " + panelId, 1);
+	//			//		AppCache.displayStackTraceOnMainFrame(e);
+	//		}
+	//		return null;
+	//	}
+
+	public void parsePanels(){
+		Document document = XMLParserUtils.parseXml(ParserConstants.panelsDirectoryPath + ParserConstants.panelsFileName);
 		NodeList stdPanelNodes = document.getElementsByTagName(Tags.STANDARD_PANEL);
-		String id = null;
 		for(int i=0; i<stdPanelNodes.getLength(); i++) {
 			Element stdPanelElement = (Element)stdPanelNodes.item(i);
-			id = stdPanelElement.getAttribute(Tags.ID);
-			if(id.equals(panelId)) {
-				String ejbRef = stdPanelElement.getAttribute(Tags.EJB_REF);
-//				ModelEntry bean = EntityReader.load(ejbRef) ;
-//				if(bean == null) {
-//					return null;
-//				}
-				AdaptStandardPanel stdPanel = new AdaptStandardPanel();
+			AdaptStandardPanel stdPanel = new AdaptStandardPanel();
+			// TODO check this restriction thing
 			//	bean = getEntityRestrictions(bean, stdPanelElement);
-				stdPanel = new AdaptStandardPanel();
-				stdPanel.setName(id);
-//				stdPanel.setEntityBean(bean);
-//				stdPanel.setLabel(bean.getLabel());
-				stdPanel.setPanelSettings(getSettings(stdPanelElement, new PanelSettings()));
-				stdPanel.setDataSettings(new DataSettings());
-				stdPanel.setStandardOperations(getStandardOperations(stdPanelElement, new SpecificOperations()));
-				stdPanel.setNextPanels(getNexts(document, stdPanelElement));
-				stdPanel.setZoomPanels(getZooms(document, stdPanelElement));
-				return stdPanel;
-			}
+			stdPanel.setName(stdPanelElement.getAttribute(Tags.ID));
+			EjbClass ejbClass = DataContainer.getInstance().findEJBByClassName(stdPanelElement.getAttribute(Tags.EJB_REF));			
+			stdPanel.setEntityBean(ejbClass);
+			stdPanel.setLabel(ejbClass.getLabel());
+			stdPanel.setPanelSettings(getSettings(stdPanelElement, new PanelSettings()));
+			stdPanel.setDataSettings(new DataSettings());
+			stdPanel.setStandardOperations(getStandardOperations(stdPanelElement, new SpecificOperations()));
+			stdPanel.setNextPanels(getNexts(document, stdPanelElement));
+			stdPanel.setZoomPanels(getZooms(document, stdPanelElement));
+			DataContainer.getInstance().addPanel(stdPanel);			
 		}
-		return null;
 	}
 
-	private static AdaptPanel findNextPanel(Document doc,String panelId, PanelType panelType, String openedId) {
-		AdaptPanel panel = null;
-		NodeList nodeList = doc.getElementsByTagName(Tags.NEXT);
-		String id = null;
-		for(int i=0; i<nodeList.getLength(); i++) {
-			Element elem = (Element) nodeList.item(i);
-			id = elem.getAttribute(Tags.NAME);
-			if(id.equals(openedId)) {
-				panel = loadPanel(panelId, panelType, openedId, OpenedAs.DEFAULT);
-				String label = elem.getAttribute(Tags.LABEL);
-				String name = elem.getAttribute(Tags.NAME);
-				panel.setName(name);
-				panel.setLabel(label);
-				if(panel instanceof AdaptStandardPanel) {
-					AdaptStandardPanel stdPanel = (AdaptStandardPanel) panel;
-					PanelSettings settings = stdPanel.getPanelSettings();
-					stdPanel.setPanelSettings(getSettings(elem, settings));
-					stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
-				}
-				return panel;
-			}
-		}
-		return panel;
-	}
+	//private AdaptStandardPanel findStandardPanel(Document document, String panelId) {
+	//	NodeList stdPanelNodes = document.getElementsByTagName(Tags.STANDARD_PANEL);
+	//	String id = null;
+	//	for(int i=0; i<stdPanelNodes.getLength(); i++) {
+	//		Element stdPanelElement = (Element)stdPanelNodes.item(i);
+	//		id = stdPanelElement.getAttribute(Tags.ID);
+	//		if(id.equals(panelId)) {
+	//			String ejbRef = stdPanelElement.getAttribute(Tags.EJB_REF);
+	//							DataContainer.getInstance().get
+	//			//				ModelEntry bean = EntityReader.load(ejbRef) ;
+	//			//				if(bean == null) {
+	//			//					return null;
+	//			//				}
+	//			AdaptStandardPanel stdPanel = new AdaptStandardPanel();
+	//				bean = getEntityRestrictions(bean, stdPanelElement);
+	//			stdPanel = new AdaptStandardPanel();
+	//			stdPanel.setName(id);
+	//			//				stdPanel.setEntityBean(bean);
+	//			//				stdPanel.setLabel(bean.getLabel());
+	//			stdPanel.setPanelSettings(getSettings(stdPanelElement, new PanelSettings()));
+	//			stdPanel.setDataSettings(new DataSettings());
+	//			stdPanel.setStandardOperations(getStandardOperations(stdPanelElement, new SpecificOperations()));
+	//			stdPanel.setNextPanels(getNexts(document, stdPanelElement));
+	//			stdPanel.setZoomPanels(getZooms(document, stdPanelElement));
+	//			return stdPanel;
+	//		}
+	//	}
+	//	return null;
+	//}
 
-	private static AdaptPanel findZoomPanel(Document doc, String panelId, PanelType panelType, String openedId) {
-		AdaptPanel panel = null;
-		NodeList nodeList = doc.getElementsByTagName(Tags.ZOOM);
-		String id = null;
-		panel = loadPanel(panelId, panelType, openedId, OpenedAs.DEFAULT);
-		for(int i=0; i<nodeList.getLength(); i++) {
-			Element elem = (Element)nodeList.item(i);
-			id = elem.getAttribute(Tags.NAME);
-			if(id.equals(openedId)) {
-				if(panel instanceof AdaptStandardPanel) {
-					AdaptStandardPanel stdPanel = (AdaptStandardPanel) panel;
-					PanelSettings settings = stdPanel.getPanelSettings();
-					stdPanel.setPanelSettings(getSettings(elem, settings));
-					stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
-				}
-				return panel;
-			}
-		}
-		return panel;
-	}
+//	private AdaptPanel findNextPanel(Document doc,String panelId, PanelType panelType, String openedId) {
+//		AdaptPanel panel = null;
+//		NodeList nodeList = doc.getElementsByTagName(Tags.NEXT);
+//		String id = null;
+//		for(int i=0; i<nodeList.getLength(); i++) {
+//			Element elem = (Element) nodeList.item(i);
+//			id = elem.getAttribute(Tags.NAME);
+//			if(id.equals(openedId)) {
+//				panel = loadPanel(panelId, panelType, openedId, OpenedAs.DEFAULT);
+//				String label = elem.getAttribute(Tags.LABEL);
+//				String name = elem.getAttribute(Tags.NAME);
+//				panel.setName(name);
+//				panel.setLabel(label);
+//				if(panel instanceof AdaptStandardPanel) {
+//					AdaptStandardPanel stdPanel = (AdaptStandardPanel) panel;
+//					PanelSettings settings = stdPanel.getPanelSettings();
+//					stdPanel.setPanelSettings(getSettings(elem, settings));
+//					stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
+//				}
+//				return panel;
+//			}
+//		}
+//		return panel;
+//	}
 
-	private static AdaptPanel findManyToManyPanel(Document doc, String panelId) {
-		NodeList nodeList = doc.getElementsByTagName(Tags.MANY_TO_MANY);
-		String id = null;
-		for(int i=0; i<nodeList.getLength(); i++) {
-			Element elem = (Element)nodeList.item(i);
-			id = elem.getAttribute(Tags.ID);
-			if(id.equals(panelId)) {
-				AdaptManyToManyPanel mtmPanel = new AdaptManyToManyPanel();
-				mtmPanel.setName(id);
-				String label = elem.getAttribute(Tags.LABEL);
-				mtmPanel.setLabel(label);
-				NodeList childPanelNodes = elem.getElementsByTagName(Tags.PANEL);
-				Element childPanelElement = null;
-				for(int j=0; j<childPanelNodes.getLength(); j++) {
-					childPanelElement = (Element)childPanelNodes.item(j);
-					mtmPanel.add(getSubPanel(childPanelElement));
-				}
-				return mtmPanel;
-			}
-		}
-		return null;
-	}
+//	private AdaptPanel findZoomPanel(Document doc, String panelId, PanelType panelType, String openedId) {
+//		AdaptPanel panel = null;
+//		NodeList nodeList = doc.getElementsByTagName(Tags.ZOOM);
+//		String id = null;
+//		panel = loadPanel(panelId, panelType, openedId, OpenedAs.DEFAULT);
+//		for(int i=0; i<nodeList.getLength(); i++) {
+//			Element elem = (Element)nodeList.item(i);
+//			id = elem.getAttribute(Tags.NAME);
+//			if(id.equals(openedId)) {
+//				if(panel instanceof AdaptStandardPanel) {
+//					AdaptStandardPanel stdPanel = (AdaptStandardPanel) panel;
+//					PanelSettings settings = stdPanel.getPanelSettings();
+//					stdPanel.setPanelSettings(getSettings(elem, settings));
+//					stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
+//				}
+//				return panel;
+//			}
+//		}
+//		return panel;
+//	}
 
-	private static AdaptParentChildPanel findParentChildPanel(Document doc, String panelId) {
-		NodeList nodeList = doc.getElementsByTagName(Tags.PARENT_CHILD);
-		String id = null;
-		for(int i=0;i <nodeList.getLength(); i++) {
-			Element elem = (Element) nodeList.item(i);
-			id =  elem.getAttribute(Tags.ID);
-			if(id.equals(panelId)) {
-				AdaptParentChildPanel pcPanel = new AdaptParentChildPanel();
-				pcPanel.setName(id);
-				String label = elem.getAttribute(Tags.LABEL);
-				pcPanel.setLabel(label);
-				NodeList childPanelNodes = elem.getElementsByTagName(Tags.PANEL);
-				Element  subElem = null;
-				for(int j=0; j<childPanelNodes.getLength(); j++) {
-					subElem = (Element) childPanelNodes.item(j);
-					pcPanel.add(getSubPanel(subElem));
-				}
-				return pcPanel;
-			}
-		}
-		return null;
-	}
+//	private AdaptPanel findManyToManyPanel(Document doc, String panelId) {
+//		NodeList nodeList = doc.getElementsByTagName(Tags.MANY_TO_MANY);
+//		String id = null;
+//		for(int i=0; i<nodeList.getLength(); i++) {
+//			Element elem = (Element)nodeList.item(i);
+//			id = elem.getAttribute(Tags.ID);
+//			if(id.equals(panelId)) {
+//				AdaptManyToManyPanel mtmPanel = new AdaptManyToManyPanel();
+//				mtmPanel.setName(id);
+//				String label = elem.getAttribute(Tags.LABEL);
+//				mtmPanel.setLabel(label);
+//				NodeList childPanelNodes = elem.getElementsByTagName(Tags.PANEL);
+//				Element childPanelElement = null;
+//				for(int j=0; j<childPanelNodes.getLength(); j++) {
+//					childPanelElement = (Element)childPanelNodes.item(j);
+//					mtmPanel.add(getSubPanel(childPanelElement));
+//				}
+//				return mtmPanel;
+//			}
+//		}
+//		return null;
+//	}
+
+//	private AdaptParentChildPanel findParentChildPanel(Document doc, String panelId) {
+//		NodeList nodeList = doc.getElementsByTagName(Tags.PARENT_CHILD);
+//		String id = null;
+//		for(int i=0;i <nodeList.getLength(); i++) {
+//			Element elem = (Element) nodeList.item(i);
+//			id =  elem.getAttribute(Tags.ID);
+//			if(id.equals(panelId)) {
+//				AdaptParentChildPanel pcPanel = new AdaptParentChildPanel();
+//				pcPanel.setName(id);
+//				String label = elem.getAttribute(Tags.LABEL);
+//				pcPanel.setLabel(label);
+//				NodeList childPanelNodes = elem.getElementsByTagName(Tags.PANEL);
+//				Element  subElem = null;
+//				for(int j=0; j<childPanelNodes.getLength(); j++) {
+//					subElem = (Element) childPanelNodes.item(j);
+//					pcPanel.add(getSubPanel(subElem));
+//				}
+//				return pcPanel;
+//			}
+//		}
+//		return null;
+//	}
 
 	// Returns JSON representation of parent-child panels' panels
 	// This method is used to quickly fetch parent-child panel information from XML file
-	public static ArrayList<String> getJSONPanelList(String pcPanelName) {
+	public ArrayList<String> getJSONPanelList(String pcPanelName) {
 		ArrayList<String> panels = new ArrayList<String>();
 		Document document = XMLParserUtils.parseXml(ParserConstants.panelsDirectoryPath + ParserConstants.panelsFileName);
 		NodeList nodeList = document.getElementsByTagName(Tags.PARENT_CHILD);
@@ -248,26 +271,26 @@ public class PanelParser {
 		return panels;
 	}
 
-	private static AdaptStandardPanel getSubPanel(Element elem) {
-		AdaptStandardPanel stdPanel = null;
-		String panelRef = elem.getAttribute(Tags.PANEL_REF);
-		stdPanel = (AdaptStandardPanel) loadPanel(panelRef, PanelType.STANDARDPANEL, null, OpenedAs.DEFAULT);
-		String id = elem.getAttribute(Tags.ID);
-		String level = elem.getAttribute(Tags.LEVEL);
-		stdPanel.setName(panelRef);
-		stdPanel.setLabel(id);
-		Integer lev = XMLTypesConverter.resolveInteger(level);
-		stdPanel.setLevel(lev);
-		if(lev > 1) {
-			stdPanel.setAssociationEnd(elem.getAttribute(Tags.ASSOCIATION_END));
-		}
-		stdPanel.setPanelSettings(getSettings(elem, stdPanel.getPanelSettings()));
-		stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
-		stdPanel.setEntityBean(getEntityRestrictions(stdPanel.getEntityBean(), elem));
-		return stdPanel;
-	}
+//	private AdaptStandardPanel getSubPanel(Element elem) {
+//		AdaptStandardPanel stdPanel = null;
+//		String panelRef = elem.getAttribute(Tags.PANEL_REF);
+//		stdPanel = (AdaptStandardPanel) loadPanel(panelRef, PanelType.STANDARDPANEL, null, OpenedAs.DEFAULT);
+//		String id = elem.getAttribute(Tags.ID);
+//		String level = elem.getAttribute(Tags.LEVEL);
+//		stdPanel.setName(panelRef);
+//		stdPanel.setLabel(id);
+//		Integer lev = XMLTypesConverter.resolveInteger(level);
+//		stdPanel.setLevel(lev);
+//		if(lev > 1) {
+//			stdPanel.setAssociationEnd(elem.getAttribute(Tags.ASSOCIATION_END));
+//		}
+//		stdPanel.setPanelSettings(getSettings(elem, stdPanel.getPanelSettings()));
+//		stdPanel.setStandardOperations(getStandardOperations(elem, stdPanel.getStandardOperations()));
+//		stdPanel.setEntityBean(getEntityRestrictions(stdPanel.getEntityBean(), elem));
+//		return stdPanel;
+//	}
 
-	public static SpecificOperations getStandardOperations(Element elem, SpecificOperations operations) {
+	public SpecificOperations getStandardOperations(Element elem, SpecificOperations operations) {
 		// Adding new operations for panel
 		NodeList nodeListOperations = elem.getElementsByTagName(Tags.OPERATION);
 		for (int i = 0; i < nodeListOperations.getLength(); i++) {
@@ -313,9 +336,9 @@ public class PanelParser {
 				oper.add(param);
 				String defaultValue = elemParam.getAttribute(Tags.DEFAULT);
 				if (defaultValue != null && !defaultValue.trim().equals("")) {
-//					Object obj = ConverterUtil.convert(defaultValue,
-//							param.getType());
-//					param.setDefaultValue(obj);
+					//					Object obj = ConverterUtil.convert(defaultValue,
+					//							param.getType());
+					//					param.setDefaultValue(obj);
 				}
 			}
 			operations.add(oper);
@@ -343,14 +366,14 @@ public class PanelParser {
 		return operations;
 	}
 
-	public static EjbClass getEntityRestrictions(EjbClass bean, Element elem) {
+	public EjbClass getEntityRestrictions(EjbClass bean, Element elem) {
 		bean = setRestrictionOnColumn(bean, elem, Tags.HIDDEN, "setHidden", true);
 		bean = setRestrictionOnColumn(bean, elem, Tags.DISABLED, "setDisabled", true);
 		bean = setRestrictionOnColumn(bean, elem, Tags.EDITABLE, "setEditable", true);
 		return bean;
 	}
 
-	public static EjbClass setRestrictionOnColumn(EjbClass bean, Element elem, String tagName, String methodName, Boolean argValue) {
+	public EjbClass setRestrictionOnColumn(EjbClass bean, Element elem, String tagName, String methodName, Boolean argValue) {
 		NodeList nodeList = elem.getElementsByTagName(tagName);
 		Element el = null;
 		String value = null;
@@ -380,7 +403,7 @@ public class PanelParser {
 		return bean;
 	}
 
-	public static PanelSettings getSettings(Element elem, PanelSettings settings) {
+	public PanelSettings getSettings(Element elem, PanelSettings settings) {
 		Node settingsNode = elem.getElementsByTagName(Tags.SETTINGS).item(0);
 		Element el = (Element) settingsNode;
 		if(el == null) {
@@ -405,7 +428,7 @@ public class PanelParser {
 		return settings;
 	}
 
-	private static PanelSettings setOneSetting(String tag, String methodName, Element elem, PanelSettings settings) {
+	private PanelSettings setOneSetting(String tag, String methodName, Element elem, PanelSettings settings) {
 		String val = elem.getAttribute(tag);
 		Method method = null;
 		if(val != null && !val.trim().equals("")) {
@@ -423,7 +446,7 @@ public class PanelParser {
 		return settings;
 	}
 
-	private static List<Next> getNexts(Document doc, Element elem) {
+	private List<Next> getNexts(Document doc, Element elem) {
 		System.out.println("GET NEXTS");
 		List<Next> nexts = new ArrayList<Next>();
 		Next next = null;
@@ -448,7 +471,7 @@ public class PanelParser {
 		return nexts;
 	}
 
-	private static List<Zoom> getZooms(Document doc, Element elem) {
+	private List<Zoom> getZooms(Document doc, Element elem) {
 		List<Zoom> zooms = new ArrayList<Zoom>();
 		Zoom zoom = null;
 		NodeList zoomNodes = elem.getElementsByTagName(Tags.ZOOM);
@@ -462,5 +485,5 @@ public class PanelParser {
 		return zooms;
 	}
 
-	
+
 }

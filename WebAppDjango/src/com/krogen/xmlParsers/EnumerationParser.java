@@ -11,18 +11,20 @@ import com.krogen.main.DataContainer;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.static_names.Tags;
 import com.krogen.xml_utils.XMLParserUtils;
-
+/**
+ * Parsing enumerations
+ *
+ */
 public class EnumerationParser {
 
-	
 	private static String logPrefix = "ENUMERATION READER: ";
 
 	public void parseEnumerations() {
-		load(ParserConstants.staticModelPath + File.separator + ParserConstants.enumStaticFileName);
-		load(ParserConstants.generatedModelPath + File.separator + ParserConstants.enumGeneratedFileName);
+		parseEnumeration(ParserConstants.staticModelPath + File.separator + ParserConstants.enumStaticFileName);
+		parseEnumeration(ParserConstants.generatedModelPath + File.separator + ParserConstants.enumGeneratedFileName);
 	}
 
-	private void load(String filePath) {
+	private void parseEnumeration(String filePath) {
 		try {
 			Document document = XMLParserUtils.parseXml(filePath);
 			NodeList enumNodes = document.getElementsByTagName(Tags.ENUM);

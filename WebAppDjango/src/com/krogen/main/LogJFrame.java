@@ -228,6 +228,7 @@ public class LogJFrame extends JFrame {
 		processBuilder.redirectErrorStream(true);
 		processBuilder.redirectOutput(Redirect.INHERIT);
 		Process process = processBuilder.start();
+		
 		//	process.waitFor();
 		//	displayText("Starting internal server on port 8000", 0);
 	}
