@@ -3,17 +3,13 @@
   
   {% block head_title%} {{block.super}} {% endblock %}
   
-  {% block jumbotron %}
-   <!-- Main component for a primary marketing message or call to action -->
-	<div class="jumbotron">      
-	
-
-   		       <fieldset>
+  {% block jumbotron_content %}
+  		       <fieldset>
               <legend>${panel.entityBean.label}</legend>        
               <div class="panel panel-default">
  			 <div class="panel-body">
               	 <a class="btn btn-large btn-info" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>  
-              	<a class="btn btn-large btn-info" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh </a>  
+              	<a class="btn btn-large btn-info" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
              
               	 </div>
               	 </div>     
@@ -46,8 +42,13 @@
                        </tr>                
                     {% endfor %}       
                     </table>                 
-              </fieldset>
-        </div>         
+              </fieldset>       
   {% endblock %}
   
+  {% block next_forms %}
+     <#list panel.nextPanels as nextFormUrl>
+        	 <a class="btn btn-info" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${panelNameMap[nextFormUrl.panelId]} </a>      
+     </#list>    		
+  
+  {% endblock %}
   

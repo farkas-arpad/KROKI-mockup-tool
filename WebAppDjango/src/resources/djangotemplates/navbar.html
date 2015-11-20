@@ -14,21 +14,15 @@
           <ul class="nav navbar-nav">          
             {% if request.user.is_authenticated %}
             					<li class="dropdown">
-            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Org jedinica <span class="caret"></span></a>
+            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">newF001 <span class="caret"></span></a>
               			<ul class="dropdown-menu">
-					   <li><a href="{% url 'orgjedinica_st_list' %}">Org jedinica</a></li>
+					   <li><a href="{% url 'newf001_st_list' %}">newF001</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
-            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Panel2 <span class="caret"></span></a>
+            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">testF002 <span class="caret"></span></a>
               			<ul class="dropdown-menu">
-					   <li><a href="{% url 'panel2_st_list' %}">Panel2</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-            			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Panel3 <span class="caret"></span></a>
-              			<ul class="dropdown-menu">
-					   <li><a href="{% url 'panel3_st_list' %}">Panel3</a></li>
+					   <li><a href="{% url 'testf002_st_list' %}">testF002</a></li>
 						</ul>
 					</li>
             {% endif %}

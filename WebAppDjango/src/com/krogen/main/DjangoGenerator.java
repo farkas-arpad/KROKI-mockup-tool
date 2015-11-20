@@ -141,11 +141,13 @@ public class DjangoGenerator {
 
 		// generate list views
 		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		Map panelNameMap = djangoAdapter.getPanelNameMap();
 		
 		for (AdaptPanel panel : panels){
 			context.clear();			
 			context.put("menu", mainMenu);
 			context.put("panel", panel);
+			context.put("panelNameMap", panelNameMap);
 			generateWithProjectname(srcDirString,"list.ftl",panel.getName() + "_list.html", context);
 			generateWithProjectname(srcDirString,"newObject.ftl",panel.getName() + "_new.html", context);
 			generateWithProjectname(srcDirString,"object.ftl",panel.getName() + ".html", context);
@@ -168,6 +170,8 @@ public class DjangoGenerator {
 		context.put("description", Settings.APP_DESCRIPTION);	
 		context.put("urls", djangoAdapter.getDjangoUrls());		
 		context.put("panels", panels);
+	
+		
 		context.put("models", djangoModelList);
 		
 		generateWithProjectname(moduleDir,VIEWS_PY, context);

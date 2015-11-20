@@ -3,28 +3,31 @@
   
   {% block head_title%} {{block.super}} {% endblock %}
   
-  {% block jumbotron %}
-	<div class="jumbotron">      
+  {% block jumbotron_content %}
 		<div class="row">
 		<form class="form-horizontal" method="post" action="">	        			
 	 	{% csrf_token%}
 	 		<fieldset>
-				<legend>Muszerek</legend>
+				<legend>newF001</legend>
 				<div class="form-group">
-					{% for field in MUSZEREKForm %}
+					{% for field in NEWF001Form %}
+					{{ field.errors }}           		
            			<div class="col-sm-2"> {{ field.label_tag }}</div> <div class="col-sm-10">{{ field }} </div>
         			{% endfor %}
         		</div>
         		<div class="form-group">
 					<div class="col-sm-10 col-sm-offset-2">
-						<button type="reset" class="btn btn-default">Cancel</button>
+					{% if newf001_st.id == None %}
+						<a class="btn btn-default" href="{% url 'newf001_st_list' %}">Back</a>
+					{% else %}
+					<a class="btn btn-default" href="{% url 'newf001_st' newf001_st.id %}">Back</a>
+					{% endif %}
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
 				</div>
 			</fieldset>
 		</form> 
         </div>
-    </div>
       
   {% endblock %}
   

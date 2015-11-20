@@ -35,13 +35,13 @@ class ${model.name}Form(forms.ModelForm):
 		widgets = {
 		<#list model.fieldsList as field>
 		<#if field.entryTypesEnum == 'CharField'>
-			'${field.fieldName}' : TextInput(),
+			'${field.fieldName}' : TextInput(attrs={'class':'form-control'}),
 		<#elseif field.entryTypesEnum == 'IntegerField'>
-			'${field.fieldName}' : NumberInput(),
+			'${field.fieldName}' : NumberInput(attrs={'class':'form-control'}),
 		<#elseif field.entryTypesEnum == 'DateField'>
 		<#elseif field.entryTypesEnum == 'FloatField'>
 		<#elseif field.entryTypesEnum == 'BooleanField'>
-			'${field.fieldName}' : CheckboxInput(),
+			'${field.fieldName}' : CheckboxInput(attrs={'class':'form-control'}),
 		<#elseif field.entryTypesEnum == 'ForeignKey'>
 		</#if>
 		</#list>

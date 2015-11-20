@@ -3,8 +3,7 @@
   
   {% block head_title%} {{block.super}} {% endblock %}
   
-  {% block jumbotron %}
-	<div class="jumbotron">      
+  {% block jumbotron_content %}
 		<div class="row">
 		<form class="form-horizontal" method="post" action="">	        			
 	 	{% csrf_token%}
@@ -29,7 +28,6 @@
 			</fieldset>
 		</form> 
         </div>
-    </div>
       
   {% endblock %}
   

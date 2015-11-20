@@ -1,6 +1,7 @@
 package com.krogen.model.django;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -107,6 +108,18 @@ public class DjangoAdapter {
 		Map<String, Enumeration> enumMap = DataContainer.getInstance().getEnumerations();
 		List<Enumeration> list = new ArrayList<Enumeration>(enumMap.values());
 		return list;
+	}
+
+	public Map getPanelNameMap() {
+		Map<String,String> panelNameMap = new HashMap<String,String>();
+		
+		List<AdaptPanel> panels = DataContainer.getInstance().getPanels();
+
+		for (AdaptPanel panel : panels)
+		{		
+			panelNameMap.put(panel.getName(),panel.getLabel());
+		}
+		return panelNameMap;		
 	}
 
 	//	public List<>

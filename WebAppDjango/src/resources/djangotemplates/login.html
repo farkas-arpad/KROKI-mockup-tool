@@ -2,9 +2,8 @@
 {% load crispy_forms_tags %} 
 {{ user }} 
 {{request.user }} 
-{% block jumbotron %}
-<!-- Main component for a primary marketing message or call to action -->
-<div class="jumbotron">
+{% block jumbotron_content %}
+
 	<div class="row">
 		<div class="col-md-8">
 			<h2> <strong>Welcome to {{ projectname }}</strong></h2>
@@ -19,6 +18,5 @@
 
 		</div>
 	</div>
-</div>
 
 {% endblock %}

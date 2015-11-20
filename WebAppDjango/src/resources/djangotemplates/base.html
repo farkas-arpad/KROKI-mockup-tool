@@ -23,14 +23,21 @@
 
    
     <div class="container">   
-		{% block jumbotron %}
+    <div class="jumbotron">      
+    <div class="row">
+		<div class="col-md-9">
+		{% block jumbotron_content %}
 		
 		{% endblock %}
+		 </div>        
+        <div class="col-md-3">
+			{% block custom %}{% endblock %}
+            {% block next_forms %}{% endblock %}
+        </div>
+        </div>
+        </div>
     </div> <!-- /container -->
-    
-{% block content %}
-		
-		{% endblock %}
+
  {% include "js.html" %}
   
   </body>
