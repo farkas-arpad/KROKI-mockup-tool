@@ -19,6 +19,7 @@ from ${modulename}.forms import LoginForm<#list models as model>, ${model.name}F
 def index(request):
 	context = {
 		"projectname": "${projectname}",
+		"description": "${description}",
 	}
 	return render(request,'home.html', context)
 
@@ -58,6 +59,10 @@ def login_user(request):
 			if user.is_active:
 				login(request, user)
 				return HttpResponseRedirect(reverse('index'))
+			else:
+				messages.error(request, "Sorry, that login was invalid. Please try again.")
+		else:
+			messages.error(request, "Sorry, that login was invalid. Please try again.")
 	return render(request,'login.html', context)
 
 <#list panels as panel>
@@ -91,6 +96,8 @@ def ${panel.name}_new(request):
 		if ${panel.name}_form.is_valid():
 			${panel.name} = ${panel.name}_form.save()
 			${panel.name}.save()
+			messages.success(request,'Data successfully saved.');
+			
 			return redirect('${panel.name}_list')
 		# previous workflow:	
 		#	return render_to_response('${panel.name}_list.html',{"${panel.entityBean.name}Form" : ${panel.name}_form, "projectname" : "${projectname}"},context)    
@@ -122,6 +129,7 @@ def ${panel.name}_edit(request, ${panel.name}_id):
 			${attribute.name}s = ${classnameModelMap[attribute.lookupClass]}.objects.all()
 			</#if>
 			</#list> 
+			messages.success(request,'Data successfully updated.');
 			${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.name}FromDB)	         
 			return render_to_response('${panel.name}.html', {'${panel.entityBean.name}Form': ${panel.name}_form,'${panel.name}_id': ${panel.name}_id, 'editable' : 'true', "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>,'${attribute.name}s' : ${attribute.name}s</#if></#list>},context)
 		else: 

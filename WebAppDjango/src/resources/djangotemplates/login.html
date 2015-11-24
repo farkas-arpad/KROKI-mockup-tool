@@ -10,6 +10,15 @@
 			<p>{{ description }}</p>
 		</div>
 		<div class="col-md-4">
+		{% if messages %}
+  		<div class="alert alert-danger fade in">
+  	<a href="#" class="close" data-dismiss="alert">&times;</a>
+  
+			{% for message in messages %}
+    		{{ message }}
+    		{% endfor %}
+		</div>
+	{% endif %}
 			<form method="POST" action="{% url 'login' %}">
 				{% csrf_token %} {{form|crispy}} <input class="btn btn-primary"
 					type="submit" value="Log in" /> <input type="hidden" name="next"

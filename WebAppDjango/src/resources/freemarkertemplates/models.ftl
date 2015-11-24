@@ -28,16 +28,16 @@ class ${model.name}(models.Model):
 <#if field.key?? && field.key == true>
 	${field.fieldName} = models.AutoField(primary_key = True)
 <#elseif field.enumerationName??>
-	${field.fieldName} = models.CharField(choices=${field.enumerationName}, max_length = 50)
+	${field.fieldName} = models.CharField(choices=${field.enumerationName}, max_length = 50, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'CharField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(max_length = <#if field.length == 0>255<#else>${field.length}</#if>)
+	${field.fieldName} = models.${field.entryTypesEnum}(max_length = <#if field.length == 0>255<#else>${field.length}</#if>, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'IntegerField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(default = 0)
+	${field.fieldName} = models.${field.entryTypesEnum}(default = 0, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'Textarea'>
-	${field.fieldName} = models.CharField(max_length= 255, default ="")
+	${field.fieldName} = models.CharField(max_length= 255, default ="", null = True, blank = True)
 <#elseif field.entryTypesEnum == 'FloatField'>
 <#elseif field.entryTypesEnum == 'BooleanField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(default = False)
+	${field.fieldName} = models.${field.entryTypesEnum}(default = False, blank = True)
 <#elseif field.entryTypesEnum == 'ForeignKey'>
 	${field.fieldName} = models.${field.entryTypesEnum}(${classnameModelMap[field.className]} , null = True, blank = True)
 </#if>	

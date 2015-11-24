@@ -4,8 +4,18 @@
   {% block head_title%} {{block.super}} {% endblock %}
   
   {% block jumbotron_content %}
-   	<div class="row">
-		<form class="form-horizontal">	        			
+  
+ {% if messages %}
+  		<div class="alert alert-success fade in">
+  	<a href="#" class="close" data-dismiss="alert">&times;</a>
+  
+			{% for message in messages %}
+    		{{ message }}
+    		{% endfor %}
+		</div>
+	{% endif %}
+	
+   		<form class="form-horizontal">	        			
 	 		{% csrf_token%}
 	 			<fieldset>
 					<legend>${panel.entityBean.label}</legend>
@@ -24,6 +34,6 @@
            			</div>
            		</div> 
         </form>         
-    </div>
+
       
   {% endblock %}
