@@ -4,11 +4,13 @@ public class DjangoModelField {
 
 //	EntryTypesEnum entryType
 	private String fieldName;
+	private String className;
 	private Boolean hidden;
 	private Boolean key;
 	private String label;
 	private String name;	
 	private Integer length;
+	private String enumerationName;
 	private EntryTypesEnum entryTypesEnum;
 	
 	
@@ -67,6 +69,22 @@ public class DjangoModelField {
 	public void setLength(Integer length) {
 		this.length = length;
 	}
-	
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getEnumerationName() {
+		return enumerationName;
+	}
+
+	public void setEnumerationName(String enumerationName) {
+		this.enumerationName = enumerationName;
+	}
+
 	
 }

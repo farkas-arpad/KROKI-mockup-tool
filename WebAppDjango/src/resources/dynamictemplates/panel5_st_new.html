@@ -8,19 +8,19 @@
 		<form class="form-horizontal" method="post" action="">	        			
 	 	{% csrf_token%}
 	 		<fieldset>
-				<legend>${panel.entityBean.label}</legend>
+				<legend>Panel5</legend>
 				<div class="form-group">
-					{% for field in ${panel.entityBean.name}Form %}
+					{% for field in PANEL5Form %}
 					{{ field.errors }}           		
            			<div class="col-sm-3"> {{ field.label_tag }}</div> <div class="col-sm-9">{{ field }} </div>
         			{% endfor %}
         		</div>
         		<div class="form-group">
 					<div class="col-sm-9 col-sm-offset-3">
-					{% if ${panel.name}.id == None %}
-						<a class="btn btn-default" href="{% url '${panel.name}_list' %}">Back</a>
+					{% if panel5_st.id == None %}
+						<a class="btn btn-default" href="{% url 'panel5_st_list' %}">Back</a>
 					{% else %}
-					<a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}">Back</a>
+					<a class="btn btn-default" href="{% url 'panel5_st' panel5_st.id %}">Back</a>
 					{% endif %}
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
@@ -30,5 +30,4 @@
         </div>
       
   {% endblock %}
-  
   

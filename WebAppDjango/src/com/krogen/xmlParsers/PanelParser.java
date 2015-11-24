@@ -1,6 +1,5 @@
 package com.krogen.xmlParsers;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,20 +9,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.krogen.enumerations.OpenedAs;
 import com.krogen.enumerations.OperationType;
-import com.krogen.enumerations.PanelType;
 import com.krogen.enumerations.ViewMode;
 import com.krogen.exceptions.OperationNotFoundException;
 import com.krogen.main.DataContainer;
-import com.krogen.model.django.DjangoAdapter;
 import com.krogen.model.ejb.AbstractAttribute;
 import com.krogen.model.ejb.ColumnAttribute;
-import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.ejb.EjbClass;
-import com.krogen.model.panel.AdaptManyToManyPanel;
-import com.krogen.model.panel.AdaptPanel;
-import com.krogen.model.panel.AdaptParentChildPanel;
+import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.panel.AdaptStandardPanel;
 import com.krogen.model.panel.configuration.DataSettings;
 import com.krogen.model.panel.configuration.Next;
@@ -33,12 +26,10 @@ import com.krogen.model.panel.configuration.operation.Operation;
 import com.krogen.model.panel.configuration.operation.Parameter;
 import com.krogen.model.panel.configuration.operation.ParameterType;
 import com.krogen.model.panel.configuration.operation.SpecificOperations;
-import com.krogen.repository_utils.RepositoryPathsUtil;
 import com.krogen.static_names.Tags;
 import com.krogen.util.ejb.EntityHelper;
 import com.krogen.util.resolvers.PanelTypeResolver;
 import com.krogen.xml_utils.XMLParserUtils;
-import com.krogen.xml_utils.XMLTypesConverter;
 
 public class PanelParser {
 

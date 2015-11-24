@@ -27,12 +27,12 @@
            			<td>{{ ${panel.name}.${attribute.fieldName} }}</td>
         			</#list>
         			<td>        				
-        			 <a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Details</span>	</a>					
+        			 <a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					
 						</td>
                        <td> {% if deletable == "true" %}
                          <form action="{% url '${panel.name}_delete' ${panel.name}.id %}" method="POST">
                          {% csrf_token %}
-                        <button class="btn btn-default" type="submit">
+                        <button class="btn btn-danger" type="submit">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
 						</button>
 						</form>
@@ -47,7 +47,7 @@
   
   {% block next_forms %}
      <#list panel.nextPanels as nextFormUrl>
-        	 <a class="btn btn-info" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ${panelNameMap[nextFormUrl.panelId]} </a>      
+        	 <a class="btn btn-info" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> List of ${panelNameMap[nextFormUrl.panelId]} </a>      
      </#list>    		
   
   {% endblock %}

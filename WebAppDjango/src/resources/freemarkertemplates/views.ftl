@@ -12,7 +12,7 @@ from django.template import RequestContext
 
 #generated imports
 from ${modulename}.models import <#list models as model> ${model.name}<#if model_has_next == true>,</#if></#list>
-from ${modulename}.forms import LoginForm<#list models as model>, ${model.name}Form</#list>
+from ${modulename}.forms import LoginForm<#list models as model>, ${model.name}Form, ${model.name}FormReadOnly</#list>
 
 # homepage view
 @login_required(login_url='login/')
@@ -61,6 +61,7 @@ def login_user(request):
 	return render(request,'login.html', context)
 
 <#list panels as panel>
+@login_required(login_url='login/')
 def ${panel.name}_list(request): # panel_id
     context = RequestContext(request)
     ${panel.name}s = ${panel.entityBean.name}.objects.all()    # modelname.objects.all()
@@ -68,13 +69,20 @@ def ${panel.name}_list(request): # panel_id
 
 def ${panel.name}(request, ${panel.name}_id):
 	context = RequestContext(request)
-	${panel.name}_form = ${panel.entityBean.name}Form(instance=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))
-	# TODO add foreign key   	
-	return render_to_response('${panel.name}.html',{'${panel.entityBean.name}Form':  ${panel.name}_form, '${panel.name}_id': ${panel.name}_id, 'editable' : 'true', "projectname" : "${projectname}"}, context)
+	${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))	
+	
+	<#list panel.entityBean.attributes as attribute>
+	<#if attribute.lookupClass??>
+	# list of foreign keys
+	${attribute.name}s = ${classnameModelMap[attribute.lookupClass]}.objects.all()
+	</#if>
+	</#list>
+	return render_to_response('${panel.name}.html',{'${panel.entityBean.name}Form':  ${panel.name}_form, '${panel.name}_id': ${panel.name}_id, 'editable' : 'true', "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>, '${attribute.name}s' : ${attribute.name}s</#if></#list>}, context)
 
 # render empty form 	
 # if new object added redirect to listing
 # if there is an error message display
+@login_required(login_url='login/')
 def ${panel.name}_new(request):
 
 	context = RequestContext(request)
@@ -90,10 +98,15 @@ def ${panel.name}_new(request):
 			messages.error(request, ${panel.name}_form.errors)
 	else:
 		${panel.name}_form = ${panel.entityBean.name}Form()
- 	# TODO add foreign key       
- 	#       enterprises = Enterprise.objects.all()
-	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form, "projectname" : "${projectname}"}, context)
-    
+		<#list panel.entityBean.attributes as attribute>
+		<#if attribute.lookupClass??>
+		# list of foreign keys
+		${attribute.name}s = ${classnameModelMap[attribute.lookupClass]}.objects.all()
+		</#if>
+		</#list>
+	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form, "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>, '${attribute.name}s' : ${attribute.name}s</#if></#list>}, context)
+
+@login_required(login_url='login/')    
 def ${panel.name}_edit(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name}FromDB = ${panel.entityBean.name}.objects.get(pk=${panel.name}_id)
@@ -102,22 +115,30 @@ def ${panel.name}_edit(request, ${panel.name}_id):
 		if ${panel.name}_form.is_valid():
 			${panel.name} = ${panel.name}_form.save()
 			${panel.name}.save()
-           # TODO add foreign key
-           # customers = Customer.objects.filter(city=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))
-			return render_to_response('${panel.name}.html', {'${panel.entityBean.name}Form': ${panel.name}_form,'${panel.name}_id': ${panel.name}_id, 'editable' : 'true', "projectname" : "${projectname}",},context)
+			
+			<#list panel.entityBean.attributes as attribute>
+			<#if attribute.lookupClass??>
+			# list of foreign keys
+			${attribute.name}s = ${classnameModelMap[attribute.lookupClass]}.objects.all()
+			</#if>
+			</#list> 
+			${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.name}FromDB)	         
+			return render_to_response('${panel.name}.html', {'${panel.entityBean.name}Form': ${panel.name}_form,'${panel.name}_id': ${panel.name}_id, 'editable' : 'true', "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>,'${attribute.name}s' : ${attribute.name}s</#if></#list>},context)
 		else: 
 			messages.error(request, ${panel.name}_form.errors)
+			
 	${panel.name}_form = ${panel.entityBean.name}Form(instance=${panel.name}FromDB)
 	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form,'${panel.name}_id': ${panel.name}_id, "projectname" : "${projectname}",}, context)
-    
+
+@login_required(login_url='login/')    
 def ${panel.name}_delete(request, ${panel.name}_id):
-    context = RequestContext(request)
-    ${panel.name} = ${panel.entityBean.name}.objects.get(pk=${panel.name}_id)
-    if request.method == 'POST':
-        ${panel.name}.delete();
+	context = RequestContext(request)
+	${panel.name} = ${panel.entityBean.name}.objects.get(pk=${panel.name}_id)
+	if request.method == 'POST':
+		${panel.name}.delete();
         
-    ${panel.name}s = ${panel.entityBean.name}.objects.all()    
-    return render_to_response('${panel.name}_list.html',{"${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
+	${panel.name}s = ${panel.entityBean.name}.objects.all()    
+	return render_to_response('${panel.name}_list.html',{'deletable' : "true", "${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
  
 </#list>
 

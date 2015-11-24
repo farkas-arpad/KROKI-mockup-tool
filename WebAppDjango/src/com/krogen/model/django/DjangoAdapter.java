@@ -2,6 +2,7 @@ package com.krogen.model.django;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import com.krogen.model.django.modelpy.EntryTypesEnum;
 import com.krogen.model.ejb.AbstractAttribute;
 import com.krogen.model.ejb.ColumnAttribute;
 import com.krogen.model.ejb.EjbClass;
+import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoSubMenu;
 import com.krogen.model.panel.AdaptPanel;
@@ -48,7 +50,7 @@ public class DjangoAdapter {
 	public List<AdaptPanel> getPanels(){
 		return DataContainer.getInstance().getPanels();
 	}
-	
+
 	public DjangoSubMenu getDefaultMenu() {
 		return DataContainer.getInstance().getDefaultMenu();
 	}
@@ -61,18 +63,22 @@ public class DjangoAdapter {
 		djangoModel.setLabel(ejbModel.getLabel());
 		List<AbstractAttribute> attributes = ejbModel.getAttributes();
 		for (AbstractAttribute attribute : attributes){
+			DjangoModelField djangoModelField= new DjangoModelField();
+
+		djangoModelField.setLabel(attribute.getLabel());
+		djangoModelField.setFieldName(attribute.getFieldName());
+		djangoModelField.setHidden(attribute.getHidden());
+		djangoModelField.setName(attribute.getName());
+		
 			if (attribute instanceof ColumnAttribute){				
-				DjangoModelField djangoModelField= new DjangoModelField();
 
 				attribute.getDisabled();
-				djangoModelField.setLabel(attribute.getLabel());
-				djangoModelField.setFieldName(attribute.getFieldName());
-				djangoModelField.setKey(((ColumnAttribute) attribute).getKey());				
-				djangoModelField.setHidden(attribute.getHidden());
-				djangoModelField.setName(attribute.getName());
+				djangoModelField.setKey(((ColumnAttribute) attribute).getKey());								
 				djangoModelField.setLength(((ColumnAttribute) attribute).getLength());
 				String dataType = ((ColumnAttribute) attribute).getDataType();
-
+				if (((ColumnAttribute) attribute).getEnumeration() != null)
+				djangoModelField.setEnumerationName(((ColumnAttribute) attribute).getEnumeration().getName());
+				
 				switch(dataType){
 				case "java.lang.Long":
 					djangoModelField.setEntryTypesEnum(EntryTypesEnum.INTEGERFIELD);
@@ -81,26 +87,41 @@ public class DjangoAdapter {
 					djangoModelField.setEntryTypesEnum(EntryTypesEnum.BOOLEANFIELD);										
 					break;
 				case "java.lang.String:TextArea":	
-					djangoModelField.setEntryTypesEnum(EntryTypesEnum.TEXTFIELD);					
+					djangoModelField.setEntryTypesEnum(EntryTypesEnum.TEXTAREA);					
 					break;
 				case "java.lang.String":					
 				default:
 					djangoModelField.setEntryTypesEnum(EntryTypesEnum.CHARFIELD);					
 				}
 
-				djangoModel.getFieldsList().add(djangoModelField);
+			}else
+			if (attribute instanceof JoinColumnAttribute){			
+				djangoModelField.setClassName(((JoinColumnAttribute) attribute).getLookupClass());		
+				djangoModelField.setEntryTypesEnum(EntryTypesEnum.FOREIGNKEY);	
 			}
+			djangoModel.getFieldsList().add(djangoModelField);
 
 		}
 		return djangoModel;
 	}
 
+	public Map<String,String> getClassnameModelMapping(){
+		Map<String,String> resultMap = new HashMap<String,String>();
+		HashMap<String,EjbClass> ejbClasses = DataContainer.getInstance().getEjbClasses();
+		for (Map.Entry<String, EjbClass> entry : ejbClasses.entrySet())
+		{
+			resultMap.put(entry.getValue().getEntityClass(), entry.getValue().getName());
+		}		
+		return resultMap;
+	}
+	
 	public List<DjangoModel> getModelList(){
-		List<EjbClass> ejbClasses = DataContainer.getInstance().getEjbClasses();
+		List<EjbClass> ejbClasses = getSortedModelList();
 		List<DjangoModel> djangoModelList = new ArrayList<DjangoModel>();
-		for (EjbClass ejbClass : ejbClasses){
-			djangoModelList.add(convertEjbToModelEntry(ejbClass));
-		}			
+		for (EjbClass entry : ejbClasses)
+		{
+			djangoModelList.add(convertEjbToModelEntry(entry));		
+		}	
 		return djangoModelList;
 	}
 
@@ -110,9 +131,9 @@ public class DjangoAdapter {
 		return list;
 	}
 
-	public Map getPanelNameMap() {
+	public Map<String,String> getPanelNameMap() {
 		Map<String,String> panelNameMap = new HashMap<String,String>();
-		
+
 		List<AdaptPanel> panels = DataContainer.getInstance().getPanels();
 
 		for (AdaptPanel panel : panels)
@@ -122,6 +143,29 @@ public class DjangoAdapter {
 		return panelNameMap;		
 	}
 
+	public List<EjbClass> getSortedModelList(){
+		List<EjbClass> ejbList = new ArrayList<EjbClass>();
+		for (Map.Entry<String, EjbClass> entry : DataContainer.getInstance().getEjbClasses().entrySet()){
+			List<EjbClass> tempList = xxx(entry.getValue());
+			for (EjbClass ejbRes : tempList){
+				if (!ejbList.contains(ejbRes))
+					ejbList.add(ejbRes);
+			}
+		}
+		return ejbList;
+	}
+	private List<EjbClass> xxx(EjbClass ejb){
+		//boolean lookup = false;
+		List<EjbClass> ejbList = new ArrayList<EjbClass>();
+		for (AbstractAttribute attribute: ejb.getAttributes()){
+			if (attribute instanceof JoinColumnAttribute){
+			//	lookup = true;
+				ejbList.addAll(xxx(DataContainer.getInstance().getEjbClasses().get(((JoinColumnAttribute) attribute).getLookupClass())));
+			}
+		}
+			ejbList.add(ejb);		
+			return ejbList;
+	}
 	//	public List<>
 	//	public Map<String, DjangoModel> getDjangoModels(){
 	//		Map<String, String> mappings =  djangoMetaModel.getXmlMappingsMap();

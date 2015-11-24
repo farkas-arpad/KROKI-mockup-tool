@@ -1,6 +1,8 @@
 package com.krogen.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,9 +82,9 @@ public class DataContainer {
 
 	//---------------------------------------------------------------------| UTIL METHODS
 	public EjbClass findEJBByClassName(String className) {
-		for (EjbClass ejb : model.getEntityBeans()){
-			if (ejb.getEntityClass().equals(className)) {
-				return ejb;
+		for (Map.Entry<String, EjbClass> ejb: model.getEntityBeans().entrySet()){
+			if (ejb.getValue().getEntityClass().equals(className)) {
+				return ejb.getValue();
 			}
 		}		
 		return null;
@@ -167,7 +169,7 @@ public class DataContainer {
 		model.add(panel);
 		
 	}
-	public List<EjbClass> getEjbClasses(){
+	public HashMap<String,EjbClass> getEjbClasses(){
 		return model.getEntityBeans();
 	}
 	

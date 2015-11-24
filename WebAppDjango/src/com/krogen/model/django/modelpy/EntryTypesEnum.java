@@ -5,8 +5,9 @@ public enum EntryTypesEnum {
 	CHARFIELD("CharField"),
 	DATEFIELD("DateField"),
 	INTEGERFIELD("IntegerField"),
-	TEXTFIELD("TextField");
-
+	TEXTAREA("Textarea"),
+	FOREIGNKEY("ForeignKey");
+	
 	String type;
 
 	EntryTypesEnum() {

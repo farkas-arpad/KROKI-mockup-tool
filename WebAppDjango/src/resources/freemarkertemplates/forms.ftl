@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 #generated imports
-from ${modulename}.models import Login<#list models as model>, ${model.name}</#list>
+from ${modulename}.models import Login<#list models as model>, ${model.name}</#list><#list enumerations as enum>, ${enum.name}</#list>
 
 # Default Login form
 class LoginForm(forms.ModelForm):
@@ -28,21 +28,57 @@ class ${model.name}Form(forms.ModelForm):
 		model = ${model.name}
 		fields =[
 			<#list model.fieldsList as field>
+			<#if field.hidden == false>
 			'${field.fieldName}'<#if field_has_next == true>,</#if>
+			</#if>
 			</#list>
 		]
 		
 		widgets = {
 		<#list model.fieldsList as field>
-		<#if field.entryTypesEnum == 'CharField'>
+		<#if field.enumerationName??>
+			'${field.fieldName}' : Select(attrs={'class':'form-control'}, choices=${field.enumerationName}),  			
+		<#elseif field.entryTypesEnum == 'CharField'>
 			'${field.fieldName}' : TextInput(attrs={'class':'form-control'}),
 		<#elseif field.entryTypesEnum == 'IntegerField'>
 			'${field.fieldName}' : NumberInput(attrs={'class':'form-control'}),
 		<#elseif field.entryTypesEnum == 'DateField'>
-		<#elseif field.entryTypesEnum == 'FloatField'>
+		<#elseif field.entryTypesEnum == 'Textarea'>
+			'${field.fieldName}' : Textarea(attrs={'class':'form-control', 'rows' : '3'}),
 		<#elseif field.entryTypesEnum == 'BooleanField'>
 			'${field.fieldName}' : CheckboxInput(attrs={'class':'form-control'}),
-		<#elseif field.entryTypesEnum == 'ForeignKey'>
+		<#elseif field.entryTypesEnum == 'ForeignKey' && classnameModelMap[field.className]??>
+			'${field.fieldName}' : Select(attrs={'class':'form-control'}, choices=${classnameModelMap[field.className]}.objects.all()),
+		</#if>
+		</#list>
+		}
+
+class ${model.name}FormReadOnly(forms.ModelForm):
+	class Meta:
+		model = ${model.name}
+		fields =[
+			<#list model.fieldsList as field>
+			<#if field.hidden == false>
+			'${field.fieldName}'<#if field_has_next == true>,</#if>
+			</#if>
+			</#list>
+		]
+		
+		widgets = {
+		<#list model.fieldsList as field>
+		<#if field.enumerationName??>
+			'${field.fieldName}' : Select(attrs={'class':'form-control', 'disabled':'disabled'}, choices=${field.enumerationName}),  			
+		<#elseif field.entryTypesEnum == 'CharField'>
+			'${field.fieldName}' : TextInput(attrs={'class':'form-control', 'disabled':'disabled'}),
+		<#elseif field.entryTypesEnum == 'IntegerField'>
+			'${field.fieldName}' : NumberInput(attrs={'class':'form-control','disabled':'disabled'}),
+		<#elseif field.entryTypesEnum == 'DateField'>
+		<#elseif field.entryTypesEnum == 'Textarea'>
+			'${field.fieldName}' : Textarea(attrs={'class':'form-control', 'rows' : '3', 'disabled':'disabled'}),
+		<#elseif field.entryTypesEnum == 'BooleanField'>
+			'${field.fieldName}' : CheckboxInput(attrs={'class':'form-control', 'disabled':'disabled'}),
+		<#elseif field.entryTypesEnum == 'ForeignKey' && classnameModelMap[field.className]??>
+			'${field.fieldName}' : Select(attrs={'class':'form-control', 'disabled':'disabled'}, choices=${classnameModelMap[field.className]}.objects.all()),
 		</#if>
 		</#list>
 		}

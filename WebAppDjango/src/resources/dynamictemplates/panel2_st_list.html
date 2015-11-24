@@ -3,42 +3,34 @@
   
   {% block head_title%} {{block.super}} {% endblock %}
   
-  {% block jumbotron %}
-   <!-- Main component for a primary marketing message or call to action -->
-	<div class="jumbotron">      
-	
-
-   		       <fieldset>
+  {% block jumbotron_content %}
+  		       <fieldset>
               <legend>Panel2</legend>        
               <div class="panel panel-default">
  			 <div class="panel-body">
               	 <a class="btn btn-large btn-info" href="{% url 'panel2_st_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Panel2</a>  
-              	<a class="btn btn-large btn-info" href="{% url 'panel2_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh </a>  
+              	<a class="btn btn-large btn-info" href="{% url 'panel2_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
              
               	 </div>
               	 </div>     
                   <table class="table" id="example">   
                   <thead>
                     <tr>
-           			<th>ID</th>
-           			<th>property4</th>
-           			<th>property5</th>
+           			<th>Panel2 ID</th>
            			<th>property6</th>
         			</tr>
         			</thead>           			        
                     {% for panel2_st in panel2_sts %}
                   <tr>
            			<td>{{ panel2_st.id }}</td>
-           			<td>{{ panel2_st.a_property4 }}</td>
-           			<td>{{ panel2_st.a_property5 }}</td>
            			<td>{{ panel2_st.a_property6 }}</td>
         			<td>        				
-        			 <a class="btn btn-default" href="{% url 'panel2_st' panel2_st.id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Details</span>	</a>					
+        			 <a class="btn btn-default" href="{% url 'panel2_st' panel2_st.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					
 						</td>
                        <td> {% if deletable == "true" %}
                          <form action="{% url 'panel2_st_delete' panel2_st.id %}" method="POST">
                          {% csrf_token %}
-                        <button class="btn btn-default" type="submit">
+                        <button class="btn btn-danger" type="submit">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
 						</button>
 						</form>
@@ -48,7 +40,10 @@
                        </tr>                
                     {% endfor %}       
                     </table>                 
-              </fieldset>
-        </div>         
+              </fieldset>       
   {% endblock %}
   
+  {% block next_forms %}
+        	 <a class="btn btn-info" href="{% url 'panel3_st_list' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> List of Panel3 </a>      
+  
+  {% endblock %}

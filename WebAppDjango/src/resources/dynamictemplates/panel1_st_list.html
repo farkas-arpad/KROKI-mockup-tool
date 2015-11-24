@@ -5,11 +5,11 @@
   
   {% block jumbotron_content %}
   		       <fieldset>
-              <legend>newF001</legend>        
+              <legend>Panel1</legend>        
               <div class="panel panel-default">
  			 <div class="panel-body">
-              	 <a class="btn btn-large btn-info" href="{% url 'newf001_st_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New newF001</a>  
-              	<a class="btn btn-large btn-info" href="{% url 'newf001_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
+              	 <a class="btn btn-large btn-info" href="{% url 'panel1_st_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Panel1</a>  
+              	<a class="btn btn-large btn-info" href="{% url 'panel1_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
              
               	 </div>
               	 </div>     
@@ -20,23 +20,23 @@
            			<th>property1</th>
            			<th>property2</th>
            			<th>property3</th>
-           			<th>Testf002</th>
+           			<th>property4</th>
         			</tr>
         			</thead>           			        
-                    {% for newf001_st in newf001_sts %}
+                    {% for panel1_st in panel1_sts %}
                   <tr>
-           			<td>{{ newf001_st.id }}</td>
-           			<td>{{ newf001_st.a_property1 }}</td>
-           			<td>{{ newf001_st.a_property2 }}</td>
-           			<td>{{ newf001_st.a_property3 }}</td>
-           			<td>{{ newf001_st.newf001_testf002 }}</td>
+           			<td>{{ panel1_st.id }}</td>
+           			<td>{{ panel1_st.a_property1 }}</td>
+           			<td>{{ panel1_st.a_property2 }}</td>
+           			<td>{{ panel1_st.a_property3 }}</td>
+           			<td>{{ panel1_st.a_property4 }}</td>
         			<td>        				
-        			 <a class="btn btn-default" href="{% url 'newf001_st' newf001_st.id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Details</span>	</a>					
+        			 <a class="btn btn-default" href="{% url 'panel1_st' panel1_st.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					
 						</td>
                        <td> {% if deletable == "true" %}
-                         <form action="{% url 'newf001_st_delete' newf001_st.id %}" method="POST">
+                         <form action="{% url 'panel1_st_delete' panel1_st.id %}" method="POST">
                          {% csrf_token %}
-                        <button class="btn btn-default" type="submit">
+                        <button class="btn btn-danger" type="submit">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
 						</button>
 						</form>

@@ -8,18 +8,18 @@
 		<form class="form-horizontal">	        			
 	 		{% csrf_token%}
 	 			<fieldset>
-					<legend>${panel.entityBean.label}</legend>
+					<legend>Panel10</legend>
 					<div class="form-group">
-						{% for field in ${panel.entityBean.name}Form %}
+						{% for field in PANEL10Form %}
            				<div class="col-sm-3"> {{ field.label_tag }}</div> <div class="col-sm-9">{{ field }} </div>
         				{% endfor %}
         			</div>
         		</fieldset>
         		<div class="form-group">
         			<div class="col-sm-9 col-sm-offset-3">
-        				<a class="btn btn-default" href="{% url '${panel.name}_list' %}"> Back</a>
+        				<a class="btn btn-default" href="{% url 'panel10_st_list' %}"> Back</a>
         				{% if editable == "true" %}
-         				<a class="btn btn-primary" href="{% url '${panel.name}_edit' ${panel.name}_id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span></a>			
+         				<a class="btn btn-primary" href="{% url 'panel10_st_edit' panel10_st_id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Edit</span></a>			
         		 		{% endif %}																							           		
            			</div>
            		</div> 

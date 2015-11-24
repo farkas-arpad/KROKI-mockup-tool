@@ -1,0 +1,48 @@
+  {% extends "base.html" %}
+  {% load crispy_forms_tags %}
+  
+  {% block head_title%} {{block.super}} {% endblock %}
+  
+  {% block jumbotron_content %}
+  		       <fieldset>
+              <legend>Panel5</legend>        
+              <div class="panel panel-default">
+ 			 <div class="panel-body">
+              	 <a class="btn btn-large btn-info" href="{% url 'panel5_st_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Panel5</a>  
+              	<a class="btn btn-large btn-info" href="{% url 'panel5_st_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
+             
+              	 </div>
+              	 </div>     
+                  <table class="table" id="example">   
+                  <thead>
+                    <tr>
+           			<th>ID</th>
+           			<th>property7</th>
+        			</tr>
+        			</thead>           			        
+                    {% for panel5_st in panel5_sts %}
+                  <tr>
+           			<td>{{ panel5_st.id }}</td>
+           			<td>{{ panel5_st.a_property7 }}</td>
+        			<td>        				
+        			 <a class="btn btn-default" href="{% url 'panel5_st' panel5_st.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					
+						</td>
+                       <td> {% if deletable == "true" %}
+                         <form action="{% url 'panel5_st_delete' panel5_st.id %}" method="POST">
+                         {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
+						</button>
+						</form>
+						</td>
+						
+                         {% endif %}
+                       </tr>                
+                    {% endfor %}       
+                    </table>                 
+              </fieldset>       
+  {% endblock %}
+  
+  {% block next_forms %}
+  
+  {% endblock %}

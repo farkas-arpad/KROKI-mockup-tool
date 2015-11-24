@@ -2,6 +2,7 @@ package com.krogen.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +20,17 @@ import com.krogen.model.panel.AdaptPanel;
 public class DataModel {
 
 	//--------------------------------------------------------------------| OBJECTS LISTS
-	protected List<EjbClass> entityBeans = new ArrayList<EjbClass>();
+	protected LinkedHashMap<String,EjbClass> entityBeans = new LinkedHashMap<String,EjbClass>();
 	protected List<DjangoMenu> menus = new ArrayList<DjangoMenu>();
 	protected List<AdaptPanel> panels = new ArrayList<AdaptPanel>();
 	protected Map<String, Enumeration> enumerations = new HashMap<String, Enumeration>();
 	protected DjangoSubMenu defaultMenu = new DjangoSubMenu();
-	
+
 	//--------------------------------------------------------------------| MAPPING DATA
 	protected Map<String, String> ejbMappings = new HashMap<String, String>();
 	protected Map<String, String> panelClassMap = new HashMap<String, String>();
 	protected Map<String, String> componentTypeMap = new HashMap<String, String>();
-	
+
 	//--------------------------------------------------------------------| ADD METHODS
 	/**
 	 * Adds XML-to-EJB mapping to model
@@ -39,41 +40,42 @@ public class DataModel {
 	public void addEjbMapping(String className, String xmlFile) {
 		ejbMappings.put(className, xmlFile);
 	}
-	
+
 	public void addEjbClass(EjbClass ejb) {
-		entityBeans.add(ejb);
+		if (!entityBeans.containsKey(ejb.getEntityClass()))
+			entityBeans.put(ejb.getEntityClass(),ejb);
 	}
 
 	public void addMenu(DjangoMenu menu) {
 		menus.add(menu);
 	}
-	
+
 	public void addMenus(ArrayList<DjangoSubMenu> allMenus) {
 		menus.addAll(allMenus);
 	}
-	
+
 	public void add(AdaptPanel panel) {
 		panels.add(panel);
 	}
-	
+
 	public void add(String name, Enumeration enumeration) {
 		enumerations.put(name, enumeration);
 	}
-	
+
 	public void addPanelClassMapping(String className, String panelId) {
 		panelClassMap.put(className, panelId);
 	}
-	
+
 	public void addComponentTypeMapping(String languageType, String component) {
 		componentTypeMap.put(languageType, component);
 	}
-	
+
 	//--------------------------------------------------------------------| GETTERS AND SETTERS
 	public Map<String, String> getXmlMappings() {
 		return ejbMappings;
 	}
 
-	public List<EjbClass> getEntityBeans() {
+	public LinkedHashMap<String,EjbClass> getEntityBeans() {
 		return entityBeans;
 	}
 
@@ -128,7 +130,7 @@ public class DataModel {
 	public void setDefaultMenu(DjangoSubMenu defaultMenu) {
 		this.defaultMenu = defaultMenu;
 	}
-	
+
 
 
 

@@ -1,20 +1,22 @@
 package com.krogen.xmlParsers;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.krogen.exceptions.EntityAttributeNotFoundException;
 import com.krogen.main.DataContainer;
-import com.krogen.model.django.DjangoAdapter;
+import com.krogen.model.ejb.AbstractAttribute;
 import com.krogen.model.ejb.ColumnAttribute;
-import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.ejb.EjbClass;
+import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.static_names.Tags;
 import com.krogen.util.ejb.EntityHelper;
@@ -48,6 +50,8 @@ public class EntityParser {
 			//TODO log error
 		}
 	}
+	
+	
 	/**
 	 * Iterate through the map and parse the ejb data
 	 * @param map
@@ -192,7 +196,7 @@ public class EntityParser {
 			if(lookupClass.equals(currentBean.getEntityClass())) {
 				ejb = currentBean;
 			}else {
-				ejb = parseEJBClass(xmlFileName);
+				ejb = parseEJBClass(xmlFileName);			
 			}
 			// TODO: izvuci samo potreban columnAttribute
 			NodeList nodeList = doc.getElementsByTagName(Tags.COLUMN_ATTRIBUTE);

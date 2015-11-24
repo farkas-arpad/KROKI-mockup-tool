@@ -1,4 +1,4 @@
-  {% extends "base.html" %}
+   {% extends "base.html" %}
   {% load crispy_forms_tags %}
   
   {% block head_title%} {{block.super}} {% endblock %}
@@ -8,19 +8,19 @@
 		<form class="form-horizontal" method="post" action="">	        			
 	 	{% csrf_token%}
 	 		<fieldset>
-				<legend>testF002</legend>
+				<legend>Panel11</legend>
 				<div class="form-group">
-					{% for field in TESTF002Form %}
+					{% for field in PANEL11Form %}
 					{{ field.errors }}           		
-           			<div class="col-sm-2"> {{ field.label_tag }}</div> <div class="col-sm-10">{{ field }} </div>
+           			<div class="col-sm-3"> {{ field.label_tag }}</div> <div class="col-sm-9">{{ field }} </div>
         			{% endfor %}
         		</div>
         		<div class="form-group">
-					<div class="col-sm-10 col-sm-offset-2">
-					{% if testf002_st.id == None %}
-						<a class="btn btn-default" href="{% url 'testf002_st_list' %}">Back</a>
+					<div class="col-sm-9 col-sm-offset-3">
+					{% if panel11_st.id == None %}
+						<a class="btn btn-default" href="{% url 'panel11_st_list' %}">Back</a>
 					{% else %}
-					<a class="btn btn-default" href="{% url 'testf002_st' testf002_st.id %}">Back</a>
+					<a class="btn btn-default" href="{% url 'panel11_st' panel11_st.id %}">Back</a>
 					{% endif %}
 						<button type="submit" class="btn btn-primary">Submit</button>
 					</div>
