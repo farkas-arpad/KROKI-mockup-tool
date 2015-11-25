@@ -36,7 +36,11 @@
                     {% for ${panel.name} in ${panel.name}s %}
                   <tr>
                     <#list panel.entityBean.attributes as attribute>
-           			<td>{{ ${panel.name}.${attribute.fieldName} }}</td>
+                    <#if attribute.enumeration?? >
+           			<td>{{ ${panel.name}.get_${attribute.fieldName}_display }}</td>
+           			<#else>
+           			<td>{{ ${panel.name}.${attribute.fieldName} }}</td>      
+           			</#if>     			
         			</#list>
         			<td>        				
         			 <a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					

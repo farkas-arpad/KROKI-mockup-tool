@@ -66,12 +66,13 @@ def login_user(request):
 	return render(request,'login.html', context)
 
 <#list panels as panel>
-@login_required(login_url='login/')
+@login_required(login_url='/${projectname}/login/')
 def ${panel.name}_list(request): # panel_id
     context = RequestContext(request)
     ${panel.name}s = ${panel.entityBean.name}.objects.all()    # modelname.objects.all()
     return render_to_response('${panel.name}_list.html',{'deletable' : "true", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
 
+@login_required(login_url='/${projectname}/login/')
 def ${panel.name}(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))	
@@ -87,7 +88,7 @@ def ${panel.name}(request, ${panel.name}_id):
 # render empty form 	
 # if new object added redirect to listing
 # if there is an error message display
-@login_required(login_url='login/')
+@login_required(login_url='/${projectname}/login/')
 def ${panel.name}_new(request):
 
 	context = RequestContext(request)
@@ -113,7 +114,7 @@ def ${panel.name}_new(request):
 		</#list>
 	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form, "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>, '${attribute.name}s' : ${attribute.name}s</#if></#list>}, context)
 
-@login_required(login_url='login/')    
+@login_required(login_url='/${projectname}/login/')   
 def ${panel.name}_edit(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name}FromDB = ${panel.entityBean.name}.objects.get(pk=${panel.name}_id)
@@ -138,7 +139,7 @@ def ${panel.name}_edit(request, ${panel.name}_id):
 	${panel.name}_form = ${panel.entityBean.name}Form(instance=${panel.name}FromDB)
 	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form,'${panel.name}_id': ${panel.name}_id, "projectname" : "${projectname}",}, context)
 
-@login_required(login_url='login/')    
+@login_required(login_url='/${projectname}/login/')   
 def ${panel.name}_delete(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name} = ${panel.entityBean.name}.objects.get(pk=${panel.name}_id)
