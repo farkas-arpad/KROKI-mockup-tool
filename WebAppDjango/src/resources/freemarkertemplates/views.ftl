@@ -70,7 +70,7 @@ def login_user(request):
 def ${panel.name}_list(request): # panel_id
     context = RequestContext(request)
     ${panel.name}s = ${panel.entityBean.name}.objects.all()    # modelname.objects.all()
-    return render_to_response('${panel.name}_list.html',{'deletable' : "true", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
+    return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}', 'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
 
 @login_required(login_url='/${projectname}/login/')
 def ${panel.name}(request, ${panel.name}_id):
@@ -147,7 +147,7 @@ def ${panel.name}_delete(request, ${panel.name}_id):
 		${panel.name}.delete();
         
 	${panel.name}s = ${panel.entityBean.name}.objects.all()    
-	return render_to_response('${panel.name}_list.html',{'deletable' : "true", "${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
+	return render_to_response('${panel.name}_list.html',{'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
  
 </#list>
 

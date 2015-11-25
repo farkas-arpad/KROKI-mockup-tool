@@ -6,66 +6,66 @@ import com.krogen.enumerations.ViewMode;
 
 public class PanelSettings {
 
-	protected Boolean add = true;
-	protected Boolean update = true;
-	protected Boolean copy = true;
-	protected Boolean delete = true;
-	protected Boolean changeMode = true;
-	protected Boolean dataNavigation =  true;
+	protected String add = "true";
+	protected String update = "true";
+	protected String copy = "true";
+	protected String delete = "true";
+	protected String changeMode = "true";
+	protected String dataNavigation =  "true";
 	protected ViewMode viewMode = ViewMode.TABLEVIEW;
-	protected Boolean hideToolbar = false;
+	protected String hideToolbar = "false";
 	protected StateMode stateMode = StateMode.UPDATE;
 	protected OpenedAs openedAs = OpenedAs.DEFAULT;
 	
 	public PanelSettings() {
 	}
 
-	public Boolean getAdd() {
+	public String getAdd() {
 		return add;
 	}
 
-	public void setAdd(Boolean add) {
+	public void setAdd(String add) {
 		this.add = add;
 	}
 
-	public Boolean getUpdate() {
+	public String getUpdate() {
 		return update;
 	}
 
-	public void setUpdate(Boolean update) {
+	public void setUpdate(String update) {
 		this.update = update;
 	}
 
-	public Boolean getCopy() {
-		return copy;
-	}
-
-	public void setCopy(Boolean copy) {
-		this.copy = copy;
-	}
-
-	public Boolean getDelete() {
+	public String getDelete() {
 		return delete;
 	}
 
-	public void setDelete(Boolean delete) {
+	public void setDelete(String delete) {
 		this.delete = delete;
-	}
+	}	
 
-	public Boolean getChangeMode() {
+	public String getChangeMode() {
 		return changeMode;
 	}
 
-	public void setChangeMode(Boolean changeMode) {
+	public void setChangeMode(String changeMode) {
 		this.changeMode = changeMode;
 	}
 
-	public Boolean getDataNavigation() {
+	public String getDataNavigation() {
 		return dataNavigation;
 	}
 
-	public void setDataNavigation(Boolean dataNavigation) {
+	public void setDataNavigation(String dataNavigation) {
 		this.dataNavigation = dataNavigation;
+	}
+
+	public String getHideToolbar() {
+		return hideToolbar;
+	}
+
+	public void setHideToolbar(String hideToolbar) {
+		this.hideToolbar = hideToolbar;
 	}
 
 	public ViewMode getViewMode() {
@@ -76,13 +76,14 @@ public class PanelSettings {
 		this.viewMode = viewMode;
 	}
 
-	public Boolean getHideToolbar() {
-		return hideToolbar;
+	public String getCopy() {
+		return copy;
 	}
 
-	public void setHideToolbar(Boolean hideToolbar) {
-		this.hideToolbar = hideToolbar;
+	public void setCopy(String copy) {
+		this.copy = copy;
 	}
+
 
 	public StateMode getStateMode() {
 		return stateMode;
@@ -99,4 +100,6 @@ public class PanelSettings {
 	public void setOpenedAs(OpenedAs openedAs) {
 		this.openedAs = openedAs;
 	}
+	
+	
 }

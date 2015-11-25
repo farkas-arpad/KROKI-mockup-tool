@@ -19,7 +19,9 @@
               <nav class="navbar navbar-default">   
                <div class="container-fluid">
                <div class="navbar-header">
-               <div class="btn-group" role="group" aria-label="..."> <a class="btn btn-info navbar-btn" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>  
+               {% if addable == "true" %}
+               <div class="btn-group" role="group" aria-label="..."> <a class="btn btn-info navbar-btn" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>
+               {% endif %}  
               	<a class="btn btn-info navbar-btn" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
               	</div>
               	</div>
@@ -45,16 +47,17 @@
         			<td>        				
         			 <a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"> Details</span>	</a>					
 						</td>
-                       <td> {% if deletable == "true" %}
+						   <td>   
+                       {% if deletable == "true" %}
+                                        
                          <form action="{% url '${panel.name}_delete' ${panel.name}.id %}" method="POST">
                          {% csrf_token %}
                         <button class="btn btn-danger" type="submit">
 						<span class="glyphicon glyphicon-remove" aria-hidden="true"> Delete</span>
 						</button>
-						</form>
-						</td>
-						
+						</form>												
                          {% endif %}
+                         </td>
                        </tr>                
                     {% endfor %}       
                     </table>                 

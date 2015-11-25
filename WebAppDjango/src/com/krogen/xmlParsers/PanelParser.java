@@ -399,39 +399,22 @@ public class PanelParser {
 		Element el = (Element) settingsNode;
 		if(el == null) {
 			return settings;
-		}
-		settings = setOneSetting(Tags.ADD, "Add", el, settings);
-		settings = setOneSetting(Tags.DELETE, "Delete", el, settings);
-		settings = setOneSetting(Tags.UPDATE, "Update", el, settings);
-		settings = setOneSetting(Tags.COPY, "Copy", el, settings);
-		settings = setOneSetting(Tags.CHANGE_MODE, "ChangeMode", el, settings);
-		settings = setOneSetting(Tags.NAVIGATION, "DataNavigation", el, settings);
+		}	
+		settings.setAdd(el.getAttribute(Tags.ADD).isEmpty()?"true":el.getAttribute(Tags.ADD));		
+		settings.setDelete(el.getAttribute(Tags.DELETE).isEmpty()?"true":el.getAttribute(Tags.DELETE));		
+		settings.setUpdate(el.getAttribute(Tags.UPDATE).isEmpty()?"true":el.getAttribute(Tags.UPDATE));		
+		settings.setCopy(el.getAttribute(Tags.COPY).isEmpty()?"true":el.getAttribute(Tags.COPY));		
+		settings.setChangeMode(el.getAttribute(Tags.CHANGE_MODE).isEmpty()?"true":el.getAttribute(Tags.CHANGE_MODE));		
+		settings.setDataNavigation(el.getAttribute(Tags.NAVIGATION).isEmpty()?"true":el.getAttribute(Tags.NAVIGATION));			
 
 		String val = el.getAttribute(Tags.ADD);
+		
 		val = el.getAttribute(Tags.VIEW_MODE);
 		if(val != null && !val.trim().equals("")) {
 			if(val.equals("table")) {
 				settings.setViewMode(ViewMode.TABLEVIEW);
 			}else if(val.equals("panel")) {
 				settings.setViewMode(ViewMode.INPUTPANELVIEW);
-			}
-		}
-		return settings;
-	}
-
-	private PanelSettings setOneSetting(String tag, String methodName, Element elem, PanelSettings settings) {
-		String val = elem.getAttribute(tag);
-		Method method = null;
-		if(val != null && !val.trim().equals("")) {
-			try {
-				method = PanelSettings.class.getMethod("get" + methodName);
-				if((Boolean) method.invoke(settings) != false) {
-					method = PanelSettings.class.getMethod("set" + methodName, Boolean.class);
-					method.invoke(settings, new Boolean(val));
-				}
-			} catch (Exception e) {
-				//		AppCache.displayTextOnMainFrame("Error apllying settings do panel", 1);
-				//		AppCache.displayStackTraceOnMainFrame(e);
 			}
 		}
 		return settings;
