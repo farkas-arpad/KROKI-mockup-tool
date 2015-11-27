@@ -12,11 +12,18 @@
 				<div class="form-group">
 					{% for field in ${panel.entityBean.name}Form %}
 					{{ field.errors }}           		
-           			<div class="col-sm-3"> {{ field.label_tag }}</div> <div class="col-sm-9">{{ field }} 
+           			<div class="col-sm-3"> {{ field.label_tag }}</div> 
+           			<div class="col-sm-9">
+           			{% if nexts|lookup:field.name != "" %}<div class="input-group">{% endif %} 
+           			{{ field }} 
            			{% if nexts|lookup:field.name != "" %}
-           			 <a class="btn btn-info" href="{% url nexts|lookup:field.name %}"><span class=" glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a> 
-           			 {% endif %}
-           			</div>
+           			 <a class="input-group-addon" href="{% url nexts|lookup:field.name %}">
+           			 <span class=" glyphicon glyphicon-share" aria-hidden="true">
+           			 </span>
+           			 </a>
+           			 {% endif %} 
+           			 {% if nexts|lookup:field.name != "" %}</div> {% endif %} 
+           			 </div>
         			{% endfor %}
         		</div>
         		<div class="form-group">
