@@ -63,7 +63,11 @@
 							</li>
 							</#if>							
 					<#else>
-					   <li><a href="{% url '${child.activate}_list' %}">${child.menuName}</a></li>
+						<#if child.menuName == 'Separator'>
+							<li role="separator" class="divider"></li>
+						<#else>
+					  		<li><a href="{% url '${child.activate}_list' %}">${child.menuName}</a></li>
+					  	</#if>
 					</#if>
 				</#foreach>			
         </#if>

@@ -106,13 +106,23 @@ def ${panel.name}_new(request):
 			messages.error(request, ${panel.name}_form.errors)
 	else:
 		${panel.name}_form = ${panel.entityBean.name}Form()
+		<#assign lookup = false> 
 		<#list panel.entityBean.attributes as attribute>
+		
 		<#if attribute.lookupClass??>
+		<#assign lookup = true> 
+		
 		# list of foreign keys
 		${attribute.name}s = ${classnameModelMap[attribute.lookupClass]}.objects.all()
 		</#if>
 		</#list>
-	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form, "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>, '${attribute.name}s' : ${attribute.name}s</#if></#list>}, context)
+		<#if lookup == true>
+		nexts = {		
+		<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>'${attribute.name}':${panelClassMap[attribute.lookupClass]}_list,</#if></#list>
+		}
+		</#if>
+		
+	return render_to_response('${panel.name}_new.html', {'${panel.entityBean.name}Form': ${panel.name}_form, "projectname" : "${projectname}"<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass??>, '${attribute.name}s' : ${attribute.name}s, 'nexts' : nexts </#if></#list>}, context)
 
 @login_required(login_url='/${projectname}/login/')   
 def ${panel.name}_edit(request, ${panel.name}_id):

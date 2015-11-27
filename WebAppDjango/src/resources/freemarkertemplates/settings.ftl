@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #third party apps
     'crispy_forms',
-    'registration',
     #this app    
     '${projectname}',
     '${modulename}'

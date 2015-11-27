@@ -41,8 +41,11 @@ public class DjangoGenerator {
 	public static String URLS_PY = "urls.py";	
 	public static String INIT_PY = "__init__.py";
 	public static String SETTINGS_PY = "settings.py";
+	public static String CUSTOM_TAGS_PY = "custom_tags.py";
 
 	public static String URLS_DEFAULT_FTL = "urlsDefault.ftl";		
+	public static String INIT_PY_DEFAULT_FTL = "__init__Default.ftl";		
+	
 	public static String NAVBAR_HTML = "navbar.html";
 	
 	public static String MODULE_NAME = "module";
@@ -53,6 +56,8 @@ public class DjangoGenerator {
 	private String projectDir =  Application.appRootPath + File.separator + "generated";
 	// module will be placed into:
 	private String moduleDir =  projectDir + File.separator + Application.projectTitleRenamed + File.separator+ MODULE_NAME;
+	//templatetags	
+	private String templatetagDir =  moduleDir + File.separator+ "templatetags";
 	// main configuration files will be generated into:
 	private String projectConfigDestDir = projectDir + File.separator + Application.projectTitleRenamed + File.separator+Application.projectTitleRenamed;
 	// static files will be copied into:
@@ -118,6 +123,9 @@ public class DjangoGenerator {
 		generateWithProjectname(projectConfigDestDir,WSGI_PY,context);		
 		// Generate urls.py
 		generateWithProjectname(projectConfigDestDir,URLS_DEFAULT_FTL,URLS_PY,context);	
+		// Custom Tags
+		generateWithProjectname(templatetagDir, CUSTOM_TAGS_PY, context);
+		generateWithProjectname(templatetagDir,INIT_PY_DEFAULT_FTL,INIT_PY,context);	
 		
 	}
 
@@ -138,7 +146,7 @@ public class DjangoGenerator {
 
 		// TODO:
 		// add multimeenu system
-		DjangoSubMenu mainMenu = djangoAdapter.getDefaultMenu();
+		DjangoSubMenu mainMenu = djangoAdapter.getMenuList();
 		context.clear();
 		context.put("menu", mainMenu);
 
@@ -150,7 +158,8 @@ public class DjangoGenerator {
 		Map panelNameMap = djangoAdapter.getPanelNameMap();
 		
 		for (AdaptPanel panel : panels){
-			context.clear();			
+			context.clear();
+			
 			context.put("menu", mainMenu);
 			context.put("panel", panel);
 			context.put("panelNameMap", panelNameMap);
@@ -174,6 +183,7 @@ public class DjangoGenerator {
 		List<AdaptPanel> panels = djangoAdapter.getPanels();
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
+		Map<String, String> panelClassMap = djangoAdapter.getPanelClassMap();
 		
 		context.clear();
 		context.put("classes", new ArrayList<String>());
@@ -182,8 +192,11 @@ public class DjangoGenerator {
 		context.put("description", Settings.APP_DESCRIPTION);	
 		context.put("urls", djangoAdapter.getDjangoUrls());		
 		context.put("panels", panels);
-		context.put("classnameModelMap", classnameModelMap);					
+		context.put("classnameModelMap", classnameModelMap);	
+		context.put("panelClassMap", panelClassMap);					
+		
 		context.put("models", djangoModelList);
+		//TODO add ejb-url map
 		
 		generateWithProjectname(moduleDir,VIEWS_PY, context);
 	}
@@ -279,6 +292,7 @@ public class DjangoGenerator {
 		
 		createFolder(Paths.get(projectConfigDestDir));
 		createFolder(Paths.get(moduleDir));		
+		createFolder(Paths.get(templatetagDir));	
 	}
 
 	private void createFolder(Path folderToCreate) throws IOException{

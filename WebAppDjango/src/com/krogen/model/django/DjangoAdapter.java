@@ -55,6 +55,16 @@ public class DjangoAdapter {
 		return DataContainer.getInstance().getDefaultMenu();
 	}
 
+	public DjangoSubMenu getMenuList(){
+		// TODO: alter the menu generator here if needed
+		if (DataContainer.getInstance().getMenuList().size() > 0 ){
+			DjangoSubMenu menu = new DjangoSubMenu();
+			menu.getChildren().addAll(DataContainer.getInstance().getMenuList());
+			return menu;
+		}
+		else			
+			return DataContainer.getInstance().getDefaultMenu(); 
+	}
 	public DjangoModel convertEjbToModelEntry(EjbClass ejbModel){
 
 		DjangoModel djangoModel= new DjangoModel();

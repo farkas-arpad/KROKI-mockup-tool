@@ -156,12 +156,16 @@ public class MenuParser {
 		tMenuItem.setFormName(formName);
 		tMenuItem.setActivate(activate);
 		PanelType ptr = null;
+		if (!panelType.equals("?"))
 		try {
 			ptr = PanelTypeResolver.getType(panelType);
+			tMenuItem.setPanelType(ptr.name().toString());
+			
 		} catch (PanelTypeParsingException e) {
+			// issue with the parsed paneltype
+			// probalby it is a Separator
 			e.printStackTrace();
 		}
-		tMenuItem.setPanelType(ptr.name().toString());
 		tMenuItem.setParent(rootMenus.get(i));
 		rootMenus.get(i).getChildren().add(tMenuItem);
 
