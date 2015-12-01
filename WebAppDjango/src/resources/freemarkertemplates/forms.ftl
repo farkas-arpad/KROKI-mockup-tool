@@ -84,4 +84,15 @@ class ${model.name}FormReadOnly(forms.ModelForm):
 		}
 
 </#list>
+
+<#list panels as panel>
+<#if panel.standardOperations.operations?has_content >   
+<#list panel.standardOperations.operations as operation>
+class ${panel.name}_${operation.name}Form(forms.Form):
+	# set transaction parameters here
+	param1 = forms.Charfield(required=False)
+</#list>   
+</#if>
+</#list>
+
     

@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 
 
 <!DOCTYPE html>
@@ -13,7 +12,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>{% block head_title %} Test {% endblock %}</title>
+    <title>{% block head_title %} {{ projectname }} {% endblock %}</title>
  {% include "head_css.html" %}
  
   </head>
@@ -25,18 +24,15 @@
     <div class="container">   
     <div class="jumbotron">      
     <div class="row">
-		<div class="col-md-9">
 		{% block jumbotron_content %}
 		
 		{% endblock %}
-		 </div>        
-        <div class="col-md-3">
-			{% block custom %}{% endblock %}
-            {% block next_forms %}{% endblock %}
+	  	{% block extra_functions %}
+       	{% endblock %}        
+       		 </div>        
+     
         </div>
-        </div>
-        </div>
-    </div> <!-- /container -->
+        </div>   
 {% endblock %}
  {% include "js.html" %}
   

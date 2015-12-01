@@ -26,11 +26,8 @@
         		</fieldset>
         		<div class="form-group">
         			<div class="col-sm-9 col-sm-offset-3">
-        				<a class="btn btn-sm btn-default" href="{% url '${panel.name}_list' %}"> Back</a>
-        				{% if editable == "true" %}
-         				<a class="btn btn-sm btn-primary" href="{% url '${panel.name}_edit' ${panel.name}_id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit</a>			
-        		 		{% endif %}																							           		
-           			</div>
+        				<a class="btn btn-sm btn-primary" href="{% url '${panel.name}_edit' ${panel.name}_id %}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Submit</a>			
+        			</div>
            		</div> 
         </form>         
 

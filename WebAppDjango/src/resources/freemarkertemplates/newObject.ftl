@@ -1,5 +1,4 @@
    {% extends "base.html" %}
-  {% load crispy_forms_tags %}
   {% load custom_tags %}
   
   {% block head_title%} {{block.super}} {% endblock %}
@@ -29,11 +28,11 @@
         		<div class="form-group">
 					<div class="col-sm-9 col-sm-offset-3">
 					{% if ${panel.name}.id == None %}
-						<a class="btn btn-default" href="{% url '${panel.name}_list' %}">Back</a>
+						<a class="btn btn-sm btn-default" href="{% url '${panel.name}_list' %}">Back</a>
 					{% else %}
-					<a class="btn btn-default" href="{% url '${panel.name}' ${panel.name}.id %}">Back</a>
+					<a class="btn btn-sm btn-default" href="{% url '${panel.name}' ${panel.name}.id %}">Back</a>
 					{% endif %}
-						<button type="submit" class="btn btn-primary">Submit</button>
+						<button type="submit" class="btn btn-sm btn-primary">Submit</button>
 					</div>
 				</div>
 			</fieldset>

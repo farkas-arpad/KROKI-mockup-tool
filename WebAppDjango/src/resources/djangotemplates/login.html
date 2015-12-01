@@ -2,6 +2,8 @@
 {% load crispy_forms_tags %} 
 {{ user }} 
 {{request.user }} 
+
+{% block head_title %} {{ projectname }} {% endblock %}
 {% block jumbotron_content %}
 
 	<div class="row">
@@ -20,11 +22,9 @@
 		</div>
 	{% endif %}
 			<form method="POST" action="{% url 'login' %}">
-				{% csrf_token %} {{form|crispy}} <input class="btn btn-primary"
-					type="submit" value="Log in" /> <input type="hidden" name="next"
-					value="{{ next }}" />
+				{% csrf_token %} {{form|crispy}} 
+				<input class="btn btn-primary btn-sm" type="submit" value="Log in" /> <input type="hidden" name="next" value="{{ next }}" />
 			</form>
-
 		</div>
 	</div>
 

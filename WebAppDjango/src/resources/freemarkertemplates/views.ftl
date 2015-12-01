@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render, redirect
 from django.template import RequestContext
+from django.db.models import Q
+from reportlab.pdfgen import canvas
+from django.db import connection
 
 #generated imports
 from ${modulename}.models import <#list models as model> ${model.name}<#if model_has_next == true>,</#if></#list>
@@ -73,6 +76,20 @@ def ${panel.name}_list(request): # panel_id
     return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}', 'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
 
 @login_required(login_url='/${projectname}/login/')
+def ${panel.name}_search(request):
+	if request.method == 'POST':
+		query = request.POST['q']
+		if query == '':
+			${panel.name}s = ${panel.entityBean.name}.objects.all()
+		else:
+		<#assign not_first = false>
+			${panel.name}s = ${panel.entityBean.name}.objects.filter(<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass?? == false && attribute.hidden == false><#if not_first == true> | </#if>Q(${attribute.name}=query)<#assign not_first = true></#if></#list>)	
+	else:
+		${panel.name}s = ${panel.entityBean.name}.objects.all()
+	context = RequestContext(request)    
+	return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}', 'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
+
+@login_required(login_url='/${projectname}/login/')
 def ${panel.name}(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))	
@@ -107,8 +124,7 @@ def ${panel.name}_new(request):
 	else:
 		${panel.name}_form = ${panel.entityBean.name}Form()
 		<#assign lookup = false> 
-		<#list panel.entityBean.attributes as attribute>
-		
+		<#list panel.entityBean.attributes as attribute>		
 		<#if attribute.lookupClass??>
 		<#assign lookup = true> 
 		
@@ -157,8 +173,46 @@ def ${panel.name}_delete(request, ${panel.name}_id):
 		${panel.name}.delete();
         
 	${panel.name}s = ${panel.entityBean.name}.objects.all()    
-	return render_to_response('${panel.name}_list.html',{'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
- 
+	return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}','deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s, "projectname": "${projectname}"},context)
+	
+<#if panel.standardOperations.operations?has_content >   
+<#list panel.standardOperations.operations as operation>
+@login_required(login_url='/${projectname}/login/')  
+def ${panel.name}_${operation.name}(request):
+	if request.method == 'GET':
+			print("To be implemented")
+		# prepare form if there are attributes
+	if request.method == 'POST':
+		# set form if the proper attributes are set'
+		<#if operation.parameters?has_content>		
+		if ${panel.name}_${operation.name}_form.is_valid():
+			c = connection.cursor()
+			try:
+				c.execute("BEGIN")
+				c.callproc("${operation.name}", (<#list operation.parameters as parameter> </#list>))
+				results = c.fetchall()
+				c.execute("COMMIT")
+			finally:
+				c.close()
+			print results
+			messages.success(request,'Stored procedure results:' + str(results).strip('[]'));		
+			return redirect('${panel.name}_list')
+		<#else>
+		c = connection.cursor()
+		try:
+			c.execute("BEGIN")
+			c.callproc("${operation.name}")
+			results = c.fetchall()
+			c.execute("COMMIT")
+		finally:
+			c.close()
+		print (results)
+		messages.success(request,'Stored procedure results:' + str(results).strip('[]'));
+		return redirect('${panel.name}_list')
+		</#if>
+</#list> 
+</#if>
+    
 </#list>
 
    

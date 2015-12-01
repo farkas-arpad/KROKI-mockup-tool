@@ -149,7 +149,8 @@ public class DjangoGenerator {
 		DjangoSubMenu mainMenu = djangoAdapter.getMenuList();
 		context.clear();
 		context.put("menu", mainMenu);
-
+		context.put("projectname", Application.projectTitleRenamed);
+		
 		// generate navbar
 		generateWithProjectname(srcDirString,NAVBAR_HTML, context);
 
@@ -160,6 +161,7 @@ public class DjangoGenerator {
 		for (AdaptPanel panel : panels){
 			context.clear();
 			
+			context.put("projectname", Application.projectTitleRenamed);
 			context.put("menu", mainMenu);
 			context.put("panel", panel);
 			context.put("panelNameMap", panelNameMap);
@@ -179,7 +181,6 @@ public class DjangoGenerator {
 	}
 	public void generateViewsPy()throws IOException{
 
-		//AppCache.getInstance().getXmlMappings();
 		List<AdaptPanel> panels = djangoAdapter.getPanels();
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
@@ -206,6 +207,7 @@ public class DjangoGenerator {
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
+		List<AdaptPanel> panels = djangoAdapter.getPanels();
 		
 		context.clear();
 		context.put("forms", new ArrayList<String>());
@@ -215,15 +217,19 @@ public class DjangoGenerator {
 		context.put("menu", mainMenu);
 		context.put("models", djangoModelList);
 		context.put("enumerations", enumerations);
+		context.put("panels", panels);
 		
 		generateWithProjectname(moduleDir,FORMS_PY, context);
 	}
 
 	public void generateURLsPy()throws IOException{
 
+		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		
 		context.clear();		
 		context.put("imports", new ArrayList<String>());
 		context.put("urls", djangoAdapter.getDjangoUrls());
+		context.put("panels", panels);		
 		context.put("projectname", Application.projectTitleRenamed);
 		context.put("modulename", MODULE_NAME);
 		generateWithProjectname(moduleDir,URLS_PY, context);
