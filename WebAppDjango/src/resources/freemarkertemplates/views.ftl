@@ -12,6 +12,12 @@ from django.template import RequestContext
 from django.db.models import Q
 from reportlab.pdfgen import canvas
 from django.db import connection
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from reportlab.platypus.doctemplate import SimpleDocTemplate
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
+from reportlab.lib import colors
 
 #generated imports
 from ${modulename}.models import <#list models as model> ${model.name}<#if model_has_next == true>,</#if></#list>
@@ -177,6 +183,7 @@ def ${panel.name}_delete(request, ${panel.name}_id):
 	
 <#if panel.standardOperations.operations?has_content >   
 <#list panel.standardOperations.operations as operation>
+<#if operation.type == 'BUSINESSTRANSACTION'>
 @login_required(login_url='/${projectname}/login/')  
 def ${panel.name}_${operation.name}(request):
 	if request.method == 'GET':
@@ -210,9 +217,39 @@ def ${panel.name}_${operation.name}(request):
 		messages.success(request,'Stored procedure results:' + str(results).strip('[]'));
 		return redirect('${panel.name}_list')
 		</#if>
+
+<#else>
+@login_required(login_url='/${projectname}/login/')  
+def ${panel.name}_${operation.name}(request):
+	# Create the HttpResponse object with the appropriate PDF headers.
+	response = HttpResponse(content_type='application/pdf')  
+	response['Content-Disposition'] = 'attachment; filename="${panel.name}_Report.pdf"'
+	
+	buffer = BytesIO()
+	
+	styles = getSampleStyleSheet()
+	doc = SimpleDocTemplate(buffer)
+	Catalog = []
+	header = Paragraph("Report of ${panel.name}", styles['Heading1'])
+	Catalog.append(header)
+	style = styles['Normal']
+	headings = (<#list panel.entityBean.attributes as attribute>'${attribute.label}'<#if attribute_has_next == true>,</#if></#list>)
+	allproducts = [(<#list panel.entityBean.attributes as attribute><#if attribute.enumeration?? >p.get_${attribute.fieldName}_display<#else>p.${attribute.fieldName}</#if><#if attribute_has_next == true>,</#if></#list>) for p 
+											in ${panel.entityBean.name}.objects.all()]
+	t = Table([headings] + allproducts)
+	t.setStyle(TableStyle(
+               [('LINEBELOW', (0,0), (-1,0), 2, colors.red),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.pink)]))
+	Catalog.append(t) 
+	doc.build(Catalog)	
+	
+	pdf = buffer.getvalue()
+	buffer.close()
+	response.write(pdf)
+	return response
+</#if>
 </#list> 
 </#if>
-    
 </#list>
 
    

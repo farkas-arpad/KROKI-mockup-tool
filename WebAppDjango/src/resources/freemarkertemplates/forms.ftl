@@ -90,7 +90,7 @@ class ${model.name}FormReadOnly(forms.ModelForm):
 <#list panel.standardOperations.operations as operation>
 class ${panel.name}_${operation.name}Form(forms.Form):
 	# set transaction parameters here
-	param1 = forms.Charfield(required=False)
+	param1 = forms.CharField(required=False)
 </#list>   
 </#if>
 </#list>

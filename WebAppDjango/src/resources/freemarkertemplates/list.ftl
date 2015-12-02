@@ -95,8 +95,8 @@
    <#list panel.standardOperations.operations as operation>
     <div class="row">         	
          	 <#if operation.type == 'VIEWREPORT'> 
-         	 <a class="btn-group btn-sm btn btn-primary" href="#">
-         	 	<span class="glyphicon glyphicon-book" aria-hidden="true"></span>${operation.label}
+         	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${panel.name}_${operation.name}'%}">
+         	 	<span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${operation.label}
          	 </a>
          	 <#elseif operation.type == 'BUSINESSTRANSACTION'> 
          	 	<#if operation.parameters?has_content> 
