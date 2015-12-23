@@ -16,7 +16,7 @@ import com.krogen.model.ejb.EjbClass;
 import com.krogen.model.ejb.JoinColumnAttribute;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoSubMenu;
-import com.krogen.model.panel.AdaptPanel;
+import com.krogen.model.panel.DjangoPanel;
 
 
 /**
@@ -47,7 +47,7 @@ public class DjangoAdapter {
 		return DataContainer.getInstance().getPanelClassMap();
 	}
 
-	public List<AdaptPanel> getPanels(){
+	public List<DjangoPanel> getPanels(){
 		return DataContainer.getInstance().getPanels();
 	}
 
@@ -82,7 +82,7 @@ public class DjangoAdapter {
 		
 			if (attribute instanceof ColumnAttribute){				
 
-				attribute.getDisabled();
+			//	attribute.getDisabled();
 				djangoModelField.setKey(((ColumnAttribute) attribute).getKey());								
 				djangoModelField.setLength(((ColumnAttribute) attribute).getLength());
 				String dataType = ((ColumnAttribute) attribute).getDataType();
@@ -144,9 +144,9 @@ public class DjangoAdapter {
 	public Map<String,String> getPanelNameMap() {
 		Map<String,String> panelNameMap = new HashMap<String,String>();
 
-		List<AdaptPanel> panels = DataContainer.getInstance().getPanels();
+		List<DjangoPanel> panels = DataContainer.getInstance().getPanels();
 
-		for (AdaptPanel panel : panels)
+		for (DjangoPanel panel : panels)
 		{		
 			panelNameMap.put(panel.getName(),panel.getLabel());
 		}

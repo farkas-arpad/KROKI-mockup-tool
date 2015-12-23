@@ -23,13 +23,24 @@ urlpatterns = patterns('',
     url(r'^${url.pattern}/delete/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}_delete', name = '${url.view}_delete'),     
 
  </#list>
-
+	# special operations
 <#list panels as panel>
 <#if panel.standardOperations.operations?has_content >   
 <#list panel.standardOperations.operations as operation>
     url(r'^${panel.name}/${operation.name}', '${modulename}.views.${panel.name}_${operation.name}', name = '${panel.name}_${operation.name}'),
-</#list>   
+</#list> 
 </#if>
+
+<#list panel.nextPanels as next>
+  <#if next.name?has_content == false>
+  	 url(r'^${next.label}', '${modulename}.manualCode.${next.label}', name = '${next.label}'),     
+  	 
+  	 url(r'^${next.label}', '${modulename}.manualCode.${next.label}', name = '${next.label}'),     	 	
+  </#if>     
+</#list>  
 </#list>
 
+	# custom code
+	url(r'^custom', 'module.manualCode.custom', name = 'custom'),  
+  	
 ) 

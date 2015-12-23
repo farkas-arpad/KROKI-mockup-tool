@@ -18,7 +18,7 @@ import com.krogen.model.django.DjangoAdapter;
 import com.krogen.model.django.modelpy.DjangoModel;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoSubMenu;
-import com.krogen.model.panel.AdaptPanel;
+import com.krogen.model.panel.DjangoPanel;
 import com.krogen.static_names.Settings;
 
 import freemarker.template.Configuration;
@@ -42,6 +42,7 @@ public class DjangoGenerator {
 	public static String INIT_PY = "__init__.py";
 	public static String SETTINGS_PY = "settings.py";
 	public static String CUSTOM_TAGS_PY = "custom_tags.py";
+	public static String CUSTOM_CODE_PY = "manualCode.py";
 
 	public static String URLS_DEFAULT_FTL = "urlsDefault.ftl";		
 	public static String INIT_PY_DEFAULT_FTL = "__init__Default.ftl";		
@@ -73,7 +74,9 @@ public class DjangoGenerator {
 	private String dynamicTemplateDir = resourcesSourceDir  +File.separator+"dynamictemplates";	
 	// static resources source
 	private String staticSourceDir = resourcesSourceDir + File.separator + "staticdata" ;
-	
+	// custom code source
+	private String customCodeDir = resourcesSourceDir  +File.separator+"customcode";	
+
 	private Template template;
 	Map<String, Object> context = new HashMap<String, Object>();
 	
@@ -100,12 +103,13 @@ public class DjangoGenerator {
 		generateURLsPy();
 		generateStaticFiles();
 		// directly tweak html files using freemarker
-		generateTemplates();
-		//
+		generateTemplates();		
+		copyCustomCode();
 		copyStaticTemplates();
-		//copy custom code
-
+		//copy custom code		
 	}
+
+	
 
 	protected void generateProjectSettings() throws IOException{
 		context.clear();
@@ -144,8 +148,6 @@ public class DjangoGenerator {
 		
 		File tempDestDir = new File(moduleDir +File.separator+"templates");		
 
-		// TODO:
-		// add multimeenu system
 		DjangoSubMenu mainMenu = djangoAdapter.getMenuList();
 		context.clear();
 		context.put("menu", mainMenu);
@@ -155,10 +157,10 @@ public class DjangoGenerator {
 		generateWithProjectname(srcDirString,NAVBAR_HTML, context);
 
 		// generate list views
-		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		List<DjangoPanel> panels = djangoAdapter.getPanels();
 		Map panelNameMap = djangoAdapter.getPanelNameMap();
 		
-		for (AdaptPanel panel : panels){
+		for (DjangoPanel panel : panels){
 			context.clear();
 			
 			context.put("projectname", Application.projectTitleRenamed);
@@ -173,6 +175,14 @@ public class DjangoGenerator {
 		FileUtils.copyDirectory(srcDir, tempDestDir);		
 	}	
 
+	private void copyCustomCode() throws IOException {
+		File srcDir = new File(customCodeDir + File.separator + CUSTOM_CODE_PY);		
+		File tempDestDir = new File(moduleDir);		
+
+		FileUtils.copyFileToDirectory(srcDir, tempDestDir);
+		
+	}
+	
 	protected void copyStaticTemplates() throws IOException{
 		File srcDir = new File(djangoTemplateDir);		
 		File tempDestDir = new File(moduleDir +File.separator+"templates");		
@@ -181,7 +191,7 @@ public class DjangoGenerator {
 	}
 	public void generateViewsPy()throws IOException{
 
-		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		List<DjangoPanel> panels = djangoAdapter.getPanels();
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
 		Map<String, String> panelClassMap = djangoAdapter.getPanelClassMap();
@@ -207,7 +217,7 @@ public class DjangoGenerator {
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
-		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		List<DjangoPanel> panels = djangoAdapter.getPanels();
 		
 		context.clear();
 		context.put("forms", new ArrayList<String>());
@@ -224,7 +234,7 @@ public class DjangoGenerator {
 
 	public void generateURLsPy()throws IOException{
 
-		List<AdaptPanel> panels = djangoAdapter.getPanels();
+		List<DjangoPanel> panels = djangoAdapter.getPanels();
 		
 		context.clear();		
 		context.put("imports", new ArrayList<String>());
@@ -235,9 +245,7 @@ public class DjangoGenerator {
 		generateWithProjectname(moduleDir,URLS_PY, context);
 	}
 
-	public void generateModelsPy()throws IOException{
-		// Map<String, DjangoModel> model = DjangoContainer.getInstance().getDjangoModels();
-
+	public void generateModelsPy()throws IOException{	
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
@@ -294,8 +302,7 @@ public class DjangoGenerator {
 	 * @throws IOException
 	 */
 	protected void generateBasicFolderStructure() throws IOException{	
-		FileUtils.deleteDirectory(new File(projectDir));
-		
+		FileUtils.deleteDirectory(new File(projectDir));		
 		createFolder(Paths.get(projectConfigDestDir));
 		createFolder(Paths.get(moduleDir));		
 		createFolder(Paths.get(templatetagDir));	

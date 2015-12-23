@@ -5,7 +5,7 @@
 from django import forms
 from django.forms.widgets import TextInput, Textarea, Select, DateInput, NumberInput, CheckboxInput
 from django.utils import timezone
-
+from django.utils.translation import ugettext_lazy as _
 
 #generated imports
 from ${modulename}.models import Login<#list models as model>, ${model.name}</#list><#list enumerations as enum>, ${enum.name}</#list>
@@ -52,6 +52,14 @@ class ${model.name}Form(forms.ModelForm):
 		</#if>
 		</#list>
 		}
+		
+		labels = {
+			<#list model.fieldsList as field>
+			<#if field.hidden == false>
+			"${field.fieldName}" : _("${field.label}")<#if field_has_next == true>,</#if>
+			</#if>
+			</#list>
+		}
 
 class ${model.name}FormReadOnly(forms.ModelForm):
 	class Meta:
@@ -83,6 +91,13 @@ class ${model.name}FormReadOnly(forms.ModelForm):
 		</#list>
 		}
 
+		labels = {
+			<#list model.fieldsList as field>
+			<#if field.hidden == false>
+			"${field.fieldName}" : _("${field.label}")<#if field_has_next == true>,</#if>
+			</#if>
+			</#list>
+		}
 </#list>
 
 <#list panels as panel>

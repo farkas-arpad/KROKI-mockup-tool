@@ -86,10 +86,13 @@
    <h4>Lists of interest:</h4>   		
    <#list panel.nextPanels as nextFormUrl>
    <div class="row">
+         <#if panelNameMap[nextFormUrl.panelId]??> 	
         	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${panelNameMap[nextFormUrl.panelId]}</a>
+       	 </#if>  	 
    </div>      
-   </#list> 
+   </#list>    
    </#if>
+   
    <#if panel.standardOperations.operations?has_content ==true >   	
   <h4>Operations:</h4>
    <#list panel.standardOperations.operations as operation>
@@ -111,6 +114,16 @@
    </div>
    </#list> 
    </#if>
+   <#if panel.nextPanels?has_content >
+   <h4>Additional operations:</h4>   		
+   <#list panel.nextPanels as nextFormUrl>
+   <div class="row">
+         <#if panelNameMap[nextFormUrl.panelId]?? == false> 	      
+       	  	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.label}' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${nextFormUrl.label}</a>      
+         </#if>  	 
+   </div>      
+   </#list> 
+   </#if> 
     </div>
    </#if>    
   {% endblock %}

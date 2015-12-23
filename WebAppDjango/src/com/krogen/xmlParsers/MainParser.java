@@ -23,10 +23,11 @@ public class MainParser {
 	}
 
 	public void parseData(){
-		// TODO
+		// parseEnumerations
 		EnumerationParser enumeParser = new EnumerationParser();
 		enumeParser.parseEnumerations();
-		// parse menudata 
+		
+		// parse menudata, if 		
 		MenuParser menuParser = new MenuParser();
 		menuParser.parse(MenuType.DEFAULT_MENU);
 		if (new File(ParserConstants.generatedModelPath + File.separator + ParserConstants.xmlFileName).exists())
@@ -39,12 +40,7 @@ public class MainParser {
 		// parse form data based upon the menu items
 		PanelParser panelParser = new PanelParser();
 		panelParser.parsePanelMappings();
-		panelParser.parsePanels();
-		// parse anything else if needed
-
-		
-	}
-	public void connectData(){
+		panelParser.parsePanels();		
 		
 	}
 }

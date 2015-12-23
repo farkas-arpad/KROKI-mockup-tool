@@ -10,7 +10,7 @@ import com.krogen.model.panel.configuration.PanelSettings;
 import com.krogen.model.panel.configuration.Zoom;
 import com.krogen.model.panel.configuration.operation.SpecificOperations;
 
-public class AdaptStandardPanel extends AdaptPanel {
+public class AdaptStandardPanel extends DjangoPanel {
 
 	protected EjbClass entityBean;
 	protected Integer level;

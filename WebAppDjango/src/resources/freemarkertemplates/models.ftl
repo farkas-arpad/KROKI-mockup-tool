@@ -5,7 +5,6 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-#TODO add enumerations
 <#list enumerations as enum>
 ${enum.name} = (
 	<#list enum.labels as label>

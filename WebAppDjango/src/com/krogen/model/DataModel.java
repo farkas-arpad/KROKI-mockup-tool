@@ -10,7 +10,7 @@ import com.krogen.model.ejb.EjbClass;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoMenu;
 import com.krogen.model.menu.DjangoSubMenu;
-import com.krogen.model.panel.AdaptPanel;
+import com.krogen.model.panel.DjangoPanel;
 
 /**
  * Application model that holds object representations of
@@ -22,7 +22,7 @@ public class DataModel {
 	//--------------------------------------------------------------------| OBJECTS LISTS
 	protected LinkedHashMap<String,EjbClass> entityBeans = new LinkedHashMap<String,EjbClass>();
 	protected List<DjangoMenu> menus = new ArrayList<DjangoMenu>();
-	protected List<AdaptPanel> panels = new ArrayList<AdaptPanel>();
+	protected List<DjangoPanel> panels = new ArrayList<DjangoPanel>();
 	protected Map<String, Enumeration> enumerations = new HashMap<String, Enumeration>();
 	protected DjangoSubMenu defaultMenu = new DjangoSubMenu();
 
@@ -54,7 +54,7 @@ public class DataModel {
 		menus.addAll(allMenus);
 	}
 
-	public void add(AdaptPanel panel) {
+	public void add(DjangoPanel panel) {
 		panels.add(panel);
 	}
 
@@ -87,11 +87,11 @@ public class DataModel {
 		this.menus = menus;
 	}
 
-	public List<AdaptPanel> getPanels() {
+	public List<DjangoPanel> getPanels() {
 		return panels;
 	}
 
-	public void setPanels(List<AdaptPanel> panels) {
+	public void setPanels(List<DjangoPanel> panels) {
 		this.panels = panels;
 	}
 

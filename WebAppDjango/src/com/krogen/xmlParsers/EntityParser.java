@@ -24,7 +24,6 @@ import com.krogen.xml_utils.XMLParserUtils;
 
 /**
  * Util class that reads ejb entities specification from application repository
- * @author Milorad Filipovic
  */
 public class EntityParser {
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AdaptManyToManyPanel extends AdaptPanel {
+public class AdaptManyToManyPanel extends DjangoPanel {
 
 	protected List<AdaptStandardPanel> panels = new ArrayList<AdaptStandardPanel>();
 	

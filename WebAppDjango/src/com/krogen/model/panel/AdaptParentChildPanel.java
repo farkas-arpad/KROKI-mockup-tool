@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AdaptParentChildPanel extends AdaptPanel {
+public class AdaptParentChildPanel extends DjangoPanel {
 
 	protected List<AdaptStandardPanel> panels = new ArrayList<AdaptStandardPanel>();
 	

@@ -44,7 +44,6 @@ public class EnumerationParser {
 				DataContainer.getInstance().addEnumeration(name, enumeration);
 			}
 		} catch (Exception e) {
-			//TODO log exception
 			e.printStackTrace();
 		}
 	}
