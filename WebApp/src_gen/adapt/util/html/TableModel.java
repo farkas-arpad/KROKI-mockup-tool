@@ -36,7 +36,7 @@ public class TableModel {
 	/**
 	 * Stores database query result list into table model
 	 * @param objects list of objects obtained from database
-	 * @return list ov values suitable for HTML representation 
+	 * @return list of values suitable for HTML representation 
 	 */
 	public ArrayList<LinkedHashMap<String, String>> getModel(List<Object> resultSet) {
 		ArrayList<LinkedHashMap<String, String>> model = new ArrayList<LinkedHashMap<String,String>>();
@@ -70,6 +70,7 @@ public class TableModel {
 								Field field = zoomClass.getDeclaredField(columnAttribute.getFieldName());
 								field.setAccessible(true);
 								zoomVals += field.get(o) + ", ";
+								
 							} catch (Exception e) {
 								AppCache.displayTextOnMainFrame("Error getting zoom values for " + jcAttribute.getLabel(), 1);
 								e.printStackTrace();
@@ -82,6 +83,9 @@ public class TableModel {
 					if(zoomVals.equals("")) {
 						zoomVals = NULL;
 					}else {
+						if(columnRefs.size() > 1) {
+							zoomVals = zoomVals.substring(zoomVals.indexOf(',') + 1);
+						}
 						zoomVals = zoomVals.substring(0, zoomVals.length() -2);
 					}
 					row.put(jcAttribute.getFieldName(), zoomVals);

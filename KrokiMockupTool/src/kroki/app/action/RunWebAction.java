@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import kroki.app.KrokiMockupToolApp;
+import kroki.app.export.ExportProjectToEclipseUML;
 import kroki.app.export.ProjectExporter;
 import kroki.app.gui.console.CommandPanel;
 import kroki.app.gui.console.OutputPanel;
@@ -20,6 +21,7 @@ import kroki.app.utils.FileChooserHelper;
 import kroki.app.utils.ImageResource;
 import kroki.app.utils.RunAnt;
 import kroki.app.utils.StringResource;
+import kroki.app.utils.uml.KrokiComponentOutputMessage;
 import kroki.profil.subsystem.BussinesSubsystem;
 import kroki.profil.utils.DatabaseProps;
 
@@ -77,16 +79,25 @@ public class RunWebAction extends AbstractAction {
 									String appPath = f.getAbsolutePath().substring(0,f.getAbsolutePath().length()-1) + "Temp";
 									File tempDir = new File(appPath);
 
-
 									//generate connection settings for embedded h2 database
 									DatabaseProps tempProps = new DatabaseProps();
 									//proj.setDBConnectionProps(tempProps);
 									ProjectExporter exporter = new ProjectExporter(false);
-									exporter.export(tempDir, jarName, proj, "Project exported OK! Running project...");
-
-									//run exported jar file
-									RunAnt runner = new RunAnt();
-									runner.runRun(proj, tempDir, false, jarName);
+									
+									KrokiMockupToolApp.getInstance().displayTextOutput("Generating UML model...", 0);
+									File tempUMLFile = new File(tempDir.getAbsolutePath() + File.separator + jarName + ".uml");
+									try{
+										new ExportProjectToEclipseUML(tempUMLFile, proj, true, true).exportToUMLDiagram(new KrokiComponentOutputMessage(), ExportProjectToEclipseUML.MESSAGES_FOR_CLASS, false);
+										exporter.export(tempDir, jarName, proj, "Project exported OK! Running project...");
+										//run exported jar file
+										RunAnt runner = new RunAnt();
+										runner.runRun(proj, tempDir, false, jarName);
+									}catch(Exception e){
+										/*
+										 * Ovde bi trebalo ispisati gresku kada exort nije uspeo i verovatno zaustaviti dalje pokretanje
+										 */
+										e.printStackTrace();
+									}
 								}
 							}
 						});
