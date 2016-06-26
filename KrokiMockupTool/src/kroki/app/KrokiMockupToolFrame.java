@@ -46,6 +46,7 @@ import kroki.app.action.OpenFileAction;
 import kroki.app.action.OpenProjectAction;
 import kroki.app.action.PasteAction;
 import kroki.app.action.RedoAction;
+import kroki.app.action.RunDjangoAction;
 import kroki.app.action.RunSwingAction;
 import kroki.app.action.RunWebAction;
 import kroki.app.action.SaveAction;
@@ -370,10 +371,10 @@ public class KrokiMockupToolFrame extends JFrame {
 			mainToolbar.setRollover(false);
 			mainToolbar.setFloatable(false);
 
-
 			JToolBar runToolbar = new JToolBar(JToolBar.HORIZONTAL);
 			runToolbar.add(new RunSwingAction());
 			runToolbar.add(new RunWebAction());
+			runToolbar.add(new RunDjangoAction());
 
 			mainToolbar.add(guiManager.getMainToolbar());
 			mainToolbar.add(runToolbar);

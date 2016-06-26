@@ -65,7 +65,7 @@ public class DjangoGenerator {
 	private String staticDestDir = projectDir + File.separator + Application.projectTitleRenamed + File.separator+"static";
 	
 	// source paths
-	private String resourcesSourceDir = Application.appRootPath + File.separator+"src"+ File.separator + "resources";
+	private String resourcesSourceDir = Application.djangoProjectRootPath + File.separator+"src"+ File.separator + "resources";
 	// ftl template source
 	private String templateDir = resourcesSourceDir + File.separator + "freemarkertemplates";	
 	// html template source

@@ -1,6 +1,7 @@
 package com.krogen.repository_utils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class RepositoryPathsUtil {
 
@@ -25,6 +26,12 @@ public class RepositoryPathsUtil {
 	public static String getAppRootPath() {
 		File f = new File(".");
 		return f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator));
+	}
+	
+	public static String getDjangoProjectPath(){
+		File f = new File(".\\..\\WebAppDjango");
+		String djangoProjectPath = f.getAbsolutePath();
+		return djangoProjectPath;
 	}
 
 	public static String getStaticRepositoryPath() {
