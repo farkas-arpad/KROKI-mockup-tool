@@ -2,19 +2,15 @@ package com.panelcomposer.core;
 
 import javax.persistence.EntityManager;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import com.panelcomposer.elements.SMainForm;
 
+import ejb.administration.User;
 import util.PersistenceHelper;
 import util.SchemaGenerator;
 import util.xml_readers.EntityReader;
 import util.xml_readers.EnumerationReader;
 import util.xml_readers.PanelReader;
 import util.xml_readers.TypeComponentReader;
-
-import com.panelcomposer.elements.SMainForm;
-
-import ejb.User;
 
 public class MainApp {
 

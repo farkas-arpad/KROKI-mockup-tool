@@ -6,15 +6,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import util.PersistenceHelper;
-
 import com.panelcomposer.model.Model;
 import com.panelcomposer.model.ejb.EntityBean;
 import com.panelcomposer.model.enumeration.Enumeration;
 import com.panelcomposer.model.menu.MyMenu;
 import com.panelcomposer.model.panel.MPanel;
 
-import ejb.User;
+import ejb.administration.User;
+import util.PersistenceHelper;
 
 
 public class AppCache {
