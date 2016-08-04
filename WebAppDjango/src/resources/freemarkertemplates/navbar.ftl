@@ -66,7 +66,11 @@
 						<#if child.menuName == 'Separator'>
 							<li role="separator" class="divider"></li>
 						<#else>
-					  		<li><a href="{% url '${child.activate}_list' %}">${child.menuName}</a></li>
+							<#if child.panelType == 'PARENTCHILDPANEL'>
+								<li><a href="{% url '${child.activate}' %}">${child.menuName}</a></li>
+							<#else>
+					  			<li><a href="{% url '${child.activate}_list' %}">${child.menuName}</a></li>
+					  		</#if>
 					  	</#if>
 					</#if>
 				</#foreach>			

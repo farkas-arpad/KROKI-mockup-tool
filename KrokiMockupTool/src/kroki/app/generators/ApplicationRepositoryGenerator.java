@@ -46,4 +46,17 @@ public class ApplicationRepositoryGenerator {
 		enumGenerator.generateXMLFiles(enumerations);
 	}
 	
+	public void generateForDjango(ArrayList<EJBClass> classes, ArrayList<Menu> menus, ArrayList<VisibleElement> elements, ArrayList<Enumeration> enumerations, Submenu rootMenu) {
+		DBConfigGenerator.generatePersistenceXMl(true);
+		EJBGenerator.generateEJBClasses(classes, false);
+		ConstraintGenerator.generateConstraints(classes, false);
+		EJBGenerator.generateEJBXmlFiles(classes, "ApplicationRepository" + File.separator + "generated" + File.separator +  "model" + File.separator + "ejb");		
+		EJBGenerator.generateXMLMappingFile(classes, "REPO");
+		menuGenerator.generateMenu(menus);
+		menuGenerator.generateNewMenu(rootMenu);
+		panelGenerator.generate(elements, "REPO");
+		enumGenerator.generateXMLFiles(enumerations);
+		
+	}
+	
 }

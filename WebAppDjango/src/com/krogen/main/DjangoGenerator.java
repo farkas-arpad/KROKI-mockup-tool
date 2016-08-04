@@ -16,11 +16,16 @@ import org.apache.commons.io.FileUtils;
 
 import com.krogen.model.django.DjangoAdapter;
 import com.krogen.model.django.modelpy.DjangoModel;
+import com.krogen.model.django.modelpy.DjangoModelField;
+import com.krogen.model.django.modelpy.EntryTypesEnum;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoSubMenu;
+import com.krogen.model.panel.AdaptParentChildPanel;
+import com.krogen.model.panel.AdaptStandardPanel;
 import com.krogen.model.panel.DjangoPanel;
 import com.krogen.static_names.Settings;
 
+import antlr.StringUtils;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -54,7 +59,7 @@ public class DjangoGenerator {
 
 	// destination paths
 	// project will be generated into:
-	private String projectDir =  Application.appRootPath + File.separator + "generated";
+	private String projectDir =  Application.djangoProjectRootPath + File.separator + "generated";
 	// module will be placed into:
 	private String moduleDir =  projectDir + File.separator + Application.projectTitleRenamed + File.separator+ MODULE_NAME;
 	//templatetags	
@@ -172,7 +177,37 @@ public class DjangoGenerator {
 			generateWithProjectname(srcDirString,"object.ftl",panel.getName() + ".html", context);
 
 		}
-		FileUtils.copyDirectory(srcDir, tempDestDir);		
+		
+		//generate parentChild
+		List<AdaptParentChildPanel> parentChildPanels = DataContainer.getInstance().getParentChildPanel();
+		
+		for (AdaptParentChildPanel adaptParentChildPanel : parentChildPanels) {
+			context.clear();
+			
+			int p1Level = adaptParentChildPanel.getPanels().get(0).getLevel();
+			int p2Level = adaptParentChildPanel.getPanels().get(1).getLevel();
+			
+			AdaptStandardPanel parentPanel = null;
+			AdaptStandardPanel childPanel = null;
+			
+			//TODO check again. not sure what does the higher of lower values mean
+			if(p1Level < p2Level){
+				parentPanel = adaptParentChildPanel.getPanels().get(0);
+				childPanel = adaptParentChildPanel.getPanels().get(1);
+			}else{
+				parentPanel = adaptParentChildPanel.getPanels().get(1);
+				childPanel = adaptParentChildPanel.getPanels().get(0);
+			}
+			
+			context.put("projectname", Application.projectTitleRenamed);
+			context.put("menu", mainMenu);
+			context.put("panel", adaptParentChildPanel);
+			context.put("parentPanel", parentPanel);
+			context.put("childPanel", childPanel);
+			generateWithProjectname(srcDirString,"parentChild.ftl", adaptParentChildPanel.getName() + "_pc.html", context);
+		}
+		
+		FileUtils.copyDirectory(srcDir, tempDestDir);	
 	}	
 
 	private void copyCustomCode() throws IOException {
@@ -192,9 +227,11 @@ public class DjangoGenerator {
 	public void generateViewsPy()throws IOException{
 
 		List<DjangoPanel> panels = djangoAdapter.getPanels();
+		List<AdaptParentChildPanel> pcPanels = DataContainer.getInstance().getParentChildPanel();
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();
 		Map<String, String> classnameModelMap = djangoAdapter.getClassnameModelMapping();
 		Map<String, String> panelClassMap = djangoAdapter.getPanelClassMap();
+		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 		
 		context.clear();
 		context.put("classes", new ArrayList<String>());
@@ -203,10 +240,60 @@ public class DjangoGenerator {
 		context.put("description", Settings.APP_DESCRIPTION);	
 		context.put("urls", djangoAdapter.getDjangoUrls());		
 		context.put("panels", panels);
+		context.put("pcPanels", pcPanels);
 		context.put("classnameModelMap", classnameModelMap);	
 		context.put("panelClassMap", panelClassMap);					
 		
 		context.put("models", djangoModelList);
+		context.put("enumerations", enumerations);
+		
+		Map<String, String> pcForeingKeyMap = new HashMap<String, String>();
+		
+		if(pcPanels.size() > 0){
+			for (AdaptParentChildPanel adaptParentChildPanel : pcPanels) {
+
+				int p1Level = adaptParentChildPanel.getPanels().get(0).getLevel();
+				int p2Level = adaptParentChildPanel.getPanels().get(1).getLevel();
+
+				AdaptStandardPanel parentPanel = null;
+				AdaptStandardPanel childPanel = null;
+
+				DjangoModel parentModel = null;
+				DjangoModel childModel = null;
+
+				//TODO check again. not sure what does the higher of lower values mean
+				if(p1Level < p2Level){
+					parentPanel = adaptParentChildPanel.getPanels().get(0);
+					childPanel = adaptParentChildPanel.getPanels().get(1);
+				}else{
+					parentPanel = adaptParentChildPanel.getPanels().get(1);
+					childPanel = adaptParentChildPanel.getPanels().get(0);
+				}
+
+				for (DjangoModel model : djangoModelList) {
+					if(model.getLabel().equals(parentPanel.getLabel())){
+						parentModel = model;
+					}
+					if(model.getLabel().equals(childPanel.getLabel())){
+						childModel = model;
+					}
+				}
+
+				DjangoModelField fieldToSend = null;
+
+				for (DjangoModelField field : childModel.getFieldsList()) {
+					if(field.getEntryTypesEnum() == EntryTypesEnum.FOREIGNKEY){
+						String foreignKeyEntity = classnameModelMap.get(field.getClassName());
+						if (foreignKeyEntity.equals(parentModel.getName())) {
+							fieldToSend = field;
+						}
+					}
+				}
+				pcForeingKeyMap.put(adaptParentChildPanel.getLabel(), fieldToSend.getFieldName());
+			}
+		}
+		
+		context.put("pcForeingKeyMap", pcForeingKeyMap);
 		//TODO add ejb-url map
 		
 		generateWithProjectname(moduleDir,VIEWS_PY, context);
@@ -235,11 +322,13 @@ public class DjangoGenerator {
 	public void generateURLsPy()throws IOException{
 
 		List<DjangoPanel> panels = djangoAdapter.getPanels();
+		List<AdaptParentChildPanel> pcPanels = DataContainer.getInstance().getParentChildPanel();
 		
 		context.clear();		
 		context.put("imports", new ArrayList<String>());
 		context.put("urls", djangoAdapter.getDjangoUrls());
 		context.put("panels", panels);		
+		context.put("parentChildPanels", pcPanels);
 		context.put("projectname", Application.projectTitleRenamed);
 		context.put("modulename", MODULE_NAME);
 		generateWithProjectname(moduleDir,URLS_PY, context);

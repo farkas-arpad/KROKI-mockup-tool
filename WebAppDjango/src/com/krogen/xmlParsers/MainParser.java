@@ -41,6 +41,7 @@ public class MainParser {
 		PanelParser panelParser = new PanelParser();
 		panelParser.parsePanelMappings();
 		panelParser.parsePanels();		
+		panelParser.parseParentChildPanel();		
 		
 	}
 }

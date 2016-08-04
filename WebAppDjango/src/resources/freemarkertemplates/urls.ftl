@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^${url.pattern}/delete/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}_delete', name = '${url.view}_delete'),     
 
  </#list>
+ 
 	# special operations
 <#list panels as panel>
 <#if panel.standardOperations.operations?has_content >   
@@ -39,6 +40,10 @@ urlpatterns = patterns('',
   </#if>     
 </#list>  
 </#list>
+
+<#list parentChildPanels as pcpanel>
+ 	 url(r'^${pcpanel.name}', '${modulename}.views.${pcpanel.name}', name = '${pcpanel.name}'),
+</#list> 
 
 	# custom code
 	url(r'^custom', 'module.manualCode.custom', name = 'custom'),  

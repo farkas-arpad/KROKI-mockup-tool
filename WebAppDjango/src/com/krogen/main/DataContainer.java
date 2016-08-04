@@ -12,6 +12,7 @@ import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoMenu;
 import com.krogen.model.menu.DjangoSubMenu;
 import com.krogen.model.panel.DjangoPanel;
+import com.krogen.model.panel.AdaptParentChildPanel;
 import com.krogen.model.panel.AdaptStandardPanel;
 
 /**
@@ -160,6 +161,10 @@ public class DataContainer {
 	public List<DjangoPanel> getPanels(){
 		return model.getPanels();
 	}
+	
+	public List<AdaptParentChildPanel> getParentChildPanel(){
+		return model.getParentChildPanel();
+	}
 
 	public Map<String, String> getPanelClassMap() {
 		return model.getPanelClassMap();
@@ -167,8 +172,12 @@ public class DataContainer {
 
 	public void addPanel(DjangoPanel panel) {
 		model.add(panel);
-		
 	}
+	
+	public void addPanel(AdaptParentChildPanel parentChildPanel){
+		model.add(parentChildPanel);
+	}
+	
 	public HashMap<String,EjbClass> getEjbClasses(){
 		return model.getEntityBeans();
 	}

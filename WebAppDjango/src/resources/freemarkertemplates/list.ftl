@@ -27,9 +27,13 @@
         	<div class="navbar-header">
             	<div class="btn-group" role="group" aria-label="...">
                 	{% if addable == "true" %}
-              		<a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>
+                	<div class="col-md-6"> 
+              		    <a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>
+              		</div>    
                		{% endif %}  
-              		<a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>  
+               		<div class="col-md-6"> 
+              		    <a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>
+              		</div>  
               	</div>
             </div>
             <form class="navbar-form navbar-right" action="{% url '${panel.name}_search' %}" method="POST">

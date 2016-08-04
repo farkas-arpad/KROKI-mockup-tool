@@ -10,6 +10,7 @@ import com.krogen.model.ejb.EjbClass;
 import com.krogen.model.enumeration.Enumeration;
 import com.krogen.model.menu.DjangoMenu;
 import com.krogen.model.menu.DjangoSubMenu;
+import com.krogen.model.panel.AdaptParentChildPanel;
 import com.krogen.model.panel.DjangoPanel;
 
 /**
@@ -23,6 +24,7 @@ public class DataModel {
 	protected LinkedHashMap<String,EjbClass> entityBeans = new LinkedHashMap<String,EjbClass>();
 	protected List<DjangoMenu> menus = new ArrayList<DjangoMenu>();
 	protected List<DjangoPanel> panels = new ArrayList<DjangoPanel>();
+	protected List<AdaptParentChildPanel> parentChildPanel = new ArrayList<AdaptParentChildPanel>();
 	protected Map<String, Enumeration> enumerations = new HashMap<String, Enumeration>();
 	protected DjangoSubMenu defaultMenu = new DjangoSubMenu();
 
@@ -56,6 +58,10 @@ public class DataModel {
 
 	public void add(DjangoPanel panel) {
 		panels.add(panel);
+	}
+	
+	public void add(AdaptParentChildPanel newParentChildPanel){
+		parentChildPanel.add(newParentChildPanel);
 	}
 
 	public void add(String name, Enumeration enumeration) {
@@ -131,7 +137,12 @@ public class DataModel {
 		this.defaultMenu = defaultMenu;
 	}
 
+	public List<AdaptParentChildPanel> getParentChildPanel() {
+		return parentChildPanel;
+	}
 
-
+	public void setParentChildPanel(List<AdaptParentChildPanel> parentChildPanel) {
+		this.parentChildPanel = parentChildPanel;
+	}
 
 }

@@ -252,6 +252,43 @@ def ${panel.name}_${operation.name}(request):
 </#if>
 </#list>
 
-   
+<#list pcPanels as pcPanel>
+@login_required(login_url='/${projectname}/login/')  
+def ${pcPanel.name}(request):
+    context = RequestContext(request)
+    
+    id = request.GET.get('id', '')
+     
+    <#if pcPanel.panels[0].level < pcPanel.panels[1].level>
+    ${pcPanel.panels[0].name}s = ${pcPanel.panels[0].entityBean.name}.objects.all()
+    
+    if id != '':
+        #order_sts = ORDER.objects.filter(order_payment_2=id)
+        ${pcPanel.panels[1].name}s = ${pcPanel.panels[1].entityBean.name}.objects.filter(${pcForeingKeyMap[pcPanel.label]}=id)
+    else:
+        ${pcPanel.panels[1].name}s = ${pcPanel.panels[1].entityBean.name}.objects.all()
+    
+    parentParams = {'addable' : '${pcPanel.panels[0].panelSettings.add}', 'deletable' : "${pcPanel.panels[0].panelSettings.delete}", "${pcPanel.panels[0].name}s" : ${pcPanel.panels[0].name}s}
+    childParams = {'addable' : '${pcPanel.panels[1].panelSettings.add}', 'deletable' : "${pcPanel.panels[1].panelSettings.delete}", "${pcPanel.panels[1].name}s" : ${pcPanel.panels[1].name}s}
+    <#else>
+    ${pcPanel.panels[1].name}s = ${pcPanel.panels[1].entityBean.name}.objects.all()
+    
+    if id != '':
+        ${pcPanel.panels[0].name}s = ${pcPanel.panels[0].entityBean.name}.objects.filter(${pcForeingKeyMap[pcPanel.label]}=id)
+    else:
+        ${pcPanel.panels[0].name}s = ${pcPanel.panels[0].entityBean.name}.objects.all()
+    
+    parentParams = {'addable' : '${pcPanel.panels[1].panelSettings.add}', 'deletable' : "${pcPanel.panels[1].panelSettings.delete}", "${pcPanel.panels[1].name}s" : ${pcPanel.panels[1].name}s}
+    childParams = {'addable' : '${pcPanel.panels[0].panelSettings.add}', 'deletable' : "${pcPanel.panels[0].panelSettings.delete}", "${pcPanel.panels[0].name}s" : ${pcPanel.panels[0].name}s}
+    </#if>
+    
+    #parentParams = {'addable' : '${pcPanel.panels[0].panelSettings.add}', 'deletable' : "${pcPanel.panels[0].panelSettings.delete}", "${pcPanel.panels[0].name}s" : ${pcPanel.panels[0].name}s}
+    #childParams = {'addable' : '${pcPanel.panels[1].panelSettings.add}', 'deletable' : "${pcPanel.panels[1].panelSettings.delete}", "${pcPanel.panels[1].name}s" : ${pcPanel.panels[1].name}s}
+    
+    #return render_to_response('${pcPanel.name}_list.html', {"parentParams" : parentParams, "childParams": "childParams", "projectname" : "${projectname}"},context)
+    return render_to_response('${pcPanel.name}_pc.html', {"parentParams" : parentParams, "childParams": childParams, "projectname" : "${projectname}"},context)
 
+    #context = RequestContext(request)
+    #return redirect('localhost:8000/youtube')
+</#list>
 	
