@@ -38,7 +38,7 @@ class ${model.name}(models.Model):
 <#elseif field.entryTypesEnum == 'BooleanField'>
 	${field.fieldName} = models.${field.entryTypesEnum}(default = False, blank = True)
 <#elseif field.entryTypesEnum == 'ForeignKey'>
-	${field.fieldName} = models.${field.entryTypesEnum}(${classnameModelMap[field.className]} , null = True, blank = True)
+	${field.fieldName} = models.${field.entryTypesEnum}(${classnameModelMap[field.className]}, related_name='${field.fieldName}', null = True, blank = True)
 </#if>	
 </#list>	
 
