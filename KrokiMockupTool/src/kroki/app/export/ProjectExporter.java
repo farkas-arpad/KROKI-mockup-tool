@@ -170,16 +170,23 @@ public class ProjectExporter {
 			enumGenerator.generateXMLFiles(enumerations);
 			enumGenerator.generateEnumFiles(enumerations);
 		} else {
-//			appRepoGenerator.generate(classes, menus, elements, enumerations, rootMenu);
-			
-			appRepoGenerator.generateForDjango(classes, menus, elements, enumerations, rootMenu);
-			
+			appRepoGenerator.generate(classes, menus, elements, enumerations, rootMenu);
 			// MainFrame.getInstance(); // If admin subsystem isn't started
 			// adminGenerator.generate();
 		}
 	}
 	
-	
+	/**
+	 * getDate - Fetches project data into lists that are used by generators
+	 * generateForDjango - fills the generic an framework specific containers with data
+	 * 
+	 * @param proj - the selected project at beginning of paring/generating
+	 */
+	public void generateDjangoAppAndRepo(BussinesSubsystem proj) {
+		this.project = proj;
+		getData(proj);
+		appRepoGenerator.generateForDjango(classes, menus, elements, enumerations, rootMenu);
+	}
 
 	/**
 	 * Fetches project data into lists that are used by generators

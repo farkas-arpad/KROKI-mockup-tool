@@ -22,14 +22,20 @@ public class MainParser {
 		// Add configuration if needed
 	}
 
+	/**
+	 * Consume all the necessary files that contain data regarding to the Django project
+	 * 
+	 */
 	public void parseData(){
-		// parseEnumerations
+		// parse the Enumerations
 		EnumerationParser enumeParser = new EnumerationParser();
 		enumeParser.parseEnumerations();
 		
-		// parse menudata, if 		
+		// parse menu data which exist by default	
 		MenuParser menuParser = new MenuParser();
 		menuParser.parse(MenuType.DEFAULT_MENU);
+		
+		//if there are any menu which is different from the default ones (custom made) it should be in the specific file
 		if (new File(ParserConstants.generatedModelPath + File.separator + ParserConstants.xmlFileName).exists())
 			menuParser.parse(MenuType.GENERATED_MENUS);
 		
@@ -37,11 +43,11 @@ public class MainParser {
 		EntityParser entityParser = new EntityParser();
 		entityParser.parseEjbToXMLMappings();
 		entityParser.parseEjbBeansUsingMappings(DataContainer.getInstance().getXMLMappings());
+		
 		// parse form data based upon the menu items
 		PanelParser panelParser = new PanelParser();
 		panelParser.parsePanelMappings();
 		panelParser.parsePanels();		
 		panelParser.parseParentChildPanel();		
-		
 	}
 }
