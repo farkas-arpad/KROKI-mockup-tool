@@ -1,13 +1,14 @@
   {% extends "base.html" %}
   {% load custom_tags %}
   
-  {% block head_title%} {{block.super}} {% endblock %}
+  {% block head_title%} ${projectname} :: ${panel.entityBean.label}{% endblock %}
+  
+  {% block page_title %} ${panel.entityBean.label} {% endblock %}
   
   {% block jumbotron_content %}
 		<form class="form-horizontal" method="post" action="">	        			
 	 	{% csrf_token%}
 	 		<fieldset>
-				<legend>${panel.entityBean.label}</legend>
 				<div class="form-group">
 					{% for field in ${panel.entityBean.name}Form %}
 					{{ field.errors }}           		

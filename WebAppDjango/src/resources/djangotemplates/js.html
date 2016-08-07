@@ -1,12 +1,17 @@
 {% load staticfiles %}
 
-  <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-   <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>--> 
-    <script src="{% static 'js/jquery.min.js'%}"></script>     
-    <script src="{% static 'js/bootstrap.min.js'%}"></script>
-    <script src="{% static 'js/custom.js'%}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-   <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
-  
+    <!-- jQuery -->
+    <script src="{% static 'bower_components/jquery/dist/jquery.min.js'%}"></script>  
+	
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js'%}"></script>  
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'bower_components/metisMenu/dist/metisMenu.min.js'%}"></script>  
+
+    <!-- Morris Charts JavaScript -->
+    <script src="{% static 'bower_components/raphael/raphael-min.js'%}"></script>  
+    <script src="{% static 'bower_components/morrisjs/morris.min.js'%}"></script>  
+    
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'dist/js/sb-admin-2.js'%}"></script>  

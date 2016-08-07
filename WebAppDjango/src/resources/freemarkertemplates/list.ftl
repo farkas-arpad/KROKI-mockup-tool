@@ -1,7 +1,10 @@
   {% extends "base.html" %}  
   {% block head_title %} ${projectname} :: ${panel.entityBean.label} {% endblock %}
   
+  {% block page_title %} ${panel.entityBean.label} {% endblock %}
+  
   {% block jumbotron_content %}
+ 
   <#assign special_functions = false> 
    <#if (panel.nextPanels?? && panel.nextPanels?has_content) || (panel.standardOperations.operations??  && panel.standardOperations.operations?has_content)>
  	<#assign special_functions = true>
@@ -21,8 +24,7 @@
 		</div>
 	{% endif %}
 <fieldset>
-	<legend>${panel.entityBean.label}</legend>     
-    <nav class="navbar navbar-default">   
+	 <nav class="navbar navbar-default">   
     	<div class="container-fluid">
         	<div class="navbar-header">
             	<div class="btn-group" role="group" aria-label="...">
@@ -44,8 +46,10 @@
         		</div>
         	</form>
         </div>
-    </nav>        		               
-        <table class="table" id="example">   
+    </nav>  
+	
+	<div class="table-responsive">	
+        <table class="table table-hover">   
         	<thead>
             	<tr>
                     <#list panel.entityBean.attributes as attribute>
@@ -77,7 +81,9 @@
                     </td>
                 </tr>                
                 {% endfor %}       
-        </table>                 
+		</table>                 
+	</div>
+	
 </fieldset> 
 </div>    
   {% endblock %}
@@ -91,7 +97,7 @@
    <#list panel.nextPanels as nextFormUrl>
    <div class="row">
          <#if panelNameMap[nextFormUrl.panelId]??> 	
-        	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${panelNameMap[nextFormUrl.panelId]}</a>
+        	 <p><a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.panelId}_list' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${panelNameMap[nextFormUrl.panelId]}</a></p>
        	 </#if>  	 
    </div>      
    </#list>    
@@ -102,12 +108,12 @@
    <#list panel.standardOperations.operations as operation>
     <div class="row">         	
          	 <#if operation.type == 'VIEWREPORT'> 
-         	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${panel.name}_${operation.name}'%}">
+         	<p> <a class="btn-group btn-sm btn btn-primary" href="{% url '${panel.name}_${operation.name}'%}">
          	 	<span class="glyphicon glyphicon-book" aria-hidden="true"></span> ${operation.label}
-         	 </a>
+         	 </a></p>
          	 <#elseif operation.type == 'BUSINESSTRANSACTION'> 
          	 	<#if operation.parameters?has_content> 
-         	 	       		 <a class="btn-group btn-sm btn btn-primary" href="{% url '${panel.name}_${operation.name}'%}"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> ${operation.label}</a>        
+         	 	       		 <p><a class="btn-group btn-sm btn btn-primary" href="{% url '${panel.name}_${operation.name}'%}"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> ${operation.label}</a></p>        
          	 	<#else>
          	 	<form action="{% url '${panel.name}_${operation.name}'%}" method="POST">
                    	{% csrf_token %}
@@ -123,7 +129,7 @@
    <#list panel.nextPanels as nextFormUrl>
    <div class="row">
          <#if panelNameMap[nextFormUrl.panelId]?? == false> 	      
-       	  	 <a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.label}' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${nextFormUrl.label}</a>      
+       	  	 <p><a class="btn-group btn-sm btn btn-primary" href="{% url '${nextFormUrl.label}' %}"> <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ${nextFormUrl.label}</a></p>     
          </#if>  	 
    </div>      
    </#list> 

@@ -2,6 +2,7 @@
   
   {% block head_title%} {{block.super}} {% endblock %}
   
+  {% block page_title %} ${panel.entityBean.label} {% endblock %}
   {% block jumbotron_content %}
    <#assign special_functions = false> 
    <#if (panel.nextPanels?? && panel.nextPanels?has_content)>
@@ -21,7 +22,6 @@
    		<form class="form-horizontal">	        			
 	 		{% csrf_token%}
 	 			<fieldset>
-					<legend>${panel.entityBean.label}</legend>
 					<div class="form-group">
 						{% for field in ${panel.entityBean.name}Form %}
            				<div class="col-sm-3"> {{ field.label_tag }}</div> <div class="col-sm-9">{{ field }} </div>

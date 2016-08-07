@@ -1,40 +1,46 @@
 {% load staticfiles %}
 
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
     <title>{% block head_title %} {{ projectname }} {% endblock %}</title>
- {% include "head_css.html" %}
+	
+{% include "head_css.html" %}
  
   </head>
   <body>
+	<div id="wrapper">
+		{% include "navbar.html" %}
 
-  {% include "navbar.html" %}
-
-   {% block jumbotron %}
-    <div class="container">   
-    <div class="jumbotron">      
-    <div class="row">
-		{% block jumbotron_content %}
-		
+		{% block jumbotron %}
+		<div id="page-wrapper" style="min-height: 600px;">  	   
+			<div class="row">
+				<div class="col-lg-12">
+                    <h2 class="page-header">{% block page_title %} Page Title {% endblock %}</h2>
+                </div>
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-body"> 
+						{% block jumbotron_content %}				
+						{% endblock %}
+						
+						{% block extra_functions %}
+						{% endblock %}  
+						</div>
+					</div>	 			
+				</div>  			
+			</div>             		
+        </div>   	
 		{% endblock %}
-	  	{% block extra_functions %}
-       	{% endblock %}        
-       		 </div>        
-     
-        </div>
-        </div>   
-{% endblock %}
- {% include "js.html" %}
+		
+	</div>
+{% include "js.html" %}
   
   </body>
 </html>
