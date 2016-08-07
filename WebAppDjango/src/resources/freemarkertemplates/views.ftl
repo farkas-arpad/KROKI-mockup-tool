@@ -26,11 +26,21 @@ from ${modulename}.forms import LoginForm<#list models as model>, ${model.name}F
 # homepage view
 @login_required(login_url='login/')
 def index(request):
-	context = {
-		"projectname": "${projectname}",
-		"description": "${description}",
-	}
-	return render(request,'home.html', context)
+
+    list = []
+<#list panels as panel>
+    entity_name = '${panel.entityBean.name}'
+    entity_size = ${panel.entityBean.name}.objects.all().count()
+    entity_url = '${panel.name}_list'
+    list.append({'entity_name':entity_name, 'entity_size':entity_size, 'entity_url':entity_url})
+</#list>    
+
+    context = {
+        "projectname": "${projectname}",
+        "description": "${description}",
+        "list": list,
+    }
+    return render(request,'home.html', context)
 
 # logout function	
 def logout_user(request):
