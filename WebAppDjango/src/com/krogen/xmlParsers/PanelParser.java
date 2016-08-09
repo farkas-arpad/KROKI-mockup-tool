@@ -2,6 +2,8 @@ package com.krogen.xmlParsers;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -235,7 +237,7 @@ public class PanelParser {
 
 	// Returns JSON representation of parent-child panels' panels
 	// This method is used to quickly fetch parent-child panel information from XML file
-	public void parseParentChildPanel() {
+	public void parseParentChildPanel() throws Exception {
 
 		Document document = XMLParserUtils.parseXml(ParserConstants.panelsDirectoryPath + ParserConstants.panelsFileName);
 		NodeList nodeList = document.getElementsByTagName(Tags.PARENT_CHILD);
@@ -252,6 +254,8 @@ public class PanelParser {
 			
 			NodeList childPanelNodes = elem.getElementsByTagName(Tags.PANEL);
 
+			//parse the panels from the xml file
+			List<AdaptStandardPanel> panels = new ArrayList<AdaptStandardPanel>();
 			for(int j=0; j < childPanelNodes.getLength(); j++) {
 				Element subElem = (Element) childPanelNodes.item(j);
 				String panelRef = subElem.getAttribute(Tags.PANEL_REF);
@@ -269,9 +273,27 @@ public class PanelParser {
 						
 					asp.setLevel(Integer.parseInt(level));
 //					asp.setAssociationEnd(asocEnd);
-					newParentChildPanel.add(asp);
+					panels.add(asp);
 				}
 			}
+			
+			// searching for the parent and the child panels
+			// the panel with lower hierarchy is the parent one
+			Collections.sort(panels, new Comparator<AdaptStandardPanel>() {
+				public int compare(AdaptStandardPanel one, AdaptStandardPanel other) {
+					return one.getLevel().compareTo(other.getLevel());
+				}
+			});
+			
+			//the parent child panel is not in relation with any other panels
+			if(panels.size() < 1){
+				throw new Exception("The parent child panel is not in relation with any other panels");
+			}
+			
+			AdaptStandardPanel parentPanel = panels.remove(0);
+			newParentChildPanel.setParentPanel(parentPanel);
+			newParentChildPanel.setChildPanels(panels);
+			
 			DataContainer.getInstance().addPanel(newParentChildPanel);
 		}
 

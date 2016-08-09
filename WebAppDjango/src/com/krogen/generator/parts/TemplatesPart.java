@@ -55,26 +55,14 @@ public class TemplatesPart extends Part {
 		for (AdaptParentChildPanel adaptParentChildPanel : DataContainer.getInstance().getParentChildPanel()) {
 			context.clear();
 
-			AdaptStandardPanel parentPanel = null;
-			AdaptStandardPanel childPanel = null;
-
-			int p1Level = adaptParentChildPanel.getPanels().get(0).getLevel();
-			int p2Level = adaptParentChildPanel.getPanels().get(1).getLevel();
-			
-			//the panel with lower hierarchy is the parent one
-			if (p1Level < p2Level) {
-				parentPanel = adaptParentChildPanel.getPanels().get(0);
-				childPanel = adaptParentChildPanel.getPanels().get(1);
-			} else {
-				parentPanel = adaptParentChildPanel.getPanels().get(1);
-				childPanel = adaptParentChildPanel.getPanels().get(0);
-			}
+			AdaptStandardPanel parentPanel = adaptParentChildPanel.getParentPanel();
+			List<AdaptStandardPanel> childPanels = adaptParentChildPanel.getChildPanels();
 
 			context.put("projectname", Application.projectTitleRenamed);
 			context.put("menu", mainMenu);
 			context.put("panel", adaptParentChildPanel);
 			context.put("parentPanel", parentPanel);
-			context.put("childPanel", childPanel);
+			context.put("childPanels", childPanels);
 			generateWithProjectname(srcDirString, "parentChild.ftl", adaptParentChildPanel.getName() + "_pc.html",
 					context);
 		}

@@ -75,6 +75,7 @@
 <!--//parent panel-->
 
 <!--child panel-->
+<#list childPanels as childPanel>
 <div class="col-md-12">
     <fieldset>
         <legend>${childPanel.entityBean.label}</legend>  
@@ -83,7 +84,7 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <div class="btn-group" role="group" aria-label="...">
-                        {% if childParams.addable == "true" %}
+                        {% if childParams.${childPanel.name}.addable == "true" %}
                             <div class="col-md-6"> 
                                 <a class="btn btn-primary btn-sm navbar-btn" href="{% url '${childPanel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${childPanel.entityBean.label}</a>
                             </div>
@@ -105,7 +106,7 @@
                 </tr>
             </thead>
                                         
-            {% for ${childPanel.name} in childParams.${childPanel.name}s %}
+            {% for ${childPanel.name} in childParams.${childPanel.name}.${childPanel.name}s %}
                 <tr>
                 
                     <#list childPanel.entityBean.attributes as attribute>
@@ -121,7 +122,7 @@
                     </td>
                     
                     <td>   
-                        {% if deletable == "true" %}                                        
+                        {% if childParams.${childPanel.name}.deletable == "true" %}                                        
                             <form action="{% url '${childPanel.name}_delete' ${childPanel.name}.id %}" method="POST">
                                 {% csrf_token %}
                                 <button class="btn btn-sm btn-danger" type="submit">
@@ -135,5 +136,6 @@
         </table>                 
 </fieldset> 
 </div>  
+</#list>
 <!--//child panel-->
 {% endblock %}

@@ -43,49 +43,50 @@ public class ViewPyPart extends Part {
 		context.put("models", djangoModelList);
 		context.put("enumerations", enumerations);
 
-		Map<String, String> pcForeingKeyMap = new HashMap<String, String>();
+		Map<String, Map<String, String>> pcForeingKeyMap = new HashMap<String, Map<String, String>>();
 
 		if (pcPanels.size() > 0) {
 			for (AdaptParentChildPanel adaptParentChildPanel : pcPanels) {
 
-				int p1Level = adaptParentChildPanel.getPanels().get(0).getLevel();
-				int p2Level = adaptParentChildPanel.getPanels().get(1).getLevel();
-
-				AdaptStandardPanel parentPanel = null;
-				AdaptStandardPanel childPanel = null;
+				// if the parent-child panel has child no panels. skip the generation
+				if (adaptParentChildPanel.getChildPanels().size() <= 0) {
+					continue;
+				}
 
 				DjangoModel parentModel = null;
-				DjangoModel childModel = null;
-
-				//the panel with lower hierarchy is the parent one
-				if (p1Level < p2Level) {
-					parentPanel = adaptParentChildPanel.getPanels().get(0);
-					childPanel = adaptParentChildPanel.getPanels().get(1);
-				} else {
-					parentPanel = adaptParentChildPanel.getPanels().get(1);
-					childPanel = adaptParentChildPanel.getPanels().get(0);
-				}
-
+				List<DjangoModel> childModelList = new ArrayList<DjangoModel>();
+				
 				for (DjangoModel model : djangoModelList) {
-					if (model.getLabel().equals(parentPanel.getLabel())) {
+					if (model.getLabel().equals(adaptParentChildPanel.getParentPanel().getLabel())) {
 						parentModel = model;
 					}
-					if (model.getLabel().equals(childPanel.getLabel())) {
-						childModel = model;
-					}
 				}
-
-				DjangoModelField fieldToSend = null;
-
-				for (DjangoModelField field : childModel.getFieldsList()) {
-					if (field.getEntryTypesEnum() == EntryTypesEnum.FOREIGNKEY) {
-						String foreignKeyEntity = classnameModelMap.get(field.getClassName());
-						if (foreignKeyEntity.equals(parentModel.getName())) {
-							fieldToSend = field;
+				
+				for (DjangoModel model : djangoModelList) {
+					for (AdaptStandardPanel childPanel : adaptParentChildPanel.getChildPanels()) {
+						if (model.getLabel().equals(childPanel.getLabel())) {
+							childModelList.add(model);
 						}
 					}
 				}
-				pcForeingKeyMap.put(adaptParentChildPanel.getLabel(), fieldToSend.getFieldName());
+				
+				Map<String, String> fieldMap = new HashMap<String, String>();
+				
+				for (DjangoModel childModel : childModelList){
+					DjangoModelField fieldToSend = null;
+					
+					for (DjangoModelField field : childModel.getFieldsList()) {
+						if (field.getEntryTypesEnum() == EntryTypesEnum.FOREIGNKEY) {
+							String foreignKeyEntity = classnameModelMap.get(field.getClassName());
+							if (foreignKeyEntity.equals(parentModel.getName())) {
+								fieldToSend = field;
+							}
+						}
+					}
+					
+					fieldMap.put(childModel.getLabel(), fieldToSend.getFieldName());
+				}
+				pcForeingKeyMap.put(adaptParentChildPanel.getLabel(), fieldMap);
 			}
 		}
 

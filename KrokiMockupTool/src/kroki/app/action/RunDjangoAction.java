@@ -121,8 +121,9 @@ public class RunDjangoAction extends AbstractAction {
 	}
 	/**
 	 * initialize the parser that reads the data from the files generated before
+	 * @throws Exception 
 	 */
-	private void parseData(){
+	private void parseData() throws Exception{
 		MainParser parser = new MainParser();
 		parser.parseData();	
 	}

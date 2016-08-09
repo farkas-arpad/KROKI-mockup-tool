@@ -24,9 +24,10 @@ public class MainParser {
 
 	/**
 	 * Consume all the necessary files that contain data regarding to the Django project
+	 * @throws Exception 
 	 * 
 	 */
-	public void parseData(){
+	public void parseData() throws Exception{
 		// parse the Enumerations
 		EnumerationParser enumeParser = new EnumerationParser();
 		enumeParser.parseEnumerations();
