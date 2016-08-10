@@ -36,7 +36,6 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons.io-1.4.0.jar"/>
-	<classpathentry kind="lib" path="lib/freemarker.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-entitymanager.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-tools.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
@@ -49,6 +48,7 @@
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/weblaf-complete-1.28.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GraphEdit"/>
 	<classpathentry kind="lib" path="libECore/org.eclipse.emf.common_2.9.0.v20130528-0742.jar"/>
 	<classpathentry kind="lib" path="libECore/org.eclipse.emf.ecore_2.9.0.v20130528-0742.jar"/>

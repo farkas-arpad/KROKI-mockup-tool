@@ -43,7 +43,7 @@ public class ViewPyPart extends Part {
 		context.put("models", djangoModelList);
 		context.put("enumerations", enumerations);
 
-		Map<String, Map<String, String>> pcForeingKeyMap = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, List<String>>> pcForeingKeyMap = new HashMap<String, Map<String, List<String>>>();
 
 		if (pcPanels.size() > 0) {
 			for (AdaptParentChildPanel adaptParentChildPanel : pcPanels) {
@@ -70,21 +70,21 @@ public class ViewPyPart extends Part {
 					}
 				}
 				
-				Map<String, String> fieldMap = new HashMap<String, String>();
+				Map<String, List<String>> fieldMap = new HashMap<String, List<String>>();
 				
 				for (DjangoModel childModel : childModelList){
-					DjangoModelField fieldToSend = null;
+					List<String> fieldListToSend = new ArrayList<String>();
 					
 					for (DjangoModelField field : childModel.getFieldsList()) {
 						if (field.getEntryTypesEnum() == EntryTypesEnum.FOREIGNKEY) {
 							String foreignKeyEntity = classnameModelMap.get(field.getClassName());
 							if (foreignKeyEntity.equals(parentModel.getName())) {
-								fieldToSend = field;
+								fieldListToSend.add(field.getFieldName());
 							}
 						}
 					}
 					
-					fieldMap.put(childModel.getLabel(), fieldToSend.getFieldName());
+					fieldMap.put(childModel.getLabel(), fieldListToSend);
 				}
 				pcForeingKeyMap.put(adaptParentChildPanel.getLabel(), fieldMap);
 			}

@@ -273,7 +273,11 @@ def ${pcPanel.name}(request):
     
     if id != '':
     <#list pcPanel.childPanels as childPanel>
-        ${childPanel.name}s = ${childPanel.entityBean.name}.objects.filter(${pcForeingKeyMap[pcPanel.label][childPanel.label]}=id) 
+        <#if pcForeingKeyMap[pcPanel.label][childPanel.label]?size == 1>
+        ${childPanel.name}s = ${childPanel.entityBean.name}.objects.filter(${pcForeingKeyMap[pcPanel.label][childPanel.label][0]}=id)
+        <#else>
+        ${childPanel.name}s = <#list pcForeingKeyMap[pcPanel.label][childPanel.label] as fieldName>${childPanel.entityBean.name}.objects.filter(${fieldName}=id)<#sep> | </#sep></#list>
+        </#if> 
     </#list>
     else:
     <#list pcPanel.childPanels as childPanel>
