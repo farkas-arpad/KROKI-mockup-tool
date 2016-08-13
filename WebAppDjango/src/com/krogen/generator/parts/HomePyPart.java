@@ -7,6 +7,10 @@ public class HomePyPart extends Part {
 	
 	String srcDirString = DjangoConstants.djangoTemplateDir;
 	
+	public HomePyPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		

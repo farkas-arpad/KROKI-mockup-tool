@@ -39,6 +39,10 @@ public class DataContainer {
 		}
 	}
 	
+	public void clearInstance(){
+		instance = null;
+	}
+	
 //	//---------------------------------------------------------------------| ADD METHODS
 	/**
 	 * Adds XML-to-EJB mapping to model

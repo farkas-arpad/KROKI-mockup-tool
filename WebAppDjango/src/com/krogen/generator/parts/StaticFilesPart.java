@@ -13,6 +13,10 @@ import com.krogen.generator.Part;
  */
 public class StaticFilesPart extends Part {
 
+	public StaticFilesPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		File srcDir = new File(DjangoConstants.staticSourceDir);

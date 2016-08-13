@@ -18,6 +18,10 @@ import com.krogen.model.panel.DjangoPanel;
  */
 public class FormsPyPart extends Part {
 
+	public FormsPyPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		DjangoSubMenu mainMenu = djangoAdapter.getDefaultMenu();

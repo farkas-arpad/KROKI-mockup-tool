@@ -48,7 +48,6 @@
 	<classpathentry kind="lib" path="lib/xml-apis-ext.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/weblaf-complete-1.28.jar"/>
-	<classpathentry kind="lib" path="lib/freemarker.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GraphEdit"/>
 	<classpathentry kind="lib" path="libECore/org.eclipse.emf.common_2.9.0.v20130528-0742.jar"/>
 	<classpathentry kind="lib" path="libECore/org.eclipse.emf.ecore_2.9.0.v20130528-0742.jar"/>
@@ -107,5 +106,6 @@
 	<classpathentry kind="lib" path="lib/org.kiama.attribution_3.1.0.201101171054.jar"/>
 	<classpathentry kind="lib" path="lib/tudresden.ocl20.pivot.pivotmodel.semantics_3.1.0.201101171054.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WebAppDjango"/>
+	<classpathentry kind="lib" path="lib/freemarker-2.3.23.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

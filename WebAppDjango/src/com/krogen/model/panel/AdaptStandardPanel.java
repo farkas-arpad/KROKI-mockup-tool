@@ -69,4 +69,5 @@ public class AdaptStandardPanel extends DjangoPanel {
 	public void setAssociationEnd(String associationEnd) {
 		this.associationEnd = associationEnd;
 	}
+	
 }

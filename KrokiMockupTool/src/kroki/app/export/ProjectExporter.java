@@ -182,7 +182,7 @@ public class ProjectExporter {
 	 * 
 	 * @param proj - the selected project at beginning of paring/generating
 	 */
-	public void generateDjangoAppAndRepo(BussinesSubsystem proj) {
+	public void generateDjangoRequirements(BussinesSubsystem proj) {
 		this.project = proj;
 		getData(proj);
 		appRepoGenerator.generateForDjango(classes, menus, elements, enumerations, rootMenu);

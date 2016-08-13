@@ -28,6 +28,8 @@ public class MainParser {
 	 * 
 	 */
 	public void parseData() throws Exception{
+		DataContainer.getInstance().clearInstance();
+		
 		// parse the Enumerations
 		EnumerationParser enumeParser = new EnumerationParser();
 		enumeParser.parseEnumerations();

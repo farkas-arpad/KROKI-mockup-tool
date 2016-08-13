@@ -15,18 +15,24 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
 /**
  * Generic representation parts which creates the django application
  */
 public abstract class Part {
 
-	protected Map<String, Object> context = new HashMap<String, Object>();
+	protected Map<String, Object> context;
 
 	protected Template template;
 	protected Configuration cfg;
 
 	protected DjangoAdapter djangoAdapter = new DjangoAdapter();
+	
+	public Part() {
+		context = new HashMap<String, Object>();
+		context.clear();
+	}
 
 	public abstract void generate() throws Exception;
 
@@ -57,8 +63,10 @@ public abstract class Part {
 		Writer out = null;
 		try {
 			// set basic configuration
-			cfg = new Configuration();
+			cfg = new Configuration(Configuration.VERSION_2_3_23);
 			cfg.setDirectoryForTemplateLoading(new File(DjangoConstants.templateDir));
+			cfg.setDefaultEncoding("UTF-8");
+			cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);  
 			template = cfg.getTemplate(templateName);
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
 

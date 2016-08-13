@@ -14,6 +14,10 @@ import com.krogen.model.enumeration.Enumeration;
  */
 public class ModelsPyPart extends Part {
 
+	public ModelsPyPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		List<DjangoModel> djangoModelList = djangoAdapter.getModelList();

@@ -20,6 +20,10 @@ import com.krogen.static_names.Settings;
 
 public class ViewPyPart extends Part {
 
+	public ViewPyPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		List<DjangoPanel> panels = djangoAdapter.getPanels();
@@ -30,6 +34,7 @@ public class ViewPyPart extends Part {
 		List<Enumeration> enumerations = djangoAdapter.getEnumerations();
 
 		context.clear();
+	
 		context.put("classes", new ArrayList<String>());
 		context.put("projectname", Application.projectTitleRenamed);
 		context.put("modulename", DjangoConstants.MODULE_NAME);

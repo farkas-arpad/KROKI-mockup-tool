@@ -13,6 +13,10 @@ import com.krogen.generator.Part;
  */
 public class CustomCodePart extends Part {
 
+	public CustomCodePart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		File srcDir = new File(DjangoConstants.customCodeDir + File.separator + DjangoConstants.CUSTOM_CODE_PY);		

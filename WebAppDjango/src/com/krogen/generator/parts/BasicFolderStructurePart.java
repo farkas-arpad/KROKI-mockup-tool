@@ -16,6 +16,10 @@ import com.krogen.generator.Part;
  */
 public class BasicFolderStructurePart extends Part {
 
+	public BasicFolderStructurePart() {
+		super();
+	}
+	
 	/**
 	 * Creates the basic folder structure for the Django project
 	 * 

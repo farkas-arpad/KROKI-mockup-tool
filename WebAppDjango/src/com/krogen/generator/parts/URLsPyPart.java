@@ -16,6 +16,10 @@ import com.krogen.model.panel.DjangoPanel;
  */
 public class URLsPyPart extends Part {
 
+	public URLsPyPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		List<DjangoPanel> panels = djangoAdapter.getPanels();

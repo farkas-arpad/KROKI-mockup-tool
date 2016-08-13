@@ -12,6 +12,10 @@ import com.krogen.main.Application;
  */
 public class ProjectSettingsPart extends Part {
 
+	public ProjectSettingsPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 

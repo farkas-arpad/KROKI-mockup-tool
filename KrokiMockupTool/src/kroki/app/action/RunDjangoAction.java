@@ -82,7 +82,7 @@ public class RunDjangoAction extends AbstractAction {
 					//logging onto the kroki app console
 					KrokiMockupToolApp.getInstance().displayTextOutput("Generating UML model...", OutputPanel.KROKI_RESPONSE);
 					
-					exporter.generateDjangoAppAndRepo(proj);
+					exporter.generateDjangoRequirements(proj);
 					//set the project name into the property files
 					exporter.writeProjectName(proj.getLabel(), proj.getProjectDescription());
 					

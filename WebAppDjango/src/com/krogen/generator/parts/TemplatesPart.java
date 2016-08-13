@@ -17,6 +17,10 @@ import com.krogen.model.panel.DjangoPanel;
 
 public class TemplatesPart extends Part {
 
+	public TemplatesPart() {
+		super();
+	}
+	
 	@Override
 	public void generate() throws Exception {
 		String srcDirString = DjangoConstants.dynamicTemplateDir;
