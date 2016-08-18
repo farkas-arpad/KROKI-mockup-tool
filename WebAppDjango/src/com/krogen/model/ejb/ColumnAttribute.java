@@ -16,6 +16,8 @@ public class ColumnAttribute extends AbstractAttribute {
 	protected Object defaultValue;
 	protected Enumeration enumeration;
 	
+	protected Boolean representative;
+	
 	public Boolean getKey() {
 		return key;
 	}
@@ -82,13 +84,20 @@ public class ColumnAttribute extends AbstractAttribute {
 	public void setPrecision(Integer precision) {
 		this.precision = precision;
 	}
+	
+	public Boolean getRepresentative() {
+		return representative;
+	}
+	public void setRepresentative(Boolean representative) {
+		this.representative = representative;
+	}
 	@Override
 	public String toString() {
-		return "ColumnAttribute [key=" + key + ", length=" + length
-				+ ", scale=" + scale + ", dataType=" + dataType + ", disabled="
-				+ disabled + ", editableInTable=" + editableInTable
-				+ ", derived=" + derived + ", formula=" + formula
-				+ ", defaultValue=" + defaultValue + ", enumeration="
-				+ enumeration + "]";
+		return "ColumnAttribute [key=" + key + ", length=" + length + ", scale=" + scale + ", precision=" + precision
+				+ ", dataType=" + dataType + ", disabled=" + disabled + ", editableInTable=" + editableInTable
+				+ ", derived=" + derived + ", formula=" + formula + ", defaultValue=" + defaultValue + ", enumeration="
+				+ enumeration + ", representative=" + representative + ", fieldName=" + fieldName + ", hidden=" + hidden
+				+ ", name=" + name + ", label=" + label + "]";
 	}
+	
 }

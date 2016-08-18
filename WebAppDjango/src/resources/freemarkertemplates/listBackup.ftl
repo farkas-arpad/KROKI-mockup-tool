@@ -48,27 +48,38 @@
         </div>
     </nav>  
 	
-	<div class="dataTable_wrapper">	
-			<table id="dataTables-example" class="table table-striped table-bordered table-hover" width="100%">  
+	<div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">	
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="dataTables_length" id="dataTables-example_length">
+					<label>Show 
+					<select name="dataTables-example_length" aria-controls="dataTables-example" class="form-control input-sm">
+						<option value="10">10</option>
+						<option value="25">25</option>
+						<option value="50">50</option>
+						<option value="100">100</option>
+						</select> entries
+					</label>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div id="dataTables-example_filter" class="dataTables_filter">
+					<label>Search:
+						<input type="search" class="form-control input-sm" placeholder="" aria-controls="dataTables-example">
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		<div class="col-sm-12">
+			<table id="dataTables-example" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline" width="100%" role="grid" aria-describedby="dataTables-example_info" style="width: 100%;">   
 				<thead>
-					<tr>
+					<tr role="row">
 						<#list panel.entityBean.attributes as attribute>
-							<th style="min-width: 50px">${attribute.label}</th>
+							<th class="sorting">${attribute.label}</th>
 						</#list>
-						<th></th>
-						<th></th>
-					</tr>						
-				</thead>   
-				<tfoot>
-					<tr>
-						<#list panel.entityBean.attributes as attribute>
-							<th>${attribute.label}</th>
-						</#list>
-						<th></th>
-						<th></th>
-					</tr>					
-				</tfoot>
-			<tbody>				
+					</tr>
+				</thead>           			        
 				{% for ${panel.name} in ${panel.name}s %}
 				<tr>
 					<#list panel.entityBean.attributes as attribute>
@@ -78,10 +89,10 @@
 					<td>{{ ${panel.name}.${attribute.fieldName} }}</td>      
 					</#if>     			
 					</#list>
-					<td class="center">        				
+					<td>        				
 						<a class="btn btn-sm btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Details</a>					
 					</td>
-					<td class="center">   
+					<td>   
 					{% if deletable == "true" %}                                        
 						<form action="{% url '${panel.name}_delete' ${panel.name}.id %}" method="POST">
 						{% csrf_token %}
@@ -92,9 +103,11 @@
 						{% endif %}
 						</td>
 					</tr>                
-					{% endfor %}     
-			</tbody>					
+					{% endfor %}       
 			</table> 
+		</div>			
+		</div>
+<div class="row"><div class="col-sm-6"><div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-6"><div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate"><ul class="pagination"><li class="paginate_button previous disabled" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_previous"><a href="#">Previous</a></li><li class="paginate_button active" aria-controls="dataTables-example" tabindex="0"><a href="#">1</a></li><li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">2</a></li><li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">3</a></li><li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">4</a></li><li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">5</a></li><li class="paginate_button " aria-controls="dataTables-example" tabindex="0"><a href="#">6</a></li><li class="paginate_button next" aria-controls="dataTables-example" tabindex="0" id="dataTables-example_next"><a href="#">Next</a></li></ul></div></div></div>		
 	</div>
 	
 </fieldset> 

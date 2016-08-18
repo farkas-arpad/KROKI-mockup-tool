@@ -18,8 +18,8 @@
 	<div id="wrapper">
 		{% include "navbar.html" %}
 
+		<div id="page-wrapper" style="min-height: 600px;">  	   		
 		{% block jumbotron %}
-		<div id="page-wrapper" style="min-height: 600px;">  	   
 			<div class="row">
 				<div class="col-lg-12">
                     <h2 class="page-header">{% block page_title %} Page Title {% endblock %}</h2>
@@ -36,9 +36,9 @@
 					</div>	 			
 				</div>  			
 			</div>             		
-        </div>   	
+        	
 		{% endblock %}
-		
+		 </div>  
 	</div>
 {% include "js.html" %}
   

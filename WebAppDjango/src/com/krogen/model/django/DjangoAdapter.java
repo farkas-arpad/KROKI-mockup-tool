@@ -75,20 +75,21 @@ public class DjangoAdapter {
 		for (AbstractAttribute attribute : attributes){
 			DjangoModelField djangoModelField= new DjangoModelField();
 
-		djangoModelField.setLabel(attribute.getLabel());
-		djangoModelField.setFieldName(attribute.getFieldName());
-		djangoModelField.setHidden(attribute.getHidden());
-		djangoModelField.setName(attribute.getName());
-		
+			djangoModelField.setLabel(attribute.getLabel());
+			djangoModelField.setFieldName(attribute.getFieldName());
+			djangoModelField.setHidden(attribute.getHidden());
+			djangoModelField.setName(attribute.getName());
+
 			if (attribute instanceof ColumnAttribute){				
 
-			//	attribute.getDisabled();
+				//	attribute.getDisabled();
 				djangoModelField.setKey(((ColumnAttribute) attribute).getKey());								
 				djangoModelField.setLength(((ColumnAttribute) attribute).getLength());
+				djangoModelField.setRepresentative(((ColumnAttribute) attribute).getRepresentative());
 				String dataType = ((ColumnAttribute) attribute).getDataType();
 				if (((ColumnAttribute) attribute).getEnumeration() != null)
-				djangoModelField.setEnumerationName(((ColumnAttribute) attribute).getEnumeration().getName());
-				
+					djangoModelField.setEnumerationName(((ColumnAttribute) attribute).getEnumeration().getName());
+
 				switch(dataType){
 				case "java.lang.Long":
 					djangoModelField.setEntryTypesEnum(EntryTypesEnum.INTEGERFIELD);
@@ -105,10 +106,12 @@ public class DjangoAdapter {
 				}
 
 			}else
-			if (attribute instanceof JoinColumnAttribute){			
-				djangoModelField.setClassName(((JoinColumnAttribute) attribute).getLookupClass());		
-				djangoModelField.setEntryTypesEnum(EntryTypesEnum.FOREIGNKEY);	
-			}
+				if (attribute instanceof JoinColumnAttribute){			
+					djangoModelField.setClassName(((JoinColumnAttribute) attribute).getLookupClass());		
+					djangoModelField.setEntryTypesEnum(EntryTypesEnum.FOREIGNKEY);
+					//In the kroki UI is not possible to set representative value for fields from other panels
+					djangoModelField.setRepresentative(false);
+				}
 			djangoModel.getFieldsList().add(djangoModelField);
 
 		}
@@ -124,7 +127,7 @@ public class DjangoAdapter {
 		}		
 		return resultMap;
 	}
-	
+
 	public List<DjangoModel> getModelList(){
 		List<EjbClass> ejbClasses = getSortedModelList();
 		List<DjangoModel> djangoModelList = new ArrayList<DjangoModel>();
@@ -169,12 +172,12 @@ public class DjangoAdapter {
 		List<EjbClass> ejbList = new ArrayList<EjbClass>();
 		for (AbstractAttribute attribute: ejb.getAttributes()){
 			if (attribute instanceof JoinColumnAttribute){
-			//	lookup = true;
+				//	lookup = true;
 				ejbList.addAll(xxx(DataContainer.getInstance().getEjbClasses().get(((JoinColumnAttribute) attribute).getLookupClass())));
 			}
 		}
-			ejbList.add(ejb);		
-			return ejbList;
+		ejbList.add(ejb);		
+		return ejbList;
 	}
 	//	public List<>
 	//	public Map<String, DjangoModel> getDjangoModels(){

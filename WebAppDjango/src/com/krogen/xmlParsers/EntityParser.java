@@ -116,6 +116,8 @@ public class EntityParser {
 		columnAttribute.setFieldName(attributeElement.getAttribute(Tags.FIELD_NAME));
 		columnAttribute.setDataType(attributeElement.getAttribute(Tags.DATA_TYPE));
 		columnAttribute.setLength(Integer.parseInt(attributeElement.getAttribute(Tags.LENGTH)));
+		
+		columnAttribute.setRepresentative(Boolean.parseBoolean(attributeElement.getAttribute(Tags.REPRESENTATIVE)));
 
 		String keyString = attributeElement.getAttribute(Tags.KEY);
 		if(keyString != null && (keyString.equals("true") || keyString.equals("false"))) {

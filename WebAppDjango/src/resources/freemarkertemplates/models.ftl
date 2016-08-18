@@ -25,25 +25,30 @@ class Login(models.Model):
 class ${model.name}(models.Model):
 <#list model.fieldsList as field>
 <#if field.key?? && field.key == true>
-	${field.fieldName} = models.AutoField(primary_key = True)
+    ${field.fieldName} = models.AutoField(primary_key = True)
 <#elseif field.enumerationName??>
-	${field.fieldName} = models.CharField(choices=${field.enumerationName}, max_length = 50, null = True, blank = True)
+    ${field.fieldName} = models.CharField(choices=${field.enumerationName}, max_length = 50, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'CharField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(max_length = <#if field.length == 0>255<#else>${field.length}</#if>, null = True, blank = True)
+    ${field.fieldName} = models.${field.entryTypesEnum}(max_length = <#if field.length == 0>255<#else>${field.length}</#if>, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'IntegerField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(default = 0, null = True, blank = True)
+    ${field.fieldName} = models.${field.entryTypesEnum}(default = 0, null = True, blank = True)
 <#elseif field.entryTypesEnum == 'Textarea'>
-	${field.fieldName} = models.CharField(max_length= 255, default ="", null = True, blank = True)
+    ${field.fieldName} = models.CharField(max_length= 255, default ="", null = True, blank = True)
 <#elseif field.entryTypesEnum == 'FloatField'>
 <#elseif field.entryTypesEnum == 'BooleanField'>
-	${field.fieldName} = models.${field.entryTypesEnum}(default = False, blank = True)
+    ${field.fieldName} = models.${field.entryTypesEnum}(default = False, blank = True)
 <#elseif field.entryTypesEnum == 'ForeignKey'>
-	${field.fieldName} = models.${field.entryTypesEnum}(${classnameModelMap[field.className]}, related_name='${field.fieldName}', null = True, blank = True)
+    ${field.fieldName} = models.${field.entryTypesEnum}(${classnameModelMap[field.className]}, related_name='${field.fieldName}', null = True, blank = True)
 </#if>	
 </#list>	
 
-	def __str__(self):
-		return '${model.name}: '<#list model.fieldsList as field> + '${field.fieldName} = ' + self.${field.fieldName}.__str__()</#list>
+    <#if representativeFieldMap[model.name]?size != 0>
+    def __str__(self):
+        return <#list representativeFieldMap[model.name] as field>self.${field.fieldName}.__str__()<#sep> + </#sep></#list>
+    <#else>
+    def __str__(self):
+        return '${model.name}: '<#list model.fieldsList as field> + '${field.fieldName} = ' + self.${field.fieldName}.__str__()</#list>
+    </#if>
 		
 </#list>
 

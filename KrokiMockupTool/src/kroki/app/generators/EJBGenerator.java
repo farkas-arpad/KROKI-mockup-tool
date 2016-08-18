@@ -237,6 +237,11 @@ public class EJBGenerator {
 							Attr colFieldNameAttr = doc.createAttribute("field-name");
 							colFieldNameAttr.setValue(attribute.getName());
 							columnAttr.setAttributeNode(colFieldNameAttr);
+							
+							//attribute "representative" 
+							Attr representativeAttr = doc.createAttribute("representative");
+							representativeAttr.setValue(attribute.getRepresentative().toString());
+							columnAttr.setAttributeNode(representativeAttr);
 
 							//atribut "type"
 							Attr colType = doc.createAttribute("type");
@@ -297,6 +302,11 @@ public class EJBGenerator {
 							Attr fieldNameAttr = doc.createAttribute("field-name");
 							fieldNameAttr.setValue(attribute.getName());
 							zoomTag.setAttributeNode(fieldNameAttr);
+							
+							//attribute "representative"
+							Attr representativeAttr = doc.createAttribute("representative");
+							representativeAttr.setValue(attribute.getRepresentative().toString());
+							zoomTag.setAttributeNode(representativeAttr);
 
 							//atribut "class-name"
 							Attr classNameAttr = doc.createAttribute("class-name");

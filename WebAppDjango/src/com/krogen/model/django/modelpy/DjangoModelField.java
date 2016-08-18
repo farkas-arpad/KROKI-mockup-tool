@@ -13,6 +13,7 @@ public class DjangoModelField {
 	private String enumerationName;
 	private EntryTypesEnum entryTypesEnum;
 	
+	private Boolean representative;
 	
 	public String getName() {
 		return name;
@@ -86,5 +87,12 @@ public class DjangoModelField {
 		this.enumerationName = enumerationName;
 	}
 
+	public Boolean getRepresentative() {
+		return representative;
+	}
+
+	public void setRepresentative(Boolean representative) {
+		this.representative = representative;
+	}
 	
 }
