@@ -36,12 +36,14 @@
 						</div>
 					</nav>  
 											   
-					<table class="table" id="selectable-table">   
+					<table class="table table-bordered table-hover" id="selectable-table">   
 						<thead>
 							<tr>
 								<#list parentPanel.entityBean.attributes as attribute>
 									<th>${attribute.label}</th>
 								</#list>
+								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>					
@@ -108,15 +110,17 @@
             </div>
         </nav> 
                                     
-        <table class="table" id="example">   
+        <table class="table table-bordered table-hover" id="example">   
             <thead>
                 <tr>
                     <#list childPanel.entityBean.attributes as attribute>
                         <th>${attribute.label}</th>
-                    </#list>
+                    </#list>					
+					<th></th>
+					<th></th>
                 </tr>
             </thead>
-                                        
+            <tbody>                            
             {% for ${childPanel.name} in childParams.${childPanel.name}.${childPanel.name}s %}
                 <tr>
                 
@@ -144,6 +148,7 @@
                     </td>
                 </tr>                
                 {% endfor %}       
+			</tbody>
         </table>                 
 </fieldset> 
 </div>  
@@ -154,3 +159,13 @@
 </#list>
 <!--//child panel-->
 {% endblock %}
+
+{% block js_extra %}
+ <script> 
+ console.log('#side-menu a[href="/{{ projectname }}/${panel.label}"]');
+	$('#side-menu a[href="/{{ projectname }}/${panel.label}_pc"]').addClass('active');
+ </script>
+{% load staticfiles %}
+<script src="{% static 'custom/parentChild.js'%}"></script>  
+{% endblock %}
+	

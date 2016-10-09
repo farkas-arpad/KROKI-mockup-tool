@@ -38,13 +38,6 @@
               		</div>  
               	</div>
             </div>
-            <form class="navbar-form navbar-right" action="{% url '${panel.name}_search' %}" method="POST">
-            {% csrf_token%}
-            	<div class="input-group">
-              		<input type="text" name="q" placeholder="Search term" autocomplete="on"/>
-        		 	<button type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
-        		</div>
-        	</form>
         </div>
     </nav>  
 	
@@ -70,7 +63,7 @@
 				</tfoot>
 			<tbody>				
 				{% for ${panel.name} in ${panel.name}s %}
-				<tr>
+				<tr class="clickable-row" data-href="{% url '${panel.name}' ${panel.name}.id %}">
 					<#list panel.entityBean.attributes as attribute>
 					<#if attribute.enumeration?? >
 					<td>{{ ${panel.name}.get_${attribute.fieldName}_display }}</td>
@@ -149,5 +142,11 @@
    </#if> 
     </div>
    </#if>    
+   
+  {% endblock %}
+  {% block js_extra %}
+  {% load staticfiles %}
+	<script src="{% static 'custom/list.js'%}"></script>  
+
   {% endblock %}
   

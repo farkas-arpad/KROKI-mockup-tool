@@ -17,7 +17,7 @@ $(document).ready(function() {
 var rowId = getUrlParameter('id'); 
 if(typeof rowId != "undefined")
 {
-  $('#selectable-table tbody tr:nth-child('+rowId+')').addClass('active').siblings().removeClass('active');
+  $('#selectable-table tbody tr:nth-child('+rowId+')').addClass('active').siblings().removeClass('active'); 
 }
 });
 

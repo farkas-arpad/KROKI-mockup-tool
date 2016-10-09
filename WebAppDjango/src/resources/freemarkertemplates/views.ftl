@@ -92,20 +92,6 @@ def ${panel.name}_list(request): # panel_id
     return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}', 'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
 
 @login_required(login_url='/${projectname}/login/')
-def ${panel.name}_search(request):
-	if request.method == 'POST':
-		query = request.POST['q']
-		if query == '':
-			${panel.name}s = ${panel.entityBean.name}.objects.all()
-		else:
-		<#assign not_first = false>
-			${panel.name}s = ${panel.entityBean.name}.objects.filter(<#list panel.entityBean.attributes as attribute><#if attribute.lookupClass?? == false && attribute.hidden == false><#if not_first == true> | </#if>Q(${attribute.name}=query)<#assign not_first = true></#if></#list>)	
-	else:
-		${panel.name}s = ${panel.entityBean.name}.objects.all()
-	context = RequestContext(request)    
-	return render_to_response('${panel.name}_list.html',{'addable' : '${panel.panelSettings.add}', 'deletable' : "${panel.panelSettings.delete}", "${panel.name}s" : ${panel.name}s,"projectname" : "${projectname}"},context)
-
-@login_required(login_url='/${projectname}/login/')
 def ${panel.name}(request, ${panel.name}_id):
 	context = RequestContext(request)
 	${panel.name}_form = ${panel.entityBean.name}FormReadOnly(instance=${panel.entityBean.name}.objects.get(pk=${panel.name}_id))	

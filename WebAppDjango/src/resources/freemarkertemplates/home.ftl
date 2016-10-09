@@ -33,3 +33,9 @@
  {% endfor %}  
  
  {% endblock %}
+ 
+ {% block js_extra %}
+ <script>
+	$('#side-menu li:nth-child(1) a:first-child').addClass('active');
+ </script>
+ {% endblock %}

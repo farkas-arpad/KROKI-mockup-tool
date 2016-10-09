@@ -16,7 +16,6 @@ urlpatterns = patterns('',
 <#list urls as url>
     #Links for ${url.pattern}
     url(r'^${url.pattern}/list', '${modulename}.views.${url.view}_list', name = '${url.view}_list'),   
-    url(r'^${url.pattern}/search', '${modulename}.views.${url.view}_search', name = '${url.view}_search'),
     url(r'^${url.pattern}/new', '${modulename}.views.${url.view}_new', name = '${url.view}_new'), 
     url(r'^${url.pattern}/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}', name = '${url.view}'), 
     url(r'^${url.pattern}/edit/(?P<${url.view}_id>\d+)', '${modulename}.views.${url.view}_edit', name = '${url.view}_edit'),   
