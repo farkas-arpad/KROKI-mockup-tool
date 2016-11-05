@@ -1,8 +1,12 @@
 $(document).ready(function() {
         $('#dataTables-example').DataTable({
-                responsive: true
-        });
+			iDisplayLength: 75,
+            "columnDefs": [ {
+				"targets": 'no-sort',
+				"orderable": false,
+			}]
     });
+});
 
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {

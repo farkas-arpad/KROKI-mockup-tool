@@ -14,6 +14,14 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 $(document).ready(function() {  
+ $('table.display').DataTable({
+			iDisplayLength: 75,           
+			"columnDefs": [ {
+				"targets": 'no-sort',
+				"orderable": false,
+			}]
+    });
+
 var rowId = getUrlParameter('id'); 
 if(typeof rowId != "undefined")
 {

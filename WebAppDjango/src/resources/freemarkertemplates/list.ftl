@@ -9,47 +9,48 @@
    <#if (panel.nextPanels?? && panel.nextPanels?has_content) || (panel.standardOperations.operations??  && panel.standardOperations.operations?has_content)>
  	<#assign special_functions = true>
  	</#if>
- 	
+
  	<#if special_functions == true>
  		<div class="col-md-9">		
  	<#else>
  		<div class="col-md-12">
  	</#if>
   	{% if messages %}
+	<div class="row">
   		<div class="alert alert-success fade in">
   			<a href="#" class="close" data-dismiss="alert">&times;</a>
 			{% for message in messages %}
     		{{ message }}
     		{% endfor %}
 		</div>
+	</div>
 	{% endif %}
-<fieldset>
 	 <nav class="navbar navbar-default">   
     	<div class="container-fluid">
         	<div class="navbar-header">
             	<div class="btn-group" role="group" aria-label="...">
                 	{% if addable == "true" %}
-                	<div class="col-md-6"> 
+                	<div class="col-xs-6"> 
               		    <a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_new' %}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New ${panel.entityBean.label}</a>
               		</div>    
                		{% endif %}  
-               		<div class="col-md-6"> 
+               		<div class="col-xs-6"> 
               		    <a class="btn btn-primary btn-sm navbar-btn" href="{% url '${panel.name}_list' %}"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</a>
               		</div>  
               	</div>
             </div>
         </div>
     </nav>  
-	
 	<div class="dataTable_wrapper">	
-			<table id="dataTables-example" class="table table-striped table-bordered table-hover" width="100%">  
+		<div class="table-responsive">
+			<table id="dataTables-example" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">  
 				<thead>
-					<tr>
+					<tr style="white-space: nowrap">
 						<#list panel.entityBean.attributes as attribute>
 							<th style="min-width: 50px">${attribute.label}</th>
 						</#list>
-						<th></th>
-						<th></th>
+						<th class="no-sort"></th>
+						<th class="no-sort"></th>
 					</tr>						
 				</thead>   
 				<tfoot>
@@ -61,37 +62,36 @@
 						<th></th>
 					</tr>					
 				</tfoot>
-			<tbody>				
-				{% for ${panel.name} in ${panel.name}s %}
-				<tr class="clickable-row" data-href="{% url '${panel.name}' ${panel.name}.id %}">
-					<#list panel.entityBean.attributes as attribute>
-					<#if attribute.enumeration?? >
-					<td>{{ ${panel.name}.get_${attribute.fieldName}_display }}</td>
-					<#else>
-					<td>{{ ${panel.name}.${attribute.fieldName} }}</td>      
-					</#if>     			
-					</#list>
-					<td class="center">        				
-						<a class="btn btn-sm btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Details</a>					
-					</td>
-					<td class="center">   
-					{% if deletable == "true" %}                                        
-						<form action="{% url '${panel.name}_delete' ${panel.name}.id %}" method="POST">
-						{% csrf_token %}
-							<button class="btn btn-sm btn-danger" type="submit">
-								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
-							</button>
-						</form>												
-						{% endif %}
+				<tbody>				
+					{% for ${panel.name} in ${panel.name}s %}
+					<tr class="clickable-row" data-href="{% url '${panel.name}' ${panel.name}.id %}">
+						<#list panel.entityBean.attributes as attribute>
+						<#if attribute.enumeration?? >
+						<td>{{ ${panel.name}.get_${attribute.fieldName}_display }}</td>
+						<#else>
+						<td>{{ ${panel.name}.${attribute.fieldName} }}</td>      
+						</#if>     			
+						</#list>
+						<td class="center">        				
+							<a class="btn btn-sm btn-default" href="{% url '${panel.name}' ${panel.name}.id %}"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Details</a>					
 						</td>
-					</tr>                
-					{% endfor %}     
-			</tbody>					
+						<td class="center">   
+						{% if deletable == "true" %}                                        
+							<form action="{% url '${panel.name}_delete' ${panel.name}.id %}" method="POST">
+							{% csrf_token %}
+								<button class="btn btn-sm btn-danger" type="submit">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
+								</button>
+							</form>												
+							{% endif %}
+							</td>
+						</tr>                
+						{% endfor %}     
+				</tbody>					
 			</table> 
+		</div>
 	</div>
-	
-</fieldset> 
-</div>    
+</div> 
   {% endblock %}
   
   {% block extra_functions %}
@@ -149,4 +149,3 @@
 	<script src="{% static 'custom/list.js'%}"></script>  
 
   {% endblock %}
-  
